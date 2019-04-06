@@ -130,8 +130,6 @@ void prog2(char* mem) {
     }
 
     // Write back to mem
-    print_binary(lower >> 3);
-    printf("\n");
     mem[k] = (upper << 4) | ((lower >> 2) & 1) | ((lower >> 3) & 14);
     k++;
     mem[k] = upper >> 4;
