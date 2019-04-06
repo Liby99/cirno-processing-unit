@@ -111,13 +111,11 @@ Note:
       <td colspan="2" align="center"><code>$a</code></td>
       <td colspan="2" align="center"><code>$b</code></td>
       <td>
-        <code>
-          shamt = $b[2:0]<br />
-          if $b[3]:<br />
-          &nbsp; $a = $a << shamt<br />
-          else:<br />
-          &nbsp; $a = $a >> shamt
-        </code>
+        <code>shamt = $b[2:0]</code><br />
+        <code>if $b[3]:</code><br />
+        <code>&nbsp; $a = $a << shamt</code><br />
+        <code>else:</code><br />
+        <code>&nbsp; $a = $a >> shamt</code>
       </td>
     </tr>
     <tr>
