@@ -92,7 +92,7 @@ void test(char* mem) {
 }
 
 int main() {
-  char * mem = (char *) calloc(0, sizeof(char) * MEM_SIZE);
+  char mem[MEM_SIZE];
   setup(mem);
   prog1(mem);
   test(mem);
