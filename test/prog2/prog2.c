@@ -1,29 +1,31 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+typedef unsigned char byte;
+
 const long MEM_SIZE = 256;
 
-void print_binary(char x) {
+void print_binary(byte x) {
   int l = sizeof(x) * 8;
   for (int i = l - 1 ; i >= 0; i--) {
     printf("%x", (x & (1 << i)) >> i);
   }
 }
 
-void print_mem(char *mem, char i) {
+void print_mem(byte *mem, byte i) {
   printf("mem[%d] = ", i);
   print_binary(mem[i]);
   printf("\n");
 }
 
-void setup_case(char* mem, char pos, char low, char high) {
+void setup_case(byte* mem, byte pos, byte low, byte high) {
   mem[pos] = low;
   mem[pos + 1] = high;
   print_mem(mem, pos);
   print_mem(mem, pos + 1);
 }
 
-void setup(char* mem) {
+void setup(byte* mem) {
   printf("Setting up...\n");
 
   // The first one is the write-up example. This is a correct one without any flipped bit when transmitting
@@ -48,10 +50,10 @@ void setup(char* mem) {
   setup_case(mem, 6, 0b10101101, 0b01010101);
 }
 
-void prog2(char* mem) {
-  char i = 0b11110000;
-  char j = 0, k = 0, t = 0, p = 0;
-  char parity = 0, lower = 0, upper = 0;
+void prog2(byte* mem) {
+  byte i = 0b11110000;
+  byte j = 0, k = 0, t = 0, p = 0;
+  byte parity = 0, lower = 0, upper = 0;
 
   while (i != 0) {
     k = i; // Store current k
@@ -177,7 +179,7 @@ void prog2(char* mem) {
   }
 }
 
-void test(char* mem) {
+void test(byte* mem) {
   printf("Testing\n");
   print_mem(mem, 0);
   print_mem(mem, 1);
@@ -190,7 +192,7 @@ void test(char* mem) {
 }
 
 int main() {
-  char mem[256];
+  byte mem[256];
   setup(mem);
   prog2(mem);
   test(mem);
