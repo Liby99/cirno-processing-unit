@@ -98,7 +98,9 @@ Note:
       <td><code>1</code></td>
       <td><code>1</code></td>
       <td colspan="4" align="center"><code>imm (signed)</code></td>
-      <td><code>if cmp: $pc = $pc + imm</code></td>
+      <td>
+        <code>if cmp:</code><br />
+        <code>&nbsp; $pc = $pc + imm</code></td>
     </tr>
     <tr>
       <td>Shift Register</td>
