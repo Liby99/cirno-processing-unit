@@ -52,5 +52,5 @@ int main(int argc, char *argv[]) {
   cpu.run();
 
   // Print the result
-  cpu.print_regs();
+  cpu.print_curr_state();
 }

@@ -1,2 +1,2 @@
-all: main
-	g++ main.cpp -o main
+all: simulate
+	g++ simulate.cpp -o simulate

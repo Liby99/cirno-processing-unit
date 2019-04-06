@@ -24,19 +24,19 @@ class Instruction:
     pass
 
 class Jmpi(Instruction):
-  def __init__(self, sign: bool, imm: int):
+  def __init__(self, neg: bool, imm: int):
     """
     sign: boolean, positive is True, negative is False
     imm: number
     """
-    self.sign = sign
+    self.neg = neg
     self.imm = imm
 
   def opcode(self) -> str:
     return "111"
 
   def __repr__(self):
-    s = "0" if self.sign else "1"
+    s = "1" if self.neg else "0"
     i = binary_repr(self.imm, 5)
     return self.opcode() + s + i
 
@@ -52,11 +52,11 @@ class Andi(AImmInstruction):
   def opcode(self) -> str:
     return "110"
 
-class Lih(AImmInstruction):
+class Movih(AImmInstruction):
   def opcode(self) -> str:
     return "101"
 
-class Lil(AImmInstruction):
+class Movil(AImmInstruction):
   def opcode(self) -> str:
     return "100"
 
@@ -76,6 +76,18 @@ class Shli(AShamtInstruction):
   def opcode(self):
     return "0110"
 
+class Bri(Instruction):
+  def __init__(self, neg: bool, imm: int):
+    self.neg = neg
+    self.imm = imm
+
+  def opcode(self):
+    return "01011"
+
+  def __repr__(self):
+    s = "1" if self.neg else "0"
+    return self.opcode() + s + binary_repr(self.imm, 3)
+
 class ABInstruction(Instruction):
   def __init__(self, rega: int, regb: int):
     self.rega = rega
@@ -84,19 +96,15 @@ class ABInstruction(Instruction):
   def __repr__(self):
     return self.opcode() + binary_repr(self.rega, 2) + binary_repr(self.regb, 2)
 
-class Sb(ABInstruction):
-  def opcode(self):
-    return "01011"
-
-class Lb(ABInstruction):
+class Sh(ABInstruction):
   def opcode(self):
     return "01010"
 
-class Shrr(ABInstruction):
+class Sb(ABInstruction):
   def opcode(self):
     return "01001"
 
-class Shlr(ABInstruction):
+class Lb(ABInstruction):
   def opcode(self):
     return "01000"
 
@@ -166,14 +174,14 @@ def parse_instr(str: str) -> Instruction:
     rega = parse_reg(arr[1])
     imm = int(arr[2])
     return Andi(rega, imm)
-  elif op == "lih":
+  elif op == "movih":
     rega = parse_reg(arr[1])
     imm = int(arr[2])
-    return Lih(rega, imm)
-  elif op == "lil":
+    return Movih(rega, imm)
+  elif op == "movil":
     rega = parse_reg(arr[1])
     imm = int(arr[2])
-    return Lil(rega, imm)
+    return Movil(rega, imm)
   elif op == "shri":
     rega = parse_reg(arr[1])
     shamt = int(arr[2])
@@ -182,6 +190,12 @@ def parse_instr(str: str) -> Instruction:
     rega = parse_reg(arr[1])
     shamt = int(arr[2])
     return Shli(rega, shamt)
+  elif op == "bri":
+    imm = arr[1]
+    neg = imm[0] == '-'
+    return Bri(neg, abs(int(imm)))
+  elif op == "sh":
+    raise "Not implemented" # TODO
   elif op == "sb":
     rega = parse_reg(arr[1])
     regb = parse_reg(arr[2])
@@ -190,14 +204,6 @@ def parse_instr(str: str) -> Instruction:
     rega = parse_reg(arr[1])
     regb = parse_reg(arr[2])
     return Lb(rega, regb)
-  elif op == "shrr":
-    rega = parse_reg(arr[1])
-    regb = parse_reg(arr[2])
-    return Shrr(rega, regb)
-  elif op == "shlr":
-    rega = parse_reg(arr[1])
-    regb = parse_reg(arr[2])
-    return Shlr(rega, regb)
   elif op == "mov":
     rega = parse_reg(arr[1])
     regb = parse_reg(arr[2])

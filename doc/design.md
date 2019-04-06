@@ -48,8 +48,8 @@ Note:
       <td><code>$a = $a & imm</code></td>
     </tr>
     <tr>
-      <td>Load Immediate High</td>
-      <td><code>lih</code></td>
+      <td>Move Immediate High</td>
+      <td><code>movih</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -58,8 +58,8 @@ Note:
       <td><code>$a[4:7] = imm</code></td>
     </tr>
     <tr>
-      <td>Load Immediate Low</td>
-      <td><code>lil</code></td>
+      <td>Move Immediate Low</td>
+      <td><code>movil</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -90,12 +90,43 @@ Note:
       <td><code>$a = $a << shamt</code></td>
     </tr>
     <tr>
+      <td>Branch Immediate</td>
+      <td><code>bri</code></td>
+      <td><code>0</code></td>
+      <td><code>1</code></td>
+      <td><code>0</code></td>
+      <td><code>1</code></td>
+      <td><code>1</code></td>
+      <td colspan="4" align="center"><code>imm (signed)</code></td>
+      <td><code>if cmp: $pc = $pc + imm</code></td>
+    </tr>
+    <tr>
+      <td>Shift Register</td>
+      <td><code>sh</code></td>
+      <td><code>0</code></td>
+      <td><code>1</code></td>
+      <td><code>0</code></td>
+      <td><code>1</code></td>
+      <td><code>0</code></td>
+      <td colspan="2" align="center"><code>$a</code></td>
+      <td colspan="2" align="center"><code>$b</code></td>
+      <td>
+        <code>
+          shamt = $b[2:0]<br />
+          if $b[3]:<br />
+          &nbsp; $a = $a << shamt<br />
+          else:<br />
+          &nbsp; $a = $a >> shamt
+        </code>
+      </td>
+    </tr>
+    <tr>
       <td>Store</td>
       <td><code>sb</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
-      <td><code>1</code></td>
+      <td><code>0</code></td>
       <td><code>1</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
       <td colspan="2" align="center"><code>$b</code></td>
@@ -107,35 +138,11 @@ Note:
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
-      <td><code>1</code></td>
+      <td><code>0</code></td>
       <td><code>0</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
       <td colspan="2" align="center"><code>$b</code></td>
       <td><code>$a = mem[$b]</code></td>
-    </tr>
-    <tr>
-      <td>Shift Right Register</td>
-      <td><code>shrr</code></td>
-      <td><code>0</code></td>
-      <td><code>1</code></td>
-      <td><code>0</code></td>
-      <td><code>0</code></td>
-      <td><code>1</code></td>
-      <td colspan="2" align="center"><code>$a</code></td>
-      <td colspan="2" align="center"><code>$b</code></td>
-      <td><code>$a = $a >> $b</code></td>
-    </tr>
-    <tr>
-      <td>Shift Left Register</td>
-      <td><code>shlr</code></td>
-      <td><code>0</code></td>
-      <td><code>1</code></td>
-      <td><code>0</code></td>
-      <td><code>0</code></td>
-      <td><code>0</code></td>
-      <td colspan="2" align="center"><code>$a</code></td>
-      <td colspan="2" align="center"><code>$b</code></td>
-      <td><code>$a = $a << $b</code></td>
     </tr>
     <tr>
       <td>Move</td>
