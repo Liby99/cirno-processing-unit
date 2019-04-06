@@ -10,7 +10,7 @@ void setup(char* mem) {
 }
 
 /*
- * Algorithm: Iterate through mem[128] to mem[190]. In each iteration, have two 
+ * Algorithm: Iterate through mem[128] to mem[190]. In each iteration, have two
  *            vars (char1 and char2) to store mem[i] and mem[i+1]. Then xor
  *            pattern with char1, where the result is abcdxxxx, where if abcd
  *            are all zeros indicate that there is a pattern match. Then left
@@ -19,13 +19,13 @@ void setup(char* mem) {
  *            effectively shifting the whole memory to left 1 bit at a time.
  *            In each iteration of outer loop, shift char1 8 times to complete
  *            check within char1, and if a match is found in the first 4 shift,
- *            this means that the pattern is matched within the pattern, then 
+ *            this means that the pattern is matched within the pattern, then
  *            have a boolean to indicate this. At the end of 8 shifts, if the
  *            boolean is true, increament accumulator of number of bytes.
- * 
+ *
  *            The last byte has to be chcked separately because it has no
  *            neighbor to the right.
- * 
+ *
  * Instructions used:
  *     Move High    reg  4bits
  *     Move Low     eg   4bits
@@ -107,7 +107,7 @@ void test(char* mem) {
 }
 
 int main() {
-  char * mem = malloc(sizeof(char) * MEM_SIZE);
+  char mem[MEM_SIZE];
   setup(mem);
   prog3(mem);
   test(mem);
