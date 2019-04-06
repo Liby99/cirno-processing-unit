@@ -8,7 +8,7 @@ void setup(char* mem) {
 }
 
 void prog1(char* mem) {
-  char i = 0, j = 0, k = 0, t = 0, p = 0;
+  char i = 0, j = 0, t = 0, p = 0;
   char p8 = 0, p4 = 0, p2 = 0, p1 = 0, lower = 0, upper = 0;
   char b4to2 = 0, b1 = 0;
   char temp_lower = 0, temp_upper = 0;
@@ -19,7 +19,7 @@ void prog1(char* mem) {
     upper = mem[i];
     i++;
 
-    temp_upper = (upper << 4) | (lower >> 4)
+    temp_upper = (upper << 4) | (lower >> 4);
 
     // find p8
     p8 = 0;
