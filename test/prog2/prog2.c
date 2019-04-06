@@ -49,19 +49,20 @@ void setup(char* mem) {
 }
 
 void prog2(char* mem) {
-  char i = 0, j = 0, k = 0, t = 0, p = 0;
+  char i = 0b11110000;
+  char j = 0, k = 0, t = 0, p = 0;
   char parity = 0, lower = 0, upper = 0;
 
-  // Index i
-  i = 0;
-  while (i < 30) {
+  while (i != 0) {
     k = i; // Store current k
+    k = k & 15;
+    k = k << 1;
 
     // Load lower and upper
-    lower = mem[i];
-    i++; // This is just an increment
-    upper = mem[i];
-    i++;
+    lower = mem[k];
+    t = k;
+    t++; // This is just an increment
+    upper = mem[t];
 
     // Initiate 0 parity
     parity = 0;
@@ -120,7 +121,8 @@ void prog2(char* mem) {
     // Finally deal with p1
     j = 0;
     p = lower;
-    t = lower >> 2;
+    t = p;
+    t = t >> 2; // t = lower >> 2
     while (j < 3) {
       p = p ^ t;
       t = t >> 2;
@@ -170,6 +172,8 @@ void prog2(char* mem) {
     // The above part is
     // t = upper >> 4;
     mem[k] = t;
+
+    i++;
   }
 }
 
