@@ -1,23 +1,53 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+typedef unsigned char byte;
 const long MEM_SIZE = 256;
 
-void setup(char* mem) {
-  // Setup
+void print_binary(byte x) {
+  int l = sizeof(x) * 8;
+  for (int i = l - 1 ; i >= 0; i--) {
+    printf("%x", (x & (1 << i)) >> i);
+  }
 }
 
-void prog1(char* mem) {
-  char i = 0, j = 0, k = 0, t = 0, p = 0;
-  char p8 = 0, p4 = 0, p2 = 0, p1 = 0, lower = 0, upper = 0;
-  char b4to2 = 0, b1 = 0;
-  char temp_lower = 0, temp_upper = 0;
-  // loop first 29 bytes to read data
-  while (i < 30) {
-    lower = mem[i];
-    i++;
-    upper = mem[i];
-    i++;
+void print_mem(byte *mem, byte i) {
+  printf("mem[%d] = ", i);
+  print_binary(mem[i]);
+  printf("\n");
+}
+
+void setup_case(byte* mem, byte pos, byte low, byte high) {
+  mem[pos] = low;
+  mem[pos+1] = high;
+  print_mem(mem, pos);
+  print_mem(mem, pos+1);
+}
+
+void setup(byte* mem) {
+  setup_case(mem, 0, 0b01010101, 0b00000101);
+  setup_case(mem, 2, 0b10110101, 0b00000110);
+}
+
+void prog1(byte* mem) {
+  byte i = 0b11110000;
+  byte j = 0, k = 0, t = 0, p = 0;
+  byte p8 = 0, p4 = 0, p2 = 0, p1 = 0, lower = 0, upper = 0;
+  byte b4to2 = 0, b1 = 0;
+  byte temp_lower = 0, temp_upper = 0;
+
+  while (i != 0) {
+    k = i;
+    k = (k & 15) << 1;
+
+    lower = mem[k];
+    // printf("-----------------\n");
+    // print_mem(mem, k);
+    t = k;
+    t++;
+    upper = mem[t];
+    // print_mem(mem, t);
+    // printf("-----------------\n");
 
     temp_upper = (upper << 4) | (lower >> 4);
 
@@ -82,13 +112,23 @@ void prog1(char* mem) {
 
     temp_lower = p8 | b4to2 | p4 | b1 | p2 | p1;
 
-    mem[i+28] = temp_lower;
-    mem[i+29] = temp_upper;
+    mem[k+30] = temp_lower;
+    mem[k+31] = temp_upper;
+
+    i++;
   }
 }
 
-void test(char* mem) {
-  // What i need to test
+void test(byte* mem) {
+  printf("Testing...\n");
+  print_mem(mem, 30);
+  print_mem(mem, 31);
+  print_mem(mem, 32);
+  print_mem(mem, 33);
+  // print_mem(mem, 4);
+  // print_mem(mem, 5);
+  // print_mem(mem, 6);
+  // print_mem(mem, 7);
 }
 
 int main() {
