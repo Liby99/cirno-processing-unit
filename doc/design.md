@@ -73,7 +73,7 @@ Note:
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
-      <td><code>0</code></td>
+      <td><code>1</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
       <td colspan="3" align="center"><code>shamt</code></td>
       <td><code>$a = $a >> shamt</code></td>
@@ -84,7 +84,7 @@ Note:
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
-      <td><code>1</code></td>
+      <td><code>0</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
       <td colspan="3" align="center"><code>shamt</code></td>
       <td><code>$a = $a << shamt</code></td>

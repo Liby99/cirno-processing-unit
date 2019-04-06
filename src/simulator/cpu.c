@@ -10,6 +10,7 @@ typedef unsigned short instr;
 typedef struct CPU {
   int pc;
   bool cmp;
+  int num_instrs;
   byte regs[4];
   instr* instructions;
   byte* memory;
@@ -22,10 +23,11 @@ void print_binary(byte x) {
   }
 }
 
-CPU* init_cpu(instr* instructions, byte* memory) {
+CPU* init_cpu(instr* instructions, byte* memory, int num_instrs) {
   CPU* cpu = (CPU *) calloc(0, sizeof(CPU));
   cpu->pc = 0;
   cpu->cmp = 0;
+  cpu->num_instrs = num_instrs;
   byte i = 0;
   while (i < 4) {
     cpu->regs[i] = 0;
@@ -37,10 +39,14 @@ CPU* init_cpu(instr* instructions, byte* memory) {
 }
 
 void step(CPU* cpu) {
-  instr ins = cpu->instructions[cpu->pc];
+  instr ins;
+  if (cpu->pc >= cpu->num_instrs) {
+    ins = 0;
+  } else {
+    ins = cpu->instructions[cpu->pc];
+  }
 
   bool advance_pc = 1;
-
   byte b8 = ins >> 8, b7 = (ins >> 7) & 1,
        b6 = (ins >> 6) & 1, b5 = (ins >> 5) & 1;
   if (b8) {
@@ -150,6 +156,12 @@ void step(CPU* cpu) {
 
   if (advance_pc) {
     cpu->pc += 1;
+  }
+}
+
+void run(CPU* cpu) {
+  while (cpu->pc < cpu->num_instrs) {
+    step(cpu);
   }
 }
 
