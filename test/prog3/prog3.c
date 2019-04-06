@@ -2,7 +2,6 @@
 #include <stdlib.h>
 const int MEM_SIZE = 256;
 
-
 void setup(char* mem) {
   for (int i = 128; i <= 191; i++) {
     mem[i] = 0b11111110;
@@ -39,7 +38,6 @@ void setup(char* mem) {
  *     Xor          reg1 reg2
  *     And          reg1 reg2
  *     Or           reg1 reg2
- *   
  */
 void prog3(char* mem) {
   unsigned char pattern = mem[192]; // TODO check which 4 bits are the pattern
@@ -52,6 +50,7 @@ void prog3(char* mem) {
   unsigned char inByte = 0; // boolean flag to indicate whether the pattern occurs in the byte
   unsigned char j; // inner loop counter
 
+  char1 = mem[pos];
   while (i != 0) {
     i++;
     j = 0b11111000;
@@ -106,7 +105,6 @@ void test(char* mem) {
   printf("%d\n", mem[193]);
   printf("%d\n", mem[194]);
 }
-
 
 int main() {
   char * mem = malloc(sizeof(char) * MEM_SIZE);
