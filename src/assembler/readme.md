@@ -32,6 +32,12 @@ The output will then be
 
 This way you can more easily copy this assembled machine code to the simulator and run this.
 
+## Exporting Simulator Runnable File
+
+```
+$ python3 assemble.py test/add.s > ../simulator/test/add.txt
+```
+
 ## Assembly Language Syntax
 
 It's very simple, we don't have any symbols. For each instruction specified on the design document, you simply add space between the different components. All the instruction will start with a **code**, like `jmpi`, `add`, `xor` and so on. After that it needs to be followed by either register id or immediate numbers.
