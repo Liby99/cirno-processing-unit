@@ -16,24 +16,31 @@ void print_mem(char *mem, char i) {
   printf("\n");
 }
 
+void setup_case(char* mem, char pos, char low, char high) {
+  mem[pos] = low;
+  mem[pos + 1] = high;
+  print_mem(mem, pos);
+  print_mem(mem, pos + 1);
+}
+
 void setup(char* mem) {
   printf("Setting up...\n");
 
   // The first one is the write up example
   // should be decoded to 0b 0000 0101 0101 0101
-  mem[0] = 0b00101101;
-  mem[1] = 0b01010101;
-  print_mem(mem, 0);
-  print_mem(mem, 1);
+  setup_case(mem, 0, 0b00101101, 0b01010101);
 
   // The second one is the corrupted write up example
   // The differed bit is at position 6
   // Should still be decoded to 0b 0000 0101 0101 0101 (the same as the first one)
   // because of the correction method
-  mem[2] = 0b00001101;
-  mem[3] = 0b01010101;
-  print_mem(mem, 2);
-  print_mem(mem, 3);
+  setup_case(mem, 2, 0b00001101, 0b01010101);
+
+  // The second one is the corrupted write up example
+  // The differed bit is at position 10
+  // Should still be decoded to 0b 0000 0101 0101 0101 (the same as the first one)
+  // because of the correction method
+  setup_case(mem, 4, 0b00101101, 0b01010111);
 }
 
 void prog2(char* mem) {
@@ -42,7 +49,7 @@ void prog2(char* mem) {
 
   // Index i
   i = 0;
-  while (i < 3) {
+  while (i < 30) {
     k = i; // Store current k
 
     // Load lower and upper
@@ -121,7 +128,7 @@ void prog2(char* mem) {
 
     // Correct parity
     if (parity > 7) {
-      t = 1 << (parity - 8);
+      t = 1 << (parity - 9);
       upper = t ^ upper;
     }
     if (parity > 0) {
@@ -142,6 +149,8 @@ void test(char* mem) {
   print_mem(mem, 1);
   print_mem(mem, 2);
   print_mem(mem, 3);
+  print_mem(mem, 4);
+  print_mem(mem, 5);
 }
 
 int main() {
