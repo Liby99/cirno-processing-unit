@@ -1,5 +1,15 @@
 # ISA Design
 
+This is a design where we have `4` registers in CPU and each register has `1` byte. Therefore we need `2` bits to represent the register id.
+
+The main memory is also `256` bytes in size, so we can use the data inside a single register to access/update the data in the main memory.
+
+Note:
+
+* `$pc`: Program Counter. Not necessarily `1` byte in size. Could have more bits.
+* `$cmp`: Compare Register. Only have `1` bit. Could be written by `cmp` instruction, and will be used by `br` instruction.
+* `mem`: The Main Memory, contains `256` bytes.
+
 <table>
   <thead>
     <tr>
@@ -22,8 +32,8 @@
       <td><code>1</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
-      <td colspan="6" align="center"><code>imm</code></td>
-      <td><code>$pc = imm</code></td>
+      <td colspan="6" align="center"><code>imm (signed)</code></td>
+      <td><code>$pc = $pc + imm</code></td>
     </tr>
     <tr>
       <td>And Immediate</td>
@@ -35,7 +45,7 @@
       <td><code>$a = $a & imm</code></td>
     </tr>
     <tr>
-      <td>Move Immediate High</td>
+      <td>Load Immediate High</td>
       <td><code>1</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -44,7 +54,7 @@
       <td><code>$a[4:7] = imm</code></td>
     </tr>
     <tr>
-      <td>Move Immediate Low</td>
+      <td>Load Immediate Low</td>
       <td><code>1</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -53,14 +63,24 @@
       <td><code>$a[0:3] = imm</code></td>
     </tr>
     <tr>
-      <td>Shift Immediate</td>
+      <td>Shift Right Immediate</td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
-      <td><code>d</code></td>
+      <td><code>0</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
-      <td colspan="3" align="center"><code>sh</code></td>
-      <td><code>$a = d ? ($a << sh) : ($a >> sh)</code></td>
+      <td colspan="3" align="center"><code>shamt</code></td>
+      <td><code>$a = $a >> shamt</code></td>
+    </tr>
+    <tr>
+      <td>Shift Left Immediate</td>
+      <td><code>0</code></td>
+      <td><code>1</code></td>
+      <td><code>1</code></td>
+      <td><code>1</code></td>
+      <td colspan="2" align="center"><code>$a</code></td>
+      <td colspan="3" align="center"><code>shamt</code></td>
+      <td><code>$a = $a << shamt</code></td>
     </tr>
     <tr>
       <td>Store</td>
@@ -118,7 +138,7 @@
       <td><code>$a = $b</code></td>
     </tr>
     <tr>
-      <td>???</td>
+      <td>Compare</td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -126,7 +146,7 @@
       <td><code>0</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
       <td colspan="2" align="center"><code>$b</code></td>
-      <td><code>???</code></td>
+      <td><code>$cmp = $a == $b</code></td>
     </tr>
     <tr>
       <td>Add</td>
@@ -217,7 +237,7 @@
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
-      <td><code>$pc = $a == 0 ? ($pc + 1) : ($pc + 2)</code></td>
+      <td><code>$pc = $cmp ? $a : $pc</code></td>
     </tr>
     <tr>
       <td>Nil Operation</td>
