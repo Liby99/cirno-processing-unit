@@ -247,11 +247,25 @@ def parse_args(args: List[str]):
       obj['c_style'] = True
   return obj
 
-with open(sys.argv[1]) as file:
-  machine_codes = [parse_instr(instr) for instr in file]
-  options = parse_args(sys.argv[2:])
-  for c in machine_codes:
-    if options['c_style']:
-      print("0b" + repr(c) + ",")
-    else:
-      print(c)
+if __name__ == "__main__":
+  with open(sys.argv[1]) as file:
+    options = parse_args(sys.argv[2:])
+
+    # First go through all the lines
+    machine_codes = []
+    for instr in file:
+
+      # Ignore comment only line
+      trimmed = instr[0:instr.find('#')]
+      if len(trimmed) == 0:
+        continue
+
+      # Parse the instruction to machine code
+      machine_codes.append(parse_instr(instr))
+
+    # Print the codes
+    for c in machine_codes:
+      if 'c_style' in options:
+        print("0b" + repr(c) + ",")
+      else:
+        print(c)
