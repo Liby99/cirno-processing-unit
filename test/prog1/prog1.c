@@ -30,24 +30,16 @@ void setup(byte* mem) {
 }
 
 void prog1(byte* mem) {
-  byte i = 0b11110000;
-  byte j = 0, k = 0, t = 0, p = 0;
+  byte i = 0, j = 0, k = 30, t = 0, p = 0;
   byte p8 = 0, p4 = 0, p2 = 0, p1 = 0, lower = 0, upper = 0;
   byte b4to2 = 0, b1 = 0;
   byte temp_lower = 0, temp_upper = 0;
 
-  while (i != 0) {
-    k = i;
-    k = (k & 15) << 1;
-
-    lower = mem[k];
-    // printf("-----------------\n");
-    // print_mem(mem, k);
-    t = k;
-    t++;
-    upper = mem[t];
-    // print_mem(mem, t);
-    // printf("-----------------\n");
+  while (i < 30) {
+    lower = mem[i];
+    i++;
+    upper = mem[i];
+    i++;
 
     temp_upper = (upper << 4) | (lower >> 4);
 
@@ -112,10 +104,10 @@ void prog1(byte* mem) {
 
     temp_lower = p8 | b4to2 | p4 | b1 | p2 | p1;
 
-    mem[k+30] = temp_lower;
-    mem[k+31] = temp_upper;
-
-    i++;
+    mem[k] = temp_lower;
+    k++;
+    mem[k] = temp_upper;
+    k++;
   }
 }
 
@@ -125,14 +117,10 @@ void test(byte* mem) {
   print_mem(mem, 31);
   print_mem(mem, 32);
   print_mem(mem, 33);
-  // print_mem(mem, 4);
-  // print_mem(mem, 5);
-  // print_mem(mem, 6);
-  // print_mem(mem, 7);
 }
 
 int main() {
-  char mem[MEM_SIZE];
+  byte mem[MEM_SIZE];
   setup(mem);
   prog1(mem);
   test(mem);
