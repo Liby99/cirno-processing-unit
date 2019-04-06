@@ -14,6 +14,7 @@ Note:
   <thead>
     <tr>
       <th>Function</th>
+      <th>Instr</th>
       <th>8</th>
       <th>7</th>
       <th>6</th>
@@ -29,6 +30,7 @@ Note:
   <tbody>
     <tr>
       <td>Jump Immediate</td>
+      <td><code>jmpi</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
@@ -37,6 +39,7 @@ Note:
     </tr>
     <tr>
       <td>And Immediate</td>
+      <td><code>andi</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -46,6 +49,7 @@ Note:
     </tr>
     <tr>
       <td>Load Immediate High</td>
+      <td><code>lih</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -55,6 +59,7 @@ Note:
     </tr>
     <tr>
       <td>Load Immediate Low</td>
+      <td><code>lil</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -64,6 +69,7 @@ Note:
     </tr>
     <tr>
       <td>Shift Right Immediate</td>
+      <td><code>shri</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
@@ -74,6 +80,7 @@ Note:
     </tr>
     <tr>
       <td>Shift Left Immediate</td>
+      <td><code>shli</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>1</code></td>
@@ -84,6 +91,7 @@ Note:
     </tr>
     <tr>
       <td>Store</td>
+      <td><code>sb</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -95,6 +103,7 @@ Note:
     </tr>
     <tr>
       <td>Load</td>
+      <td><code>lb</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -106,6 +115,7 @@ Note:
     </tr>
     <tr>
       <td>Shift Right Register</td>
+      <td><code>shrr</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -117,6 +127,7 @@ Note:
     </tr>
     <tr>
       <td>Shift Left Register</td>
+      <td><code>shlr</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -128,6 +139,7 @@ Note:
     </tr>
     <tr>
       <td>Move</td>
+      <td><code>mov</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -139,6 +151,7 @@ Note:
     </tr>
     <tr>
       <td>Compare</td>
+      <td><code>cmp</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -150,6 +163,7 @@ Note:
     </tr>
     <tr>
       <td>Add</td>
+      <td><code>add</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -161,6 +175,7 @@ Note:
     </tr>
     <tr>
       <td>Sub</td>
+      <td><code>sub</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
@@ -172,6 +187,7 @@ Note:
     </tr>
     <tr>
       <td>And</td>
+      <td><code>and</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -183,6 +199,7 @@ Note:
     </tr>
     <tr>
       <td>Or</td>
+      <td><code>or</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -194,6 +211,7 @@ Note:
     </tr>
     <tr>
       <td>Xor</td>
+      <td><code>xor</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -205,6 +223,7 @@ Note:
     </tr>
     <tr>
       <td>Incr</td>
+      <td><code>incr</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -217,6 +236,7 @@ Note:
     </tr>
     <tr>
       <td>Jump Register</td>
+      <td><code>jmpr</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -229,6 +249,7 @@ Note:
     </tr>
     <tr>
       <td>Branch if Zero</td>
+      <td><code>br</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -237,10 +258,11 @@ Note:
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td colspan="2" align="center"><code>$a</code></td>
-      <td><code>$pc = $cmp ? $a : $pc</code></td>
+      <td><code>if $cmp: $pc = $a</code></td>
     </tr>
     <tr>
       <td>Nil Operation</td>
+      <td><code>nil</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
