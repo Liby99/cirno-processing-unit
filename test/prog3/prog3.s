@@ -109,7 +109,7 @@ end_outerwhile:
 	mv	$2, addr_inByte
 	st	$1, $2			// inbyte = 0
 
-	mv	$1, 0b11111000		// j = 0b11111100;
+	mv	$1, 0b1111011		// j = 3;
 	mv	$2, addr_j
 	st	$1, $2
 
