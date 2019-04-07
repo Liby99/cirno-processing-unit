@@ -1,4 +1,4 @@
-lih $0 5
-lil $0 5
-lil $1 3
+movih $0 5
+movil $0 5
+movil $1 3
 add $0 $1

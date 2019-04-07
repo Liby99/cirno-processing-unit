@@ -22,119 +22,134 @@ public:
   }
 
   void step() {
+    bool advance_pc = true;
+
     Instr ins;
     if (pc >= instructions.size()) {
-      ins = 0;
+      ins = 0; // Nil Operator
+      advance_pc = false;
     } else {
       ins = instructions[pc];
     }
 
-    bool advance_pc = 1;
-    byte b8 = ins >> 8, b7 = (ins >> 7) & 1,
-        b6 = (ins >> 6) & 1, b5 = (ins >> 5) & 1;
-    if (b8) {
-      byte reg = (ins >> 4) & 3;
-      byte imm = ins & 15;
-      if (b7) {
-        if (b6) {
-          imm = ins & 31;
-          if (b5) {
-            pc -= imm;
-          } else {
-            pc += imm;
-          }
-          advance_pc = 0;
+    byte b876 = (ins >> 6) & 7;
+    byte b54 = (ins >> 4) & 3;
+    byte b5 = (ins >> 5) & 1;
+    byte rega = (ins >> 2) & 3;
+    byte regb = ins & 3;
+    switch (b876) {
+      case 0b111: { // 111, jmpi
+        byte imm = ins & 31;
+        if (b5) {
+          pc -= imm;
         } else {
-          regs[reg] &= imm;
+          pc += imm;
         }
-      } else {
-        if (b6) {
-          regs[reg] |= imm << 4;
-        } else {
-          regs[reg] |= imm;
+        advance_pc = false;
+      } break;
+      case 0b110: { // 110, andi
+        byte reg = (ins >> 4) & 3;
+        byte imm = ins & 15;
+        regs[reg] &= imm;
+      } break;
+      case 0b101: { // 101, movih
+        byte reg = (ins >> 4) & 3;
+        byte imm = ins & 15;
+        regs[reg] |= imm << 4;
+      } break;
+      case 0b100: { // 100, movil
+        byte reg = (ins >> 4) & 3;
+        byte imm = ins & 15;
+        regs[reg] |= imm;
+      } break;
+      case 0b011: { // 011
+        byte reg = (ins >> 3) & 3;
+        byte shamt = ins & 7;
+        if (b5) { // 0111, shri
+          regs[reg] >>= shamt;
+        } else { // 0110, shli
+          regs[reg] <<= shamt;
         }
-      }
-    } else {
-      if (b7) {
-        if (b6) {
-          byte reg = (ins >> 3) & 3;
-          byte shamt = ins & 7;
-          if (b5) {
-            regs[reg] >>= shamt;
-          } else {
-            regs[reg] <<= shamt;
-          }
-        } else {
-          byte b4 = (ins >> 4) & 1;
-          byte rega = (ins >> 2) & 3;
-          byte regb = ins & 3;
-          if (b5) {
-            if (b4) {
-              memory[regb] = regs[rega];
-            } else {
-              regs[rega] = memory[regb];
+      } break;
+      case 0b010: { // 010
+        switch (b54) {
+          case 0b11: { // 01011, bri
+            if (cmp) {
+              byte b3 = (ins >> 3) & 1;
+              byte imm = ins & 7;
+              pc = b3 ? pc - imm : pc + imm;
+              advance_pc = false;
             }
-          } else {
-            if (b4) {
-              regs[rega] >>= regs[regb];
+          } break;
+          case 0b10: { // 01010, sh
+            byte b = regs[regb];
+            byte shamt = b & 7;
+            byte sign = (b >> 3) & 1;
+            if (sign) {
+              regs[rega] <<= shamt;
             } else {
-              regs[rega] <<= regs[regb];
+              regs[rega] >>= shamt;
             }
-          }
+          } break;
+          case 0b01: { // 01001, sb
+            memory[regb] = regs[rega];
+          } break;
+          case 0b00: { // 01000, lb
+            regs[rega] = memory[regb];
+          } break;
         }
-      } else {
-        byte b4 = (ins >> 4) & 1;
-        byte rega = (ins >> 2) & 3;
-        byte regb = ins & 3;
-        if (b6) {
-          if (b5) {
-            if (b4) {
-              regs[rega] = regs[regb];
-            } else {
-              cmp = regs[rega] == regs[regb];
-            }
-          } else {
-            if (b4) {
-              regs[rega] += regs[regb];
-            } else {
-              regs[rega] -= regs[regb];
-            }
-          }
-        } else {
-          if (b5) {
-            if (b4) {
-              regs[rega] &= regs[regb];
-            } else {
-              regs[rega] |= regs[regb];
-            }
-          } else {
-            if (b4) {
-              regs[rega] ^= regs[regb];
-            } else {
-              byte b3 = (rega >> 1) & 1;
-              byte b2 = rega & 1;
-              rega = regb;
-              if (b3) {
-                if (b2) {
-                  regs[rega] += 1;
-                } else {
+      } break;
+      case 0b001: { // 001
+        switch (b54) {
+          case 0b11: { // 00011, mov
+            regs[rega] = regs[regb];
+          } break;
+          case 0b10: { // 00010, cmp
+            cmp = regs[rega] == regs[regb];
+          } break;
+          case 0b01: { // 00001, add
+            regs[rega] += regs[regb];
+          } break;
+          case 0b00: { // 00000, sub
+            regs[rega] -= regs[regb];
+          } break;
+        }
+      } break;
+      case 0b000: { // 000
+        switch (b54) {
+          case 0b11: { // 00011, and
+            regs[rega] &= regs[regb];
+          } break;
+          case 0b10: { // 00010, or
+            regs[rega] |= regs[regb];
+          } break;
+          case 0b01: { // 00001, xor
+            regs[rega] ^= regs[regb];
+          } break;
+          case 0b00: { // 00000
+            byte b32 = rega;
+            rega = regb;
+            switch (b32) {
+              case 0b11: { // 0000011, incr
+                regs[rega] += 1;
+              } break;
+              case 0b10: { // 0000010, jmpr
+                pc = regs[rega];
+                advance_pc = false;
+              } break;
+              case 0b01: { // 0000001, br
+                if (cmp) {
                   pc = regs[rega];
-                  advance_pc = 0;
+                  advance_pc = false;
                 }
-              } else {
-                if (b2) {
-                  if (cmp) {
-                    pc = regs[rega];
-                    advance_pc = 0;
-                  }
-                } else {
-                  // Do nothing
-                }
-              }
+              } break;
+              case 0b00: { // 0000000xx, nil
+                // Do nothing
+              } break;
             }
-          }
+          } break;
         }
-      }
+      } break;
     }
 
     if (advance_pc) {
@@ -146,6 +161,12 @@ public:
     while (pc < instructions.size()) {
       step();
     }
+  }
+
+  void print_curr_state() {
+    printf("pc: %d\n", pc);
+    printf("cmp: %d\n", cmp);
+    print_regs();
   }
 
   void print_reg(byte i) {
