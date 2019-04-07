@@ -1,4 +1,26 @@
-	// TODO clear acc1 and acc2 if memory is not 0 at start
+#define addr_i 195
+#define addr_j 196
+#define addr_pos 197
+#define addr_acc1 194
+#define addr_acc2 193
+#define addr_char1 198
+#define addr_char2 199
+#define addr_inByte 200
+#define addr_pattern 192
+
+#define st sb
+#define ld lb
+#define mv movi
+#define b0 br
+#define jp jmpr
+#define inc incr
+
+	andi	$1, 0			// $1 = 0
+	mv	$2, addr_acc1
+	st	$1, $2			// acc1 = 0
+	mv	$2, addr_acc2
+	st	$1, $2			// acc2 = 0
+	
 	mv	$2, addr_i
 	mv	$1, 0b11000001		// $1 = i
 	st	$1, $2			// i = 0b11000001
@@ -11,15 +33,13 @@
 	mv	$2, addr_char1
 	st	$1, $2			// char1 = mem[pos]
 
-
 outerwhile:
 	// while(i != 0)
 	mv	$2, addr_i
 	ld 	$1, $2			// $1 = i
 	b0	$1, end_outerwhile
 
-	inc	$1			
-	mv	$2, addr_i
+	inc	$1	
 	st	$1, $2			// i++
 
 	mv	$2, addr_pos
@@ -31,11 +51,10 @@ outerwhile:
 	mv	$2, addr_char2
 	st	$1, $2
 
-	clr	$1,
+	andi	$1, 0
 	mv	$2, addr_inByte
 	st	$1, $2			// inbyte = 0
 
-	//
 	mv	$1, 0b11111000		// j = 0b11111000;
 	mv	$2, addr_j
 	st	$1, $2
@@ -83,12 +102,12 @@ ifmatch:
 	mv	$2, addr_j
 	ld	$1, $2			// $1 = j
 	and	$1, 0b00000100
-	b0	ifinbyte
+	b0	$1, ifinbyte
 	jp	notMatch
 
 ifinbyte: 
 	mv	$2, addr_inByte
-	mv	$1, $2			// inByte = 1
+	mv	$1, 1			// inByte = 1
 	st	$1, $2
 	jp	notMatch
 
@@ -105,7 +124,7 @@ end_innerwhile:
 
 end_outerwhile:
 
-	clr	$1,
+	andi	$1, 0
 	mv	$2, addr_inByte
 	st	$1, $2			// inbyte = 0
 
@@ -145,7 +164,7 @@ lastByteMatch:
 	st	$1, $2
 
 	mv	$2, addr_inByte
-	mv	$1, $2			// inByte = 1
+	mv	$1, 1			// inByte = 1
 	st	$1, $2
 
 	jp	lastByteNotMatch
