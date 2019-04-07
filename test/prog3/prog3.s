@@ -37,7 +37,8 @@ outerwhile:
 	// while(i != 0)
 	mv	$2, addr_i
 	ld 	$1, $2			// $1 = i
-	b0	$1, end_outerwhile
+	mv	$4, end_outerwhile
+	b0	$1, $4
 
 	inc	$1	
 	st	$1, $2			// i++
@@ -60,7 +61,8 @@ outerwhile:
 	st	$1, $2
 
 innerwhile:
-	b0	$1, end_innerwhile
+	mv	$4, end_innerwhile
+	b0	$1, $4
 	mv	$2, addr_char1
 	ld	$1, $2			// $1 = char1
 	mv	$2, addr_pattern
@@ -70,7 +72,8 @@ innerwhile:
 	mv	$2, 0b11110000		
 	and 	$1, $2			// temp $= 0b11110000
 
-	b0	$1, ifmatch
+	mv	$4, ifmatch
+	b0	$1, $4
 
 notMatch:
 	mv	$2, addr_char1
@@ -91,7 +94,8 @@ notMatch:
 	ld	$1, $2
 	inc	$1
 	st	$1, $2
-	jp	innerwhile
+	mv	$4, innerwhile
+	jp	$4
 	
 ifmatch:
 	mv	$2, addr_acc1
@@ -102,14 +106,17 @@ ifmatch:
 	mv	$2, addr_j
 	ld	$1, $2			// $1 = j
 	and	$1, 0b00000100
-	b0	$1, ifinbyte
+	mv	$4, ifinbyte
+	b0	$1, $4
+	mv	$4, notMatch
 	jp	notMatch
 
 ifinbyte: 
 	mv	$2, addr_inByte
 	mv	$1, 1			// inByte = 1
 	st	$1, $2
-	jp	notMatch
+	mv	$4, notMatch
+	jp	$4
 
 end_innerwhile:
 	mv	$2, addr_acc2		// $1 = acc2
@@ -120,7 +127,8 @@ end_innerwhile:
 
 	add	$1, $3
 	st	$1, $2
-	jp	outerwhile
+	mv	$4, outerwhile
+	jp	$4
 
 end_outerwhile:
 
@@ -133,7 +141,8 @@ end_outerwhile:
 	st	$1, $2
 
 lastBytewhile:
-	b0	$1, end_prog
+	mv	$4, end_prog
+	b0	$1, $4
 	mv	$2, addr_char1
 	ld	$1, $2			// $1 = char1
 	mv	$2, addr_pattern
@@ -143,7 +152,8 @@ lastBytewhile:
 	mv	$2, 0b11110000		
 	and 	$1, $2			// temp &= 0b11110000
 
-	b0	$1, lastByteMatch
+	mv	$4, lastByteMatch
+	b0	$1, $4
 
 lastByteNotMatch:
 	mv	$2, addr_char1
@@ -155,7 +165,8 @@ lastByteNotMatch:
 	ld	$1, $2
 	inc	$1
 	st	$1, $2
-	jp	lastBytewhile
+	mv	$4, lastBytewhile
+	jp	$4
 	
 lastByteMatch:
 	mv	$2, addr_acc1
@@ -167,7 +178,8 @@ lastByteMatch:
 	mv	$1, 1			// inByte = 1
 	st	$1, $2
 
-	jp	lastByteNotMatch
+	mv	$4, lastBytewhile
+	jp	$4
 
 end_prog
 	mv	$2, addr_acc2		// $1 = acc2

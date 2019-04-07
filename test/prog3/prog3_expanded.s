@@ -28,7 +28,8 @@ outerwhile:
 	// while(i != 0)
 	movi	$2, 195
 	lb 	$1, $2			// $1 = i
-	br	$1, end_outerwhile
+	movi	$4, end_outerwhile
+	br	$1, $4
 
 	incr	$1	
 	sb	$1, $2			// i++
@@ -51,7 +52,8 @@ outerwhile:
 	sb	$1, $2
 
 innerwhile:
-	br	$1, end_innerwhile
+	movi	$4, end_innerwhile
+	br	$1, $4
 	movi	$2, 198
 	lb	$1, $2			// $1 = char1
 	movi	$2, 192
@@ -61,7 +63,8 @@ innerwhile:
 	movi	$2, 0b11110000		
 	and 	$1, $2			// temp $= 0b11110000
 
-	br	$1, ifmatch
+	movi	$4, ifmatch
+	br	$1, $4
 
 notMatch:
 	movi	$2, 198
@@ -82,7 +85,8 @@ notMatch:
 	lb	$1, $2
 	incr	$1
 	sb	$1, $2
-	jmpr	innerwhile
+	movi	$4, innerwhile
+	jmpr	$4
 	
 ifmatch:
 	movi	$2, 194
@@ -93,14 +97,17 @@ ifmatch:
 	movi	$2, 196
 	lb	$1, $2			// $1 = j
 	and	$1, 0b00000100
-	br	$1, ifinbyte
+	movi	$4, ifinbyte
+	br	$1, $4
+	movi	$4, notMatch
 	jmpr	notMatch
 
 ifinbyte: 
 	movi	$2, 200
 	movi	$1, 1			// inByte = 1
 	sb	$1, $2
-	jmpr	notMatch
+	movi	$4, notMatch
+	jmpr	$4
 
 end_innerwhile:
 	movi	$2, 193		// $1 = acc2
@@ -111,7 +118,8 @@ end_innerwhile:
 
 	add	$1, $3
 	sb	$1, $2
-	jmpr	outerwhile
+	movi	$4, outerwhile
+	jmpr	$4
 
 end_outerwhile:
 
@@ -124,7 +132,8 @@ end_outerwhile:
 	sb	$1, $2
 
 lastBytewhile:
-	br	$1, end_prog
+	movi	$4, end_prog
+	br	$1, $4
 	movi	$2, 198
 	lb	$1, $2			// $1 = char1
 	movi	$2, 192
@@ -134,7 +143,8 @@ lastBytewhile:
 	movi	$2, 0b11110000		
 	and 	$1, $2			// temp &= 0b11110000
 
-	br	$1, lastByteMatch
+	movi	$4, lastByteMatch
+	br	$1, $4
 
 lastByteNotMatch:
 	movi	$2, 198
@@ -146,7 +156,8 @@ lastByteNotMatch:
 	lb	$1, $2
 	incr	$1
 	sb	$1, $2
-	jmpr	lastBytewhile
+	movi	$4, lastBytewhile
+	jmpr	$4
 	
 lastByteMatch:
 	movi	$2, 194
@@ -158,7 +169,8 @@ lastByteMatch:
 	movi	$1, 1			// inByte = 1
 	sb	$1, $2
 
-	jmpr	lastByteNotMatch
+	movi	$4, lastBytewhile
+	jmpr	$4
 
 end_prog
 	movi	$2, 193		// $1 = acc2
