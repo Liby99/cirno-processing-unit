@@ -47,7 +47,7 @@ void prog3(char* mem) {
   unsigned char i = 0b11000001; // The outer while loop runs 63 times, check last byte separately
   unsigned char pos = 128;
   unsigned char temp; // used to store intermediate value
-  unsigned char inByte = 0; // boolean flag to indicate whether the pattern occurs in the byte
+  unsigned char inByte; // boolean flag to indicate whether the pattern occurs in the byte
   unsigned char j; // inner loop counter
 
   char1 = mem[pos];
@@ -57,6 +57,7 @@ void prog3(char* mem) {
     //char1 = mem[pos]; // Optimization, char1 has been set of value of last char2
     pos++;
     char2 = mem[pos];
+    inByte = 0;
 
     while (j != 0) { // j is a loop counter that logically loops between 0:7
       temp = char1 ^ pattern;
@@ -74,9 +75,7 @@ void prog3(char* mem) {
       j++;
     }
 
-    if (inByte) {
-      acc2++;
-    }
+    acc2 += inByte;
   }
 
   /*-------------- Check last byte --------------*/
@@ -92,9 +91,8 @@ void prog3(char* mem) {
     char1 = char1 << 1;
     j++;
   }
-  if (inByte) {
-    acc2++;
-  }
+
+  acc2 += inByte;
   /*-------------- Check last byte --------------*/
 
   mem[193] = acc2;
