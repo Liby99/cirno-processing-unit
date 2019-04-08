@@ -1,4 +1,4 @@
-# This example
+; This example is the same as `jmpi`, but using label instead
 
   movil $0 1
   jmpil end

@@ -2,7 +2,10 @@ from typing import Union, List
 from instruction import *
 
 def trim_comment(s: str) -> str:
-  return str.strip(s[0:s.find('#')])
+  comment_index = s.find(';')
+  if comment_index > 0:
+    return str.strip(s[0:comment_index])
+  return str.strip(s)
 
 def parse_reg(s: str) -> int:
   assert s[0] == "$"
