@@ -1,6 +1,6 @@
 import sys, os
 from typing import List
-from parser import parse_label, parse_instr, is_label
+from parser import trim_comment, is_label, parse_label, parse_instr
 
 machine_codes = []
 labels = {}
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     for instr in file:
 
       # Ignore comment only line
-      trimmed = str.strip(instr[0:instr.find('#')])
+      trimmed = trim_comment(instr)
       if len(trimmed) == 0:
         continue
 

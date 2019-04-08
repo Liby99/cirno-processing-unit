@@ -243,7 +243,7 @@ Note:
     </tr>
     <tr>
       <td>Jump Register</td>
-      <td><code>jmpr</code></td>
+      <td><code>jmp</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -308,3 +308,4 @@ Note:
 | Jump Label | `jmpl` | `jmpl $reg <label>` | You will be able to freely use the register `$reg` to use this command. This instruction will first move the label address to `$reg`, and then jump using that `$reg` |
 | Branch if Eq Label | `beql` | `brl $reg <label>` | This is almost the same as `Jump Label`, instead it will check if `cmp` is `1` before jumping. If not, `$pc` will be just advanced by `1`. Again you will need to be able to use the `$reg` to use this instruction |
 | Jump Immediate Label | `jmpil` | `jmpil <label>` | If you are very sure that the difference between the current instruction and the label is within 32, then you can use this instruction. This will directly jump to the `<label>` specified |
+| Branch Immediate Label | `beqil` | `beqil <label>` | If you are very sure that the difference between the current instruction and the label is within 8, then you can use this instruction. This will branch to the `<label>` if `$cmp = 0` |
