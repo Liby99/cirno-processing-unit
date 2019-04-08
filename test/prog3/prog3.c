@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 const int MEM_SIZE = 256;
+unsigned char mem[MEM_SIZE];
 
-void setup(char* mem) {
-  for (int i = 128; i <= 191; i++) {
-    mem[i] = 0b11111110;
+char* string(int a) {
+  if (a) {
+    return "SUCCEEDED";
   }
-  mem[192] = 0b11010000;
+  return "FAILED";
+}
+
+void TEST(int round, int acc1, int acc2) {
+  printf("Test %d: acc1 %s, acc2 %s\n", round, string(mem[194] == acc1), string(mem[193] == acc2));
 }
 
 /*
@@ -39,7 +44,7 @@ void setup(char* mem) {
  *     And          reg1 reg2
  *     Or           reg1 reg2
  */
-void prog3(char* mem) {
+void prog3() {
   unsigned char pattern = mem[192]; // TODO check which 4 bits are the pattern
   unsigned char acc1 = 0, acc2 = 0; // acc1 is number of times pattern occure
                                     // acc2 is numebr of bytes pattern occure within
@@ -47,7 +52,7 @@ void prog3(char* mem) {
   unsigned char i = 0b11000001; // The outer while loop runs 63 times, check last byte separately
   unsigned char pos = 128;
   unsigned char temp; // used to store intermediate value
-  unsigned char inByte = 0; // boolean flag to indicate whether the pattern occurs in the byte
+  unsigned char inByte; // boolean flag to indicate whether the pattern occurs in the byte
   unsigned char j; // inner loop counter
 
   char1 = mem[pos];
@@ -57,6 +62,7 @@ void prog3(char* mem) {
     //char1 = mem[pos]; // Optimization, char1 has been set of value of last char2
     pos++;
     char2 = mem[pos];
+    inByte = 0;
 
     while (j != 0) { // j is a loop counter that logically loops between 0:7
       temp = char1 ^ pattern;
@@ -74,15 +80,13 @@ void prog3(char* mem) {
       j++;
     }
 
-    if (inByte) {
-      acc2++;
-    }
+    acc2 += inByte;
   }
 
   /*-------------- Check last byte --------------*/
   inByte = 0;
-  j = 0b11111100;
-  while (j != 0) {
+  j = 0b11111011;
+  while (j != 0) { // runs 5 times
     temp = char1 ^ pattern;
     temp &= 0b11110000;
     if (temp == 0) {
@@ -92,23 +96,44 @@ void prog3(char* mem) {
     char1 = char1 << 1;
     j++;
   }
-  if (inByte) {
-    acc2++;
-  }
+
+  acc2 += inByte;
   /*-------------- Check last byte --------------*/
 
   mem[193] = acc2;
   mem[194] = acc1;
 }
 
-void test(char* mem) {
-  printf("%d\n", mem[193]);
-  printf("%d\n", mem[194]);
+void test1() {
+  for (int i = 128; i <= 191; i++) {
+    mem[i] = 0b11111110;
+  }
+  mem[192] = 0b11010000;
+  prog3();
+  TEST(1, 63, 0);
+}
+
+void test2() {
+  for (int i = 128; i <= 191; i++) {
+    mem[i] = 0b10011001;
+  }
+  mem[192] = 0b01100000;
+  prog3();
+  TEST(2, 127, 64);
+}
+
+void test3() {
+  for (int i = 128; i <= 191; i++) {
+    mem[i] = 0b10011001;
+  }
+  mem[192] = 0b10010000;
+  prog3();
+  // printf("%d\n", mem[194]);
+  TEST(3, 128, 64);
 }
 
 int main() {
-  char mem[MEM_SIZE];
-  setup(mem);
-  prog3(mem);
-  test(mem);
+  test1();
+  test2();
+  test3();
 }
