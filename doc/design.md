@@ -14,7 +14,7 @@ Note:
   <thead>
     <tr>
       <th>Function</th>
-      <th>Instr</th>
+      <th>Code</th>
       <th>8</th>
       <th>7</th>
       <th>6</th>
@@ -122,7 +122,7 @@ Note:
     </tr>
     <tr>
       <td>Store</td>
-      <td><code>sb</code></td>
+      <td><code>st</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -134,7 +134,7 @@ Note:
     </tr>
     <tr>
       <td>Load</td>
-      <td><code>lb</code></td>
+      <td><code>ld</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -268,7 +268,21 @@ Note:
       <td><code>if $cmp: $pc = $a</code></td>
     </tr>
     <tr>
-      <td>Nil Operation</td>
+      <td>Halt</td>
+      <td><code>nil</code></td>
+      <td><code>0</code></td>
+      <td><code>0</code></td>
+      <td><code>0</code></td>
+      <td><code>0</code></td>
+      <td><code>0</code></td>
+      <td><code>0</code></td>
+      <td><code>0</code></td>
+      <td><code>0</code></td>
+      <td><code>1</code></td>
+      <td>CPU Stops Working</td>
+    </tr>
+    <tr>
+      <td>No Op</td>
       <td><code>nil</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -284,22 +298,10 @@ Note:
   </tbody>
 </table>
 
-<!-- | Function | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|--|--|-|-|-|-|-|-|-|-
-| Jump     | `1` | |
-| Shift | `0` | `1` | `1` |
-| Store | `0` | `1` | `0` | `1` | `1` |
-| Load | `0` | `1` | `0` | `1` | `0` |
-| Move Hi | `0` | `1` | `0` | `0` | `1` |
-| Move Low | `0` | `1` | `0` | `0` | `0` |
-| Shift Right Reg  | `0` | `0` | `1` | `1` | `1` |
-| Shift Left Reg  | `0` | `0` | `1` | `1` | `0` |
-| Add  | `0` | `0` | `1` | `0` | `1` |
-| Sub  | `0` | `0` | `1` | `0` | `0` |
-| And  | `0` | `0` | `0` | `1` | `1` |
-| Or  | `0` | `0` | `0` | `1` | `0` <td colspan="2">\$reg</td><td colspan="2">\$reg</td>
-| Xor  | `0` | `0` | `0` | `0` | `1` |
-| Incr | `0` | `0` | `0` | `0` | `0` | `1` | `1` |
-| ??? | `0` | `0` | `0` | `0` | `0` | `1` | `0` |
-| Branch If 0 | `0` | `0` | `0` | `0` | `0` | `0` | `1` |
-| Nil  | `0` | `0` | `0` | `0` | `0` | `0` | `0` | `0` | `0` | -->
+## Extras
+
+| Function | Code | Format | Description |
+|----------|------|--------|-------------|
+| Move Label | `movl` | `movl $reg label` | Because a label usually represents an 8-bit number, this single instruction will be compiled into two instructions: first `movil` the lower part of the absolute position of `label` and then `movih` the upper part of the `label`. This could be used perfectly alone with `jmpr` since `jmpr` will jump to a position specified by the data in a register. |
+| Branch Label | `brl` | `brl ` |
+| Move Immediate | `movi` | `movi $reg <8-bit-number>` | This will be just transcribed to
