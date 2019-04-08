@@ -153,6 +153,10 @@ def parse_instr(s: str) -> Union[Instruction, List[Instruction]]:
       Br(reg)
     ]
 
+  elif op == "jmpil":
+    label = arr[1]
+    return JumpImmediateLabel(label)
+
   else:
     raise Exception("Not Implemented")
 

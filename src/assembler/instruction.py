@@ -178,3 +178,15 @@ class MoveLabel(Instruction):
     else:
       num = label_index & 15
       return Movil(self.reg, num).to_binary(index, labels)
+
+class JumpImmediateLabel(Instruction):
+  def __init__(self, label: str):
+    self.label = label
+
+  def to_binary(self, index: int, labels: Dict[str, int]) -> str:
+    if not self.label in labels:
+      raise Exception("Label {} doesn't exist")
+    label_index = labels[self.label]
+    diff = label_index - index
+    is_neg = diff < 0
+    return Jmpi(is_neg, abs(diff))
