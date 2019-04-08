@@ -8,10 +8,15 @@
 #define addr_inByte 200
 #define addr_pattern 192
 
+#define $1 $0
+#define $2 $1
+#define $3 $2
+#define $4 $3
+
 #define st sb
 #define ld lb
 #define mv movi
-#define b0 br
+#define b0 beq
 #define jp jmpr
 #define inc incr
 
@@ -38,7 +43,8 @@ outerwhile:
 	mv	$2, addr_i
 	ld 	$1, $2			// $1 = i
 	mv	$4, end_outerwhile
-	b0	$1, $4
+	cmp     $1, 0
+	b0	$4
 
 	inc	$1	
 	st	$1, $2			// i++
@@ -62,7 +68,8 @@ outerwhile:
 
 innerwhile:
 	mv	$4, end_innerwhile
-	b0	$1, $4
+	cmp     $1, 0
+	b0	$4
 	mv	$2, addr_char1
 	ld	$1, $2			// $1 = char1
 	mv	$2, addr_pattern
@@ -73,7 +80,8 @@ innerwhile:
 	and 	$1, $2			// temp $= 0b11110000
 
 	mv	$4, ifmatch
-	b0	$1, $4
+	cmp     $1, 0
+	b0	$4
 
 notMatch:
 	mv	$2, addr_char1
@@ -107,7 +115,8 @@ ifmatch:
 	ld	$1, $2			// $1 = j
 	and	$1, 0b00000100
 	mv	$4, ifinbyte
-	b0	$1, $4
+	cmp     $1, 0
+	b0	$4
 	mv	$4, notMatch
 	jp	notMatch
 
@@ -142,7 +151,8 @@ end_outerwhile:
 
 lastBytewhile:
 	mv	$4, end_prog
-	b0	$1, $4
+	cmp     $1, 0
+	b0	$4
 	mv	$2, addr_char1
 	ld	$1, $2			// $1 = char1
 	mv	$2, addr_pattern
@@ -153,7 +163,8 @@ lastBytewhile:
 	and 	$1, $2			// temp &= 0b11110000
 
 	mv	$4, lastByteMatch
-	b0	$1, $4
+	cmp     $1, 0
+	b0	$4
 
 lastByteNotMatch:
 	mv	$2, addr_char1
