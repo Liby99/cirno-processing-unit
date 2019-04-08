@@ -90,8 +90,8 @@ Note:
       <td><code>$a = $a << shamt</code></td>
     </tr>
     <tr>
-      <td>Branch Immediate</td>
-      <td><code>bri</code></td>
+      <td>Branch if Equal Immediate</td>
+      <td><code>beqi</code></td>
       <td><code>0</code></td>
       <td><code>1</code></td>
       <td><code>0</code></td>
@@ -255,8 +255,8 @@ Note:
       <td><code>$pc = $a</code></td>
     </tr>
     <tr>
-      <td>Branch if Zero</td>
-      <td><code>br</code></td>
+      <td>Branch if Equal</td>
+      <td><code>beq</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
       <td><code>0</code></td>
@@ -303,5 +303,7 @@ Note:
 | Function | Code | Format | Description |
 |----------|------|--------|-------------|
 | Move Label | `movl` | `movl $reg label` | Because a label usually represents an 8-bit number, this single instruction will be compiled into two instructions: first `movil` the lower part of the absolute position of `label` and then `movih` the upper part of the `label`. This could be used perfectly alone with `jmpr` since `jmpr` will jump to a position specified by the data in a register. |
-| Branch Label | `brl` | `brl ` |
-| Move Immediate | `movi` | `movi $reg <8-bit-number>` | This will be just transcribed to
+| Move Immediate | `movi` | `movi $reg <8-bit-number>` | This will be just transcribed to `movil` and `movih` the two parts of this immediate |
+| Clear | `clr` | `clr $reg` | This instruction will be transcribed to `addi $reg 0`, and will set `$reg` directly to `0` |
+| Jump Label | `jmpl` | `jmpl $reg <label>` | You will be able to freely use the register `$reg` to use this command. This instruction will first move the label address to `$reg`, and then jump using that `$reg` |
+| Branch if Eq Label | `beql` | `brl $reg <label>` | This is almost the same as `Jump Label`, instead it will check if `cmp` is `1` before jumping. If not, `$pc` will be just advanced by `1`. Again you will need to be able to use the `$reg` to use this instruction |
