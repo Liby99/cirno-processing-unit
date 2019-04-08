@@ -3,7 +3,7 @@ from instruction import *
 
 def trim_comment(s: str) -> str:
   comment_index = s.find(';')
-  if comment_index > 0:
+  if comment_index >= 0:
     return str.strip(s[0:comment_index])
   return str.strip(s)
 
