@@ -54,7 +54,7 @@ void prog2(byte* mem) {
   byte i = 64, j = 0, k = 94, t = 0, p = 0;
   byte parity = 0, lower = 0, upper = 0;
 
-  while (i < 71) {
+  while (i < 94) {
 
     // Load lower and upper
     lower = mem[i];

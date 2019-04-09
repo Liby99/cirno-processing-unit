@@ -10,7 +10,7 @@ loop_start:
   incr $0 ; i++
   ld $3 $0 ; upper = mem[i]
   incr $0 ; i++
-  movil $1 15
+  movi $1 255
   st $0 $1 ; mem[255] = i, $0, $1 free, $2: lower, $3: upper
   movil $1 14
   st $2 $1 ; mem[254] = lower
@@ -206,7 +206,7 @@ correct_parity_end:
   ld $0 $3 ; i = mem[255]
   movi $3 94 ; temp = 94
   cmp $0 $3 ; $cmp = temp == i
-  beql $1 loop_end ; branch loop_end if i == 94
+  beqil loop_end ; branch loop_end if i == 94
   jmpl $1 loop_start
 
 loop_end:

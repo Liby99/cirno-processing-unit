@@ -64,6 +64,7 @@ bool should_stop(CPU &cpu, std::vector<int> &breakpoints) {
 }
 
 void run_cpu(CPU &cpu, std::vector<int> &breakpoints) {
+  cpu.step();
   while (!should_stop(cpu, breakpoints)) {
     cpu.step();
   }

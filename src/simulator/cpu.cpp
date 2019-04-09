@@ -69,12 +69,12 @@ public:
       case 0b101: { // 101, movih
         byte reg = (ins >> 4) & 3;
         byte imm = ins & 15;
-        regs[reg] |= imm << 4;
+        regs[reg] = (imm << 4) | (regs[reg] & 15);
       } break;
       case 0b100: { // 100, movil
         byte reg = (ins >> 4) & 3;
         byte imm = ins & 15;
-        regs[reg] |= imm;
+        regs[reg] = (regs[reg] & 240) | imm;
       } break;
       case 0b011: { // 011
         byte reg = (ins >> 3) & 3;

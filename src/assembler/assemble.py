@@ -46,10 +46,12 @@ if __name__ == "__main__":
       if is_label(trimmed):
         label = parse_label(trimmed)
         labels[label] = len(machine_codes)
-        debug_labels[len(machine_codes)]["label"] = label
+        if "debug" in options:
+          debug_labels[len(machine_codes)]["label"] = label
       else:
         instrs = parse_instr(trimmed)
-        debug_labels[len(machine_codes)]["instr"] = trimmed
+        if "debug" in options:
+          debug_labels[len(machine_codes)]["instr"] = trimmed
         if isinstance(instrs, list):
           machine_codes += instrs
         else:
