@@ -3,6 +3,12 @@
 #include <string>
 #include <sstream>
 
+void clean_memory(byte mem[256]) {
+  for (int i = 0; i < 256; i++) {
+    mem[i] = 0;
+  }
+}
+
 void print_prompt() {
   printf("(cdb) > ");
 }
@@ -72,6 +78,11 @@ void exec_user_input(const std::string &user_input, std::vector<int> &breakpoint
       cpu.step();
     } else if (trimmed[0] == "run") {
       run_cpu(cpu, breakpoints);
+      if (cpu.pc >= cpu.instructions.size()) {
+        printf("The program finished running\n");
+      } else {
+        printf("The program hit a breakpoint at %d\n", cpu.pc);
+      }
     } else if (trimmed[0] == "break") {
       if (trimmed.size() > 1) {
         try {
@@ -90,7 +101,7 @@ void exec_user_input(const std::string &user_input, std::vector<int> &breakpoint
         printf("Usage: break [line_num]\n");
       }
     } else if (trimmed[0] == "list") {
-      int start = std::max(cpu.pc - 5, 0);
+      int start = std::max(cpu.pc - 4, 0);
       int end = std::min(cpu.pc + 5, (int) cpu.instructions.size());
       for (int i = start; i < end; i++) {
         Instr instr = cpu.instructions[i];
@@ -159,6 +170,7 @@ int main(int argc, char *argv[]) {
   // Initialize instructions and memory
   std::vector<Instr> instructions;
   byte memory[256];
+  clean_memory(memory);
 
   // Load the data into the instructions
   if (argc < 2) {

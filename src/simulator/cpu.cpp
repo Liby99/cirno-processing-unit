@@ -106,10 +106,10 @@ public:
             }
           } break;
           case 0b01: { // 01001, sb
-            memory[regb] = regs[rega];
+            memory[regs[regb]] = regs[rega];
           } break;
           case 0b00: { // 01000, lb
-            regs[rega] = memory[regb];
+            regs[rega] = memory[regs[regb]];
           } break;
         }
       } break;
@@ -196,7 +196,7 @@ public:
   }
 
   void print_memory() {
-    printf("memory:");
+    printf("memory:\n");
     for (int i = 0; i < 256; i++) {
       printf("%d ", i);
       print_binary(memory[i]);
