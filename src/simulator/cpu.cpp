@@ -17,6 +17,17 @@ void print_binary(byte x) {
 
 class CPU {
 public:
+
+  int pc;
+
+  bool cmp;
+
+  byte regs[4];
+
+  const std::vector<Instr> &instructions;
+
+  byte *memory;
+
   CPU(const std::vector<Instr> &instructions, byte *memory)
     : pc(0), cmp(0), instructions(instructions), memory(memory) {
     for (int i = 0; i < 4; i++) {
@@ -192,13 +203,6 @@ public:
       printf("\n");
     }
   }
-
-private:
-  int pc;
-  bool cmp;
-  byte regs[4];
-  const std::vector<Instr> &instructions;
-  byte *memory;
 };
 
 #endif
