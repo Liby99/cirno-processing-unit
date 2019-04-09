@@ -26,9 +26,10 @@ void print_help() {
   printf("  help\n");
   printf("  step\n");
   printf("  run\n");
-  printf("  list\n");
-  printf("  break [line_num]\n");
-  printf("  print [pc | reg | cmp | mem | mem [loc] | mem [start] [end] | breakpoint]\n");
+  printf("  list [breakpoint]\n");
+  printf("  break line_num\n");
+  printf("  remove [breakpoint [id]]\n");
+  printf("  print [pc | reg | cmp | mem | mem [loc] | mem [start] [end]]\n");
 }
 
 std::vector<std::string> split(std::string str, char delimiter) {
@@ -87,7 +88,7 @@ void exec_user_input(const std::string &user_input, std::vector<int> &breakpoint
     } else if (trimmed[0] == "break") {
       if (trimmed.size() > 1) {
         try {
-          int index = atoi(trimmed[1].c_str());
+          int index = std::stoi(trimmed[1]);
           if (index >= 0 && index < cpu.instructions.size()) {
             breakpoints.push_back(index);
             printf("Added breakpoint #%lu at line %d\n", breakpoints.size(), index);
@@ -101,14 +102,51 @@ void exec_user_input(const std::string &user_input, std::vector<int> &breakpoint
         printf("Please specify the line number you want to set breakpoint.");
         printf("Usage: break [line_num]\n");
       }
+    } else if (trimmed[0] == "remove") {
+      if (trimmed.size() > 1) {
+        if (trimmed[1] == "breakpoint") {
+          if (trimmed.size() > 2) {
+            try {
+              int index = std::stoi(trimmed[2]);
+              if (index > 0 && index <= breakpoints.size()) {
+                int actual = index - 1;
+                breakpoints.erase(breakpoints.begin() + actual);
+              } else {
+                printf("Non-exist breakpoint #%d\n", index);
+              }
+            } catch (...) {
+              printf("Unknown argument %s\n", trimmed[2].c_str());
+              printf("Please input the breakpoint id\n");
+            }
+          } else {
+            breakpoints.clear();
+          }
+        } else {
+          printf("Unknown object %s\n", trimmed[1].c_str());
+        }
+      } else {
+        printf("Please specify what do you want to clear\n");
+        printf("Usage: remove [breakpoint]\n");
+      }
     } else if (trimmed[0] == "list") {
-      int start = std::max(cpu.pc - 4, 0);
-      int end = std::min(cpu.pc + 5, (int) cpu.instructions.size());
-      for (int i = start; i < end; i++) {
-        Instr instr = cpu.instructions[i];
-        printf("%s %d: %d", i == cpu.pc ? "->" : "  ", i, (instr >> 8) & 1);
-        print_binary((byte) instr);
-        printf("\n");
+      if (trimmed.size() > 1) {
+        if (trimmed[1] == "breakpoint") {
+          printf("Breakpoints:\n");
+          for (int i = 0; i < breakpoints.size(); i++) {
+            printf("  #%d: line %d\n", i + 1, breakpoints[i]);
+          }
+        } else {
+          printf("Unknown object %s\n", trimmed[1].c_str());
+        }
+      } else {
+        int start = std::max(cpu.pc - 4, 0);
+        int end = std::min(cpu.pc + 5, (int) cpu.instructions.size());
+        for (int i = start; i < end; i++) {
+          Instr instr = cpu.instructions[i];
+          printf("%s %d: %d", i == cpu.pc ? "->" : "  ", i, (instr >> 8) & 1);
+          print_binary((byte) instr);
+          printf("\n");
+        }
       }
     } else if (trimmed[0] == "print") {
       if (trimmed.size() > 1) {
@@ -121,11 +159,11 @@ void exec_user_input(const std::string &user_input, std::vector<int> &breakpoint
         } else if (trimmed[1] == "mem") {
           if (trimmed.size() > 2) {
             try {
-              int index_1 = atoi(trimmed[2].c_str());
+              int index_1 = std::stoi(trimmed[2]);
               if (index_1 >= 0 && index_1 < 256) {
                 if (trimmed.size() > 3) {
                   try {
-                    int index_2 = atoi(trimmed[3].c_str());
+                    int index_2 = std::stoi(trimmed[3]);
                     if (index_2 >= 0 && index_2 < 256) {
                       if (index_1 <= index_2) {
                         for (int i = index_1; i <= index_2; i++) {
