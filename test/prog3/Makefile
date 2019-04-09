@@ -16,4 +16,4 @@ expand:
 	rm temp.s temp1.s
 
 clean:
-	rm prog3_arm.s prog3_expanded.s
+	rm -f prog3_arm.s prog3_expanded.s
