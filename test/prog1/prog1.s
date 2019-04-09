@@ -18,14 +18,6 @@ prog_start:
 	andi	$0, 0
 	movi	$1, addr_i
 	st	$0, $1
-	movi $1, addr_lower
-	st	$0, $1
-	movi	$1, addr_upper
-	st	$0, $1
-	movi $1, addr_temp_lower
-	st	$0, $1
-	movi $1, addr_temp_upper
-	st	$0, $1
 
 	andi	$0, 30
 	movi		$1, addr_k
@@ -34,10 +26,7 @@ prog_start:
 while:
 	movi	$1,	addr_i
 	ld	$1, $1
-	andi	$0, 30
-	cmp	$0, $1
-	beqil	end_while
-
+	
 	movi	$0, addr_lower
 	ld	$2, $1					// $2(lower) = mem[i]
 	st	$2, $0
@@ -193,5 +182,12 @@ continue_while:
 	st	$1, $3
 	incr	$3
 	st	$3, $2
+
+	movi	$1,	addr_i
+	ld	$1, $1
+	movi	$0, 30
+	cmp	$1, $0
+	beqil	end_while
+	jmpil	while
 
 end_while:

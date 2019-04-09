@@ -52,7 +52,7 @@ void prog1(byte* mem) {
       t = t >> 1;
       j++;
     }
-    p8 = (p << 7) & 128;
+    p8 = p << 7;
 
     // find p4
     // p4 = 0;
@@ -64,7 +64,7 @@ void prog1(byte* mem) {
       t = t >> 1;
       j++;
     }
-    p4 = (p << 3) & 8;
+    p4 = p << 3;
 
     // find p2
     // p2 = 0;
