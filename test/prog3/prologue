@@ -1,0 +1,46 @@
+#define addr_i 		r0, 195
+#define addr_j 		r0, 196
+#define addr_pos 	r0, 197
+#define addr_acc1 	r0, 194
+#define addr_acc2 	r0, 193
+#define addr_char1 	r0, 198
+#define addr_char2 	r0, 199
+#define addr_inByte 	r0, 200
+#define addr_pattern 	r0, 192
+#define POS		r0, r1
+
+#define $1 r1
+#define $2 r2
+#define $3 r3
+#define $4 r4
+
+#define st strb
+#define ld ldrb
+#define mv mov
+#define b0 bxeq
+#define jp bx
+#define ls lsl
+#define rs lsr
+#define or orr
+#define inc incr
+#define xor eor
+#define mva add
+#define mvb ldr
+#define andi and
+
+@ Rasberry Pi directives
+	.cpu	cortex-a53	@ Version of our Pis
+	.syntax unified		@ Modern ARM syntax
+	
+	.equ	FP_OFFSET, 4	@ Offset from sp to set fp
+
+	.global prog3		@ Specify sum3 as a global symnbol
+
+	.text			@ Switch to Text segament 
+	.align 2		@ Align on evenly divisible by 4 byte address;
+				@  .align n where 2^n determines alignment
+
+prog3:
+@ Standard prologue
+	push	{fp, lr}		@ Save registers: fp, lr
+	add	fp, sp, FP_OFFSET	@ Set fp to base of saved registers

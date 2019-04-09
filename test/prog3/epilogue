@@ -1,0 +1,3 @@
+@ Standard epilogue
+	sub	sp, fp, FP_OFFSET	@ Set sp to top of saved registers
+	pop	{fp,pc}			@ Restore fp; restoer lr into pc for 
