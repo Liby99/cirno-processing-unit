@@ -71,7 +71,7 @@ class Shli(AShamtInstruction):
   def opcode(self):
     return "0110"
 
-class Bri(Instruction):
+class Beqi(Instruction):
   def __init__(self, neg: bool, imm: int):
     self.neg = neg
     self.imm = imm
@@ -95,11 +95,11 @@ class Sh(ABInstruction):
   def opcode(self):
     return "01010"
 
-class Sb(ABInstruction):
+class St(ABInstruction):
   def opcode(self):
     return "01001"
 
-class Lb(ABInstruction):
+class Ld(ABInstruction):
   def opcode(self):
     return "01000"
 
@@ -142,11 +142,11 @@ class Incr(AInstruction):
   def opcode(self):
     return "0000011"
 
-class Jmpr(AInstruction):
+class Jmp(AInstruction):
   def opcode(self):
     return "0000010"
 
-class Br(AInstruction):
+class Beq(AInstruction):
   def opcode(self):
     return "0000001"
 
@@ -189,4 +189,16 @@ class JumpImmediateLabel(Instruction):
     label_index = labels[self.label]
     diff = label_index - index
     is_neg = diff < 0
-    return Jmpi(is_neg, abs(diff))
+    return Jmpi(is_neg, abs(diff)).to_binary(index, labels)
+
+class BranchImmediateLabel(Instruction):
+  def __init__(self, label: str):
+    self.label = label
+
+  def to_binary(self, index: int, labels: Dict[str, int]) -> str:
+    if not self.label in labels:
+      raise Exception("Label {} doesn't exist")
+    label_index = labels[self.label]
+    diff = label_index - index
+    is_neg = diff < 0
+    return Beqi(is_neg, abs(diff)).to_binary(index, labels)
