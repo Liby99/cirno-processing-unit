@@ -1,3 +1,6 @@
+#ifndef CPU_CPP
+#define CPU_CPP
+
 #include <stdio.h>
 #include <vector>
 
@@ -181,6 +184,15 @@ public:
     }
   }
 
+  void print_memory() {
+    printf("memory:");
+    for (int i = 0; i < 256; i++) {
+      printf("%d ", i);
+      print_binary(memory[i]);
+      printf("\n");
+    }
+  }
+
 private:
   int pc;
   bool cmp;
@@ -188,3 +200,5 @@ private:
   const std::vector<Instr> &instructions;
   byte *memory;
 };
+
+#endif
