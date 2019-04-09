@@ -100,9 +100,9 @@ public:
             byte shamt = b & 7;
             byte sign = (b >> 3) & 1;
             if (sign) {
-              regs[rega] <<= shamt;
-            } else {
               regs[rega] >>= shamt;
+            } else {
+              regs[rega] <<= shamt;
             }
           } break;
           case 0b01: { // 01001, sb

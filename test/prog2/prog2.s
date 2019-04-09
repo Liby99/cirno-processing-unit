@@ -65,12 +65,15 @@ p4_while_start:
 p4_while_end:
   andi $2 1 ; p &= 1
   movi $0 252
-  ld $1 $0 ; $0 = parity = mem[252]
-  or $0 $2 ; parity |= p
-  shli $0 1 ; parity <<= 1
-  st $1 $0 ; mem[252] = parity
+  ld $1 $0 ; $1 = parity = mem[252]
+  or $1 $2 ; parity |= p
+  shli $1 1 ; parity <<= 1
 
   ;; Then we deal with p2
+  ;;  $0: temp
+  ;;  $1: parity
+  ;;  $2: p
+  ;;  $3: t
   movil $0 14 ; temp = 254
   ld $2 $0 ; p = mem[254] = mem[temp] = lower
   shri $2 1 ; p >>= 1
@@ -91,10 +94,9 @@ p4_while_end:
   shri $3 1 ; t >>= 1
   xor $2 $3 ; p ^= t
   andi $2 1 ; p &= 1
-  movil $0 12 ; temp = 252
-  ld $1 $0 ; parity = mem[temp]
   or $1 $2 ; parity |= p
-  shli $1 1
+  shli $1 1 ; parity <<= 1
+  movil $0 12 ; temp = 252
   st $1 $0 ; mem[temp] = parity
 
   ;; Finally we deal with p1

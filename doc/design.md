@@ -114,10 +114,10 @@ Note:
       <td colspan="2" align="center"><code>$b</code></td>
       <td>
         <code>shamt = $b[2:0]</code><br />
-        <code>if $b[3]:</code><br />
-        <code>&nbsp; $a = $a << shamt</code><br />
+        <code>if $b[3] == 1:</code><br />
+        <code>&nbsp; $a = $a >> shamt</code><br />
         <code>else:</code><br />
-        <code>&nbsp; $a = $a >> shamt</code>
+        <code>&nbsp; $a = $a <<>> shamt</code>
       </td>
     </tr>
     <tr>
