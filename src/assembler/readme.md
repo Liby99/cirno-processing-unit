@@ -15,27 +15,20 @@ This will print out the following result
 001010000
 ```
 
-There's also a command line flag of thie program `--c-style`:
-
-```
-$ python3 assemble.py test/add.s --c-style
-```
-
-The output will then be
-
-```
-0b101000101,
-0b100000101,
-0b100010011,
-0b001010000,
-```
-
-This way you can more easily copy this assembled machine code to the simulator and run this.
-
 ## Exporting Simulator Runnable File
 
 ```
 $ python3 assemble.py test/add.s > ../simulator/test/add.txt
+```
+
+Then give this `add.txt` to simulator and it will be able to directly run the file
+
+## Print Debugging Symbols
+
+When doing assembly, add a flag `--debug` to enable debugging. Like this:
+
+```
+$ python3 assemble.py test/prog2.s --debug
 ```
 
 ## Assembly Language Syntax
@@ -48,5 +41,5 @@ When you want to specify the immediate, usually you only need positive number. T
 
 ## TODO
 
-- [ ] Add `0b003` and `0xf` kind of syntax support when parsing immediate
-- [ ] Add Commenting Support. When seeing `#` at the start of the line, stop parsing and go to the next line
+- [ ] Add `0b0011` and `0xf` kind of syntax support when parsing immediate
+- [x] Add Commenting Support. When seeing `;` at the start of the line, stop parsing and go to the next line
