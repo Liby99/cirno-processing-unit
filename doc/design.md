@@ -117,7 +117,7 @@ Note:
         <code>if $b[3] == 1:</code><br />
         <code>&nbsp; $a = $a >> shamt</code><br />
         <code>else:</code><br />
-        <code>&nbsp; $a = $a <<>> shamt</code>
+        <code>&nbsp; $a = $a << shamt</code>
       </td>
     </tr>
     <tr>
