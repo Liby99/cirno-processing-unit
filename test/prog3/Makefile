@@ -1,4 +1,4 @@
-all: expandARM expand
+all: expand
 	gcc prog3.c -o prog3
 	./prog3
 
