@@ -13,7 +13,7 @@ def parse_reg(s: str) -> int:
 
 def parse_instr(s: str) -> Union[Instruction, List[Instruction]]:
   try:
-    arr = [e for e in s.split(" ") if e != ""]
+    arr = [e for e in s.replace('\t',' ').replace(',',' ').split(" ") if e != ""]
     op = arr[0]
 
     # ---- Basic Instructions ----
