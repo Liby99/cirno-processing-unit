@@ -1,5 +1,5 @@
 all: expandARM expand
-	# gcc prog3.c -o prog3
+	gcc prog3.c -o prog3
 
 expandARM:
 	touch temp.s
@@ -14,3 +14,6 @@ expand:
 	sed 's/\/.*//g' temp.s  > temp1.s
 	tr -d '[]=,' < temp1.s > prog3_expanded.s
 	rm temp.s temp1.s
+
+clean:
+	rm prog3_arm.s prog3_expanded.s
