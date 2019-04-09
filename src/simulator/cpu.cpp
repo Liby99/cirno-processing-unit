@@ -1,3 +1,6 @@
+#ifndef CPU_CPP
+#define CPU_CPP
+
 #include <stdio.h>
 #include <vector>
 
@@ -14,6 +17,17 @@ void print_binary(byte x) {
 
 class CPU {
 public:
+
+  int pc;
+
+  bool cmp;
+
+  byte regs[4];
+
+  const std::vector<Instr> &instructions;
+
+  byte *memory;
+
   CPU(const std::vector<Instr> &instructions, byte *memory)
     : pc(0), cmp(0), instructions(instructions), memory(memory) {
     for (int i = 0; i < 4; i++) {
@@ -55,12 +69,12 @@ public:
       case 0b101: { // 101, movih
         byte reg = (ins >> 4) & 3;
         byte imm = ins & 15;
-        regs[reg] |= imm << 4;
+        regs[reg] = (imm << 4) | (regs[reg] & 15);
       } break;
       case 0b100: { // 100, movil
         byte reg = (ins >> 4) & 3;
         byte imm = ins & 15;
-        regs[reg] |= imm;
+        regs[reg] = (regs[reg] & 240) | imm;
       } break;
       case 0b011: { // 011
         byte reg = (ins >> 3) & 3;
@@ -86,16 +100,16 @@ public:
             byte shamt = b & 7;
             byte sign = (b >> 3) & 1;
             if (sign) {
-              regs[rega] <<= shamt;
-            } else {
               regs[rega] >>= shamt;
+            } else {
+              regs[rega] <<= shamt;
             }
           } break;
           case 0b01: { // 01001, sb
-            memory[regb] = regs[rega];
+            memory[regs[regb]] = regs[rega];
           } break;
           case 0b00: { // 01000, lb
-            regs[rega] = memory[regb];
+            regs[rega] = memory[regs[regb]];
           } break;
         }
       } break;
@@ -181,10 +195,14 @@ public:
     }
   }
 
-private:
-  int pc;
-  bool cmp;
-  byte regs[4];
-  const std::vector<Instr> &instructions;
-  byte *memory;
+  void print_memory() {
+    printf("memory:\n");
+    for (int i = 0; i < 256; i++) {
+      printf("%d ", i);
+      print_binary(memory[i]);
+      printf("\n");
+    }
+  }
 };
+
+#endif

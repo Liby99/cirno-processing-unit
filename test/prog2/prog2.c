@@ -66,8 +66,8 @@ void prog2(byte* mem) {
     parity = 0;
 
     // First deal with p8
-    p = lower >> 7;
     t = upper;
+    p = lower >> 7;
     j = 0;
     while (j < 7) {
       p = p ^ t;
@@ -138,7 +138,7 @@ void prog2(byte* mem) {
 
     // Correct parity
     t = 1;
-    if (parity > 7) {
+    if (parity > 8) {
       p = parity - 9;
       t = t << p; // t = 1 << (parity - 9)
       upper = t ^ upper;

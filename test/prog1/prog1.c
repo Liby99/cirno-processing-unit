@@ -44,7 +44,7 @@ void prog1(byte* mem) {
     temp_upper = (upper << 4) | (lower >> 4);
 
     // find p8
-    p8 = 0;
+    // p8 = 0;
     p = temp_upper;
     t = temp_upper >> 1;
     while (j < 7) {
@@ -55,7 +55,7 @@ void prog1(byte* mem) {
     p8 = (p << 7) & 128;
 
     // find p4
-    p4 = 0;
+    // p4 = 0;
     p = (temp_upper & 248) | ((lower >> 1) & 7);
     t = p >> 1;
     j = 0;
@@ -67,7 +67,7 @@ void prog1(byte* mem) {
     p4 = (p << 3) & 8;
 
     // find p2
-    p2 = 0;
+    // p2 = 0;
     p = temp_upper >> 1;
     t = p >> 1;
     p = p ^ t;
