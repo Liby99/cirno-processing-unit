@@ -19,8 +19,8 @@
 #define mv mov
 #define b0 bxeq
 #define jp bx
-#define ls lsl
-#define rs lsr
+#define shli lsl
+#define shri lsr
 #define or orr
 #define inc incr
 #define xor eor
