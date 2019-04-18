@@ -6,7 +6,7 @@ module register (
 	input reg_readx_en, reg_ready_en, reg_r_en, reg_w_en, reg_hi_en, reg_lo_en, reg_swap_en,
 	output logic [7:0] x, y
 );
-	logic [7:0][4:0] mem;
+	logic [3:0][7:0] mem;
 
 	always @(posedge clk) begin
 		if (reg_r_en) begin

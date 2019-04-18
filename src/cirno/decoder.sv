@@ -12,7 +12,12 @@ module decoder (
 
     always @(posedge clk) begin
         if (decoder_en) begin
-            case (inst)
+            reg_readx_en <= 0;
+            reg_ready_en <= 0;
+            reg_hi_en <= 0;
+            reg_lo_en <= 0;
+            reg_swap_en <= 0;
+            casex (inst)
                 9'b111xxxxxx: begin  // jmpi
                     inst_type <= 2;
                     branchi <= 1;
@@ -26,13 +31,11 @@ module decoder (
                             reg_hi_en <= 1;
                             inst_type <= 4;
                             immediate <= inst[3:0];
-                            reg_hi_en <= 1;
                         end
                         2'b00: begin // movli
                             reg_lo_en <= 1;
                             inst_type <= 4;
                             immediate <= inst[3:0];
-                            reg_lo_en <= 1;
                         end
                         2'b10: begin    //andi
                             inst_type <= 1;
@@ -102,6 +105,8 @@ module decoder (
                 default: begin
                     r1 <= inst[3:2];
                     r2 <= inst[1:0];
+                    reg_readx_en <= 1;
+                    reg_ready_en <= 1;
                     case(inst[7:4])
                         4'b1001: begin //store
                             inst_type <= 5;

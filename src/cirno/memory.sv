@@ -3,7 +3,7 @@ module memory (
 	input [7:0] addr,
 	input memory_w_en, memory_r_en,
 	input clk,
-	output[7:0] mem_out
+	output logic[7:0] mem_out
 );
 	logic [7:0][255:0] mem;
 
