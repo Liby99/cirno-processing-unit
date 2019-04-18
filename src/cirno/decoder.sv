@@ -77,7 +77,7 @@ module decoder (
                         done <= 1;
                 end
 
-                9'b00000xxx: begin
+                9'b00000xxxx: begin
                     reg_readx_en <= 1;
                     r1 <= inst[1:0];
                     case (inst[3:2])
@@ -118,8 +118,9 @@ module decoder (
                             inst_type <= 6;
                         end
 
-                        4'b0111: begin // sh
+                        4'b0111: begin // mv
                             inst_type <= 4;
+                            reg_swap_en <= 1;
                         end
 
 

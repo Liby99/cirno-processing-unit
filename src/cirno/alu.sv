@@ -30,6 +30,8 @@ module alu (
                 4'b0001:
                     result <= x ^ y;
                 4'b0011:
+                    result <= x & y;
+                4'b0010:
                     result <= x | y;
                 4'b0110:
                     cmp    <= x == y;
