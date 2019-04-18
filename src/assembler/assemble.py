@@ -19,6 +19,8 @@ if __name__ == "__main__":
       options["print_original"] = True
     if arg == "--debug":
       options["debug"] = True
+    if arg == "--verilog":
+      options["verilog"] = True
 
   filepath = os.path.join(os.getcwd(), sys.argv[1])
   with open(filepath) as file:
@@ -67,5 +69,7 @@ if __name__ == "__main__":
         has_label = index in debug_labels and "label" in debug_labels[index]
         l = "<- " + debug_labels[index]["label"] if has_label else ""
         print("{}: {} {} {}".format(i, b, c, l))
+      elif "verilog" in options:
+        print("assign rom[{}] = 9'b{};".format(index, machine_codes[index].to_binary(index, labels)))
       else:
         print(machine_codes[index].to_binary(index, labels))
