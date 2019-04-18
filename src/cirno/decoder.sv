@@ -17,6 +17,8 @@ module decoder (
             reg_hi_en <= 0;
             reg_lo_en <= 0;
             reg_swap_en <= 0;
+            branch <= 0;
+            branchi <= 0;
             casex (inst)
                 9'b111xxxxxx: begin  // jmpi
                     inst_type <= 2;
@@ -54,14 +56,14 @@ module decoder (
                     reg_readx_en <= 1;
                     y_is_imm <= 1;
                     if (inst[5]) begin //shri
-                        funct <= 4'b1110; // 0110 conflict with com
+                        funct <= 4'b0111; // 0110 conflict with com
                     end
                     else begin //shli
-                        funct <= 4'b0111;
+                        funct <= 4'b1110;
                     end
                 end
 
-                9'b01011xxx: begin //beqi
+                9'b01011xxxx: begin //beqi
                     inst_type <= 2;
                     if (cmp) begin
                         branchi <= 1;
@@ -119,6 +121,7 @@ module decoder (
                         4'b0111: begin // sh
                             inst_type <= 4;
                         end
+
 
                         default: begin 
                             inst_type <= 1;

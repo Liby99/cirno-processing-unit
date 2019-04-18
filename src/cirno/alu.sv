@@ -23,7 +23,7 @@ module alu (
                     result <= x + y;
                 4'b0100:
                     result <= x - y;
-                4'b0110:
+                4'b1110:
                     result <= x << y;
                 4'b0111:
                     result <= x >> y;

@@ -68,8 +68,6 @@ module top_level (
             2: begin
                 decoder_en <= 1;
                 fetch_unit_en <= 0;
-                branch <= 0;
-                branchi <= 0;
                 step <= 3;
                 exe_done <= 0;
             end
