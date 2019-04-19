@@ -11,7 +11,9 @@ module fetch_unit(
     output logic[8:0] inst
 );
     logic[8:0]          pc;
-    logic[511:0][8:0]   rom;
+    logic[511:0][8:0]   rom1;
+    logic[511:0][8:0]   rom2;
+    logic[511:0][8:0]   rom3;
     logic[1:0]          prog = 0;
      
     always @(posedge clk) begin
