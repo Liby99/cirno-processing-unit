@@ -55,7 +55,6 @@ module top_level (
             1: begin
                 fetch_unit_en <= 1;
                 step <= 2;
-                exe_done <= 0;
             end 
 
             2: begin
@@ -106,14 +105,11 @@ module top_level (
                         exe_done <= reg_mem_w_en;
                     end
                 endcase
+                if (exe_done) begin
+                    exe_done <= 0;
+                    step <= 1;
+                end
             end
         endcase
     end
-
-    always @(posedge exe_done) begin
-        step <= 1;
-        // reg_r_en <= 0;
-        // reg_w_en <= 0;
-    end
-
 endmodule
