@@ -1,5 +1,5 @@
 module decoder (
-    input            clk, cmp, decoder_en,
+    input            clk, cmp, decoder_en, init,
     input      [8:0] inst,
     output reg [1:0] r1, r2,
     output reg [2:0] inst_type,
@@ -21,6 +21,8 @@ module decoder (
     end
 
     always @(posedge clk) begin
+        if (init) 
+            done <= 0;
         if (decoder_en) begin
             reg_readx_en <= 0;
             reg_ready_en <= 0;

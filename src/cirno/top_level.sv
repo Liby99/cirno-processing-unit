@@ -28,7 +28,7 @@ module top_level (
     logic temp;
 
     decoder decoder(.*);
-    memory memory(.mem_in(x), .addr(y), .memory_r_en, .memory_w_en, .clk, .mem_out);
+    memory dm1(.mem_in(x), .addr(y), .memory_r_en, .memory_w_en, .clk, .mem_out);
     register register(.*);
     alu alu(.*);
     fetch_unit fetch_unit(.clk, .init, .branch, .branchi, .fetch_unit_en, .startAddress, .target(x), .immediate, .inst, .jump);

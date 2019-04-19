@@ -5,13 +5,13 @@ module memory (
 	input clk,
 	output logic[7:0] mem_out
 );
-	logic [255:0][7:0] mem;
+	logic [255:0][7:0] core;
 
 	always @(posedge clk) begin
 		if (memory_r_en)
-			mem_out <= mem[addr];
+			mem_out <= core[addr];
 		if (memory_w_en)
-			mem[addr] <= mem_in;
+			core[addr] <= mem_in;
 	end
 	initial begin
 mem[0] = 8'b01010101;
