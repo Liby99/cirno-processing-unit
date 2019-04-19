@@ -33,8 +33,10 @@ module alu (
                     result <= x & y;
                 4'b0010:
                     result <= x | y;
-                4'b0110:
+                4'b0110: begin
                     cmp    <= x == y;
+                    result <= x;
+                end
                 4'b1010: begin
                     if (y[3])
                         result <= x >> y[2:0];

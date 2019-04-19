@@ -9,6 +9,16 @@ module decoder (
     output reg       reg_hi_en, reg_lo_en, reg_readx_en, reg_ready_en, reg_swap_en,
     output reg       y_is_imm, done
 );
+    initial begin
+        reg_readx_en <= 0;
+        reg_ready_en <= 0;
+        reg_hi_en <= 0;
+        reg_lo_en <= 0;
+        reg_swap_en <= 0;
+        y_is_imm <= 0;
+        branch <= 0;
+        branchi <= 0;
+    end
 
     always @(posedge clk) begin
         if (decoder_en) begin
@@ -19,6 +29,7 @@ module decoder (
             reg_swap_en <= 0;
             branch <= 0;
             branchi <= 0;
+		    y_is_imm <= 0;
             casex (inst)
                 9'b111xxxxxx: begin  // jmpi
                     inst_type <= 2;
