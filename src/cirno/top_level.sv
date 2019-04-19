@@ -24,14 +24,14 @@ module top_level (
 	logic reg_readx_en, reg_ready_en, reg_r_en, reg_w_en, reg_hi_en, reg_lo_en, reg_swap_en, reg_mem_w_en;
     logic alu_en, decoder_en, memory_w_en, memory_r_en, fetch_unit_en;
     logic exe_done, y_is_imm;
-    logic branch, branchi;
+    logic branch, branchi, jump;
     logic temp;
 
     decoder decoder(.*);
     memory memory(.mem_in(x), .addr(y), .memory_r_en, .memory_w_en, .clk, .mem_out);
     register register(.*);
     alu alu(.*);
-    fetch_unit fetch_unit(.clk, .init, .branch, .branchi, .fetch_unit_en, .startAddress, .target(x), .immediate, .inst);
+    fetch_unit fetch_unit(.clk, .init, .branch, .branchi, .fetch_unit_en, .startAddress, .target(x), .immediate, .inst, .jump);
 
     initial begin
         startAddress = 0;
@@ -51,6 +51,8 @@ module top_level (
     always @(posedge clk) begin
         if (init) 
             step <= 1;
+        if (done)
+            step <= 0;
         case(step)
             1: begin
                 fetch_unit_en <= 1;

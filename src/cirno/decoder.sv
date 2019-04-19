@@ -5,7 +5,7 @@ module decoder (
     output reg [2:0] inst_type,
     output reg [3:0] funct,
     output reg [5:0] immediate,
-    output reg       branch, branchi,
+    output reg       branch, branchi, jump,
     output reg       reg_hi_en, reg_lo_en, reg_readx_en, reg_ready_en, reg_swap_en,
     output reg       y_is_imm, done
 );
@@ -29,12 +29,14 @@ module decoder (
             reg_swap_en <= 0;
             branch <= 0;
             branchi <= 0;
+            jump <= 0;
 		    y_is_imm <= 0;
             casex (inst)
                 9'b111xxxxxx: begin  // jmpi
                     inst_type <= 2;
                     branchi <= 1;
                     immediate <= inst[5:0];
+                    jump <= 1;
                 end
 
                 9'b1xxxxxxxx: begin // movih, movil, andi
