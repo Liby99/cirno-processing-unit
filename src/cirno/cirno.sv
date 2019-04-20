@@ -48,7 +48,6 @@ module cirno (
     temp <= 0;
   end
 
-
   always @(posedge clk) begin
     if (init) step <= 1;
     else if (done) step <= 0;

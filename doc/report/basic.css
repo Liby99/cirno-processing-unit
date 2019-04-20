@@ -1,0 +1,11 @@
+@media print {
+  body {
+    column-count: 2;
+    font-size: 9px;
+  }
+
+  .span-all {
+    column-span: all;
+    width: 100%;
+  }
+}

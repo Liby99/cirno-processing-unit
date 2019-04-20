@@ -1,0 +1,8 @@
+0: 100001001 movil $0 9 
+1: 100010100 movil $1 4 
+2: 001011100 add $3 $0 <- loop_start
+3: 000001110 incr $2 
+4: 001100110 cmp $1 $2 
+5: 010110010 beqil loop_end 
+6: 111100100 jmpil loop_start 
+7: 000000001 halt <- loop_end
