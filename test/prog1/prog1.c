@@ -32,7 +32,7 @@ void setup(byte* mem) {
 
 void prog1(byte* mem) {
   byte i = 0, j = 0, k = 30, t = 0, p = 0;
-  byte p8 = 0, p4 = 0, p2 = 0, p1 = 0, lower = 0, upper = 0;
+  byte parity = 0, lower = 0, upper = 0;
   byte b4to2 = 0, b1 = 0;
   byte temp_lower = 0, temp_upper = 0;
 
@@ -53,7 +53,9 @@ void prog1(byte* mem) {
       t = t >> 1;
       j++;
     }
-    p8 = p << 7;
+    p &= 1;
+    parity = p << 4;
+    parity |= lower & 14;
 
     // find p4
     // p4 = 0;
@@ -65,14 +67,18 @@ void prog1(byte* mem) {
       t = t >> 1;
       j++;
     }
-    p4 = p << 3;
+    p &= 1;
+    parity |= p;
+    parity <<= 1;
+    parity |= lower & 1;
+    parity <<= 1;
 
     // find p2
     // p2 = 0;
     p = temp_upper >> 1;
     t = p >> 1;
     p = p ^ t;
-    t = t >> 2;
+    t = t >> 3;
     p = p ^ t;
     t = t >> 1;
     p = p ^ t;
@@ -82,7 +88,9 @@ void prog1(byte* mem) {
     p = p ^ t;
     t = t >> 1;
     p = p ^ t;
-    p2 = (p << 1) & 2;
+    p &= 1;
+    parity |= p;
+    parity <<= 1;
 
     // find p1
     p = temp_upper;
@@ -99,13 +107,10 @@ void prog1(byte* mem) {
     p = p ^ t;
     t = t >> 2;
     p = p ^ t;
-    p1 = p & 1;
-    b4to2 = (lower << 3) & 112;
-    b1 = (lower << 2) & 4;
+    p = p & 1;
+    parity |= p;
 
-    temp_lower = p8 | b4to2 | p4 | b1 | p2 | p1;
-
-    mem[k] = temp_lower;
+    mem[k] = parity;
     k++;
     mem[k] = temp_upper;
     k++;
