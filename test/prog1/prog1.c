@@ -25,8 +25,9 @@ void setup_case(byte* mem, byte pos, byte low, byte high) {
 }
 
 void setup(byte* mem) {
-  setup_case(mem, 0, 0b01010101, 0b00000101);
-  setup_case(mem, 2, 0b10110101, 0b00000110);
+  // setup_case(mem, 0, 0b01010101, 0b00000101);
+  // setup_case(mem, 2, 0b10110101, 0b00000110);
+  setup_case(mem, 0, 0b10000001, 0b00000110);
 }
 
 void prog1(byte* mem) {
@@ -113,10 +114,10 @@ void prog1(byte* mem) {
 
 void test(byte* mem) {
   printf("Testing...\n");
-  print_mem(mem, 30);
+  print_mem(mem, 30); // 0110 1000 1000 1110
   print_mem(mem, 31);
-  print_mem(mem, 32);
-  print_mem(mem, 33);
+  // print_mem(mem, 32);
+  // print_mem(mem, 33);
 }
 
 int main() {
