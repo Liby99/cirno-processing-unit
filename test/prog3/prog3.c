@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../generateMem.c"
+#include "./original/generateMem.c"
 
 #define MEM_SIZE 256
 unsigned char mem[MEM_SIZE];
@@ -120,7 +120,7 @@ void test1() {
   }
   mem[192] = 0b11010000;
 
-  generateMemFile(mem, "prog3_test1.mem");
+  // generateMemFile(mem, "prog3_test1.mem");
 
   prog3(mem);
   TEST(1, 63, 0);
@@ -133,7 +133,7 @@ void test2() {
   }
   mem[192] = 0b01100000;
 
-  generateMemFile(mem, "prog3_test2.mem");
+  // generateMemFile(mem, "prog3_test2.mem");
 
   prog3(mem);
   TEST(2, 127, 64);
@@ -146,7 +146,7 @@ void test3() {
   }
   mem[192] = 0b10010000;
 
-  generateMemFile(mem, "prog3_test3.mem");
+  // generateMemFile(mem, "prog3_test3.mem");
 
   prog3(mem);
   // printf("%d\n", mem[194]);
