@@ -304,7 +304,7 @@ Note:
 |----------|------|--------|-------------|
 | Move Label | `movl` | `movl $reg label` | Because a label usually represents an 8-bit number, this single instruction will be compiled into two instructions: first `movil` the lower part of the absolute position of `label` and then `movih` the upper part of the `label`. This could be used perfectly alone with `jmpr` since `jmpr` will jump to a position specified by the data in a register. |
 | Move Immediate | `movi` | `movi $reg <8-bit-number>` | This will be just transcribed to `movil` and `movih` the two parts of this immediate |
-| Clear | `clr` | `clr $reg` | This instruction will be transcribed to `addi $reg 0`, and will set `$reg` directly to `0` |
+| Clear | `clr` | `clr $reg` | This instruction will be transcribed to `andi $reg 0`, and will set `$reg` directly to `0` |
 | Jump Label | `jmpl` | `jmpl $reg <label>` | You will be able to freely use the register `$reg` to use this command. This instruction will first move the label address to `$reg`, and then jump using that `$reg` |
 | Branch if Eq Label | `beql` | `brl $reg <label>` | This is almost the same as `Jump Label`, instead it will check if `cmp` is `1` before jumping. If not, `$pc` will be just advanced by `1`. Again you will need to be able to use the `$reg` to use this instruction |
 | Jump Immediate Label | `jmpil` | `jmpil <label>` | If you are very sure that the difference between the current instruction and the label is within 32, then you can use this instruction. This will directly jump to the `<label>` specified |
