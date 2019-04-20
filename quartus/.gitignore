@@ -17,11 +17,9 @@
 *.qar
 *.qarlog
 *.qws
-*.rpt
 *.smsg
 *.sof
 *.sopc_builder
-*.summary
 *.tcl
 *.txt # Explicitly add any text files used
 *~
