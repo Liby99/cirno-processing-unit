@@ -1,12 +1,12 @@
-Fitter Status : Successful - Fri Apr 19 23:16:31 2019
+Fitter Status : Successful - Fri Apr 19 23:57:52 2019
 Quartus Prime Version : 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 Revision Name : cirno
 Top-level Entity Name : top_level
 Family : Cyclone V
 Device : 5CGXFC7C7F23C8
 Timing Models : Final
-Logic utilization (in ALMs) : 321 / 56,480 ( < 1 % )
-Total registers : 117
+Logic utilization (in ALMs) : 315 / 56,480 ( < 1 % )
+Total registers : 129
 Total pins : 3 / 268 ( 1 % )
 Total virtual pins : 0
 Total block memory bits : 2,048 / 7,024,640 ( < 1 % )
