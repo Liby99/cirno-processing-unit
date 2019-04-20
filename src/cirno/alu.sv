@@ -13,9 +13,10 @@ module alu (
     input[7:0]  x, y,
     input[3:0]  funct,
     output logic[7:0] result,
-    output logic      cmp
+    output logic      eq
 );
     always @(*) begin
+			  eq <= 0;
 				case(funct)
 						4'b0101:
 								result <= x + y;
@@ -32,10 +33,10 @@ module alu (
 						4'b0010:
 								result <= x | y;
 						4'b0110: begin
-								cmp    <= x == y;
+								eq <= x == y;
 								result <= x;
 						end
-						4'b1010: begin
+						default: begin // 4'b1010 or others. Treat them as the same thing
 								if (y[3])
 										result <= x >> y[2:0];
 								else

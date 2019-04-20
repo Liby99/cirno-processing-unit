@@ -5,16 +5,16 @@ module fetch_unit(
     input       branchi,
     input       fetch_unit_en,
     input       jump,
-    input[8:0]  startAddress,
+    input[7:0]  startAddress,
     input[7:0]  target,
     input[5:0]  immediate,
     output logic[8:0] inst
 );
-    logic[8:0]          pc;
-    logic[8:0]   rom1[512];
-    logic[8:0]   rom2[512];
-    logic[8:0]   rom3[512];
-    logic[1:0]          prog = 0;
+    logic [7:0] pc;
+    logic [8:0] rom1 [139];
+    logic [8:0] rom2 [185];
+    logic [8:0] rom3 [232];
+    logic [1:0] prog = 0;
 
 		initial begin
 			$readmemb("programs/prog1.mem", rom1);
@@ -51,6 +51,7 @@ module fetch_unit(
     end
 
     always @(pc) begin
+			  inst <= 9'b000000000;
         case (prog)
             2'b01: inst <= rom1[pc];
             2'b10: inst <= rom2[pc];

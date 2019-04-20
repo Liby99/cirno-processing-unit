@@ -19,12 +19,13 @@ module top_level (
     logic [1:0] r1, r2;
     logic cmp;
     logic [2:0] step;
-    logic [8:0] startAddress;
+    logic [7:0] startAddress;
 
-	logic reg_readx_en, reg_ready_en, reg_r_en, reg_w_en, reg_hi_en, reg_lo_en, reg_swap_en, reg_mem_w_en;
+	  logic reg_readx_en, reg_ready_en, reg_r_en, reg_w_en, reg_hi_en, reg_lo_en, reg_swap_en, reg_mem_w_en;
     logic alu_en, decoder_en, memory_w_en, memory_r_en, fetch_unit_en;
     logic exe_done, y_is_imm;
     logic branch, branchi, jump;
+		logic is_cmp, eq;
     logic temp;
 
     decoder decoder(.*);
@@ -34,7 +35,7 @@ module top_level (
     fetch_unit fetch_unit(.clk, .init, .branch, .branchi, .fetch_unit_en, .startAddress, .target(x), .immediate, .inst, .jump);
 
     initial begin
-        startAddress = 9'b111111111;
+        startAddress = 9'b11111111;
         reg_r_en <= 0;
         reg_w_en <= 0;
         alu_en <= 0;
@@ -80,6 +81,9 @@ module top_level (
                             alu_en <= reg_r_en;
                             reg_w_en <= alu_en;
                             exe_done <= reg_w_en;
+														if (alu_en & is_cmp) begin
+																cmp <= eq;
+														end
                         end
                             
                         2: begin;
