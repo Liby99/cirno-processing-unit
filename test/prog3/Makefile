@@ -1,20 +1,23 @@
-all: expand
-	gcc prog3.c -o prog3
-	./prog3
+PROGRAM = prog3
+ASSEMBLER = ../../src/assembler/assemble.py
+TO_INSTR_BYTE_CODE = ../../src/tools/to_instr_byte_code.py
 
-expandARM:
-	touch temp.s
-	cat prologue >> temp.s
-	sed '/#/d' prog3.s  >> temp.s
-	cat epilogue >> temp.s
-	cpp -P temp.s > prog3_arm.s
-	rm temp.s
+all: c-test directory machine-code debug verilog-code
 
-expand:
-	cpp -P prog3.s > temp.s
-	sed 's/\/.*//g' temp.s  > temp1.s
-	tr -d '[]=,' < temp1.s > prog3_expanded.s
-	rm temp.s temp1.s
+c-test: $(PROGRAM)
+	gcc $(PROGRAM).c -o $(PROGRAM)
 
-clean:
-	rm -f prog3_arm.s prog3_expanded.s
+directory:
+	mkdir -p compiled
+
+machine-code:
+	rm -f compiled/$(PROGRAM).mem
+	python3 $(ASSEMBLER) ./$(PROGRAM).s > compiled/$(PROGRAM).mem
+
+debug:
+	rm -f compiled/$(PROGRAM).debug
+	python3 $(ASSEMBLER) ./$(PROGRAM).s --debug > compiled/$(PROGRAM).debug
+
+verilog-code:
+	rm -f compiled/$(PROGRAM).mem.sv
+	python3 $(ASSEMBLER) ./$(PROGRAM).s --verilog > compiled/$(PROGRAM).mem.sv
