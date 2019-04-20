@@ -39,8 +39,8 @@ initial begin
   for(int i=0;i<15;i++)	begin
     d1_in[i] = $random;              // create 15 messages
 // copy 15 original messages into first 30 bytes of memory
-    DUT.data_mem.core[2*i+1]  = {5'b0,d1_in[i][11:9]};	 // concatenate
-    DUT.data_mem.core[2*i]    = d1_in[i][8:1];
+    DUT.DATA_MEM.core[2*i+1]  = {5'b0,d1_in[i][11:9]};	 // concatenate
+    DUT.DATA_MEM.core[2*i]    = d1_in[i][8:1];
   end
   #10ns reset = 1'b0;
   #10ns req   = 1'b1;      // pulse request to DUT
@@ -56,10 +56,10 @@ initial begin
     p1 = d1_in[i][11]^d1_in[i][ 9]^d1_in[i][7]^d1_in[i][5]^d1_in[i][4]^d1_in[i][2]^d1_in[i][1];
 // assemble output (data with parity embedded)
     $displayb ({1'b0,d1_in[i][11:5],p8,d1_in[i][4:2],p4,d1_in[i][1],p2,p1});
-    $writeb  (DUT.data_mem.core[31+2*i]);
-    $displayb(DUT.data_mem.core[30+2*i]);
+    $writeb  (DUT.DATA_MEM.core[31+2*i]);
+    $displayb(DUT.DATA_MEM.core[30+2*i]);
 	if({1'b0,d1_in[i][11:5],p8,d1_in[i][4:2],p4,d1_in[i][1],p2,p1}!=
-       {DUT.data_mem.core[31+2*i],DUT.data_mem.core[30+2*i]}) $display("****Oh S***!");
+       {DUT.DATA_MEM.core[31+2*i],DUT.DATA_MEM.core[30+2*i]}) $display("****Oh S***!");
     $display();
   end
 
@@ -74,8 +74,8 @@ initial begin
     d2_good[i] = {d2_in[i][11:5],p8,d2_in[i][4:2],p4,d2_in[i][1],p2,p1};
     flip[i] = $random;
     d2_bad[i] = d2_good[i] ^ (1'b1<<flip[i]);
-	DUT.data_mem.core[65+2*i] = {1'b0,d2_bad[i][15:9]};
-    DUT.data_mem.core[64+2*i] = {d2_bad[i][8:1]};
+	DUT.DATA_MEM.core[65+2*i] = {1'b0,d2_bad[i][15:9]};
+    DUT.DATA_MEM.core[64+2*i] = {d2_bad[i][8:1]};
   end
   #10ns req   = 1;
   #10ns req   = 0;
@@ -85,9 +85,9 @@ initial begin
   $display();
   for(int i=0; i<15; i++) begin
     $displayb({5'b0,d2_in[i]});
-    $writeb  (DUT.data_mem.core[95+2*i]);
-    $displayb(DUT.data_mem.core[94+2*i]);
-	if({5'b0,d2_in[i]}!={DUT.data_mem.core[95+2*i],DUT.data_mem.core[94+2*i]})
+    $writeb  (DUT.DATA_MEM.core[95+2*i]);
+    $displayb(DUT.DATA_MEM.core[94+2*i]);
+	if({5'b0,d2_in[i]}!={DUT.DATA_MEM.core[95+2*i],DUT.DATA_MEM.core[94+2*i]})
 	  $display("****Not Again!****");
 	$display();
   end
@@ -95,10 +95,10 @@ initial begin
 // program 3
   pat = 4'b0101;//$random;
   str2 = 0;
-  DUT.data_mem.core[160] = pat;
+  DUT.DATA_MEM.core[160] = pat;
   for(int i=0; i<32; i++) begin
     mat_str[i] = 8'b01010101;// $random;
-	DUT.data_mem.core[128+i] = mat_str[i];
+	DUT.DATA_MEM.core[128+i] = mat_str[i];
 	str2 = (str2<<8)+mat_str[i];
   end
   ctb = 0;
@@ -125,12 +125,12 @@ initial begin
   $display();
   $display("start program 3");
   $display();
-  $display("ctb = %d %d",ctb,DUT.data_mem.core[192]);
-  if(ctb!=DUT.data_mem.core[192]) $display("**** oops!****");
-  $display("cts = %d %d",cts,DUT.data_mem.core[193]);
-  if(cts!=DUT.data_mem.core[193]) $display("**** oops!****");
-  $display("cto = %d %d",cto,DUT.data_mem.core[194]);
-  if(cto!=DUT.data_mem.core[194]) $display("**** oops!****");
+  $display("ctb = %d %d",ctb,DUT.DATA_MEM.core[192]);
+  if(ctb!=DUT.DATA_MEM.core[192]) $display("**** oops!****");
+  $display("cts = %d %d",cts,DUT.DATA_MEM.core[193]);
+  if(cts!=DUT.DATA_MEM.core[193]) $display("**** oops!****");
+  $display("cto = %d %d",cto,DUT.DATA_MEM.core[194]);
+  if(cto!=DUT.DATA_MEM.core[194]) $display("**** oops!****");
   #10ns $stop;
 end
 
