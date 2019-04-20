@@ -547,7 +547,7 @@ assign rom3[164] = 9'b101101100;
 assign rom3[165] = 9'b100100100;
 assign rom3[166] = 9'b010010110;
 assign rom3[167] = 9'b101001101;
-assign rom3[168] = 9'b100001001;
+assign rom3[168] = 9'b100001110;
 assign rom3[169] = 9'b110110000;
 assign rom3[170] = 9'b001100111;
 assign rom3[171] = 9'b000000100;
@@ -593,21 +593,26 @@ assign rom3[210] = 9'b100101000;
 assign rom3[211] = 9'b101010000;
 assign rom3[212] = 9'b100010001;
 assign rom3[213] = 9'b010010110;
-assign rom3[214] = 9'b101001011;
-assign rom3[215] = 9'b100001011;
-assign rom3[216] = 9'b000001000;
-assign rom3[217] = 9'b101101100;
-assign rom3[218] = 9'b100100010;
-assign rom3[219] = 9'b010000110;
-assign rom3[220] = 9'b101001100;
-assign rom3[221] = 9'b100001000;
-assign rom3[222] = 9'b010001100;
-assign rom3[223] = 9'b001010111;
-assign rom3[224] = 9'b010010110;
+assign rom3[214] = 9'b101101100;
+assign rom3[215] = 9'b100100000;
+assign rom3[216] = 9'b010000110;
+assign rom3[217] = 9'b000001101;
+assign rom3[218] = 9'b010010110;
+assign rom3[219] = 9'b101001011;
+assign rom3[220] = 9'b100001011;
+assign rom3[221] = 9'b000001000;
+assign rom3[222] = 9'b101101100;
+assign rom3[223] = 9'b100100010;
+assign rom3[224] = 9'b010000110;
+assign rom3[225] = 9'b101001100;
+assign rom3[226] = 9'b100001000;
+assign rom3[227] = 9'b010001100;
+assign rom3[228] = 9'b001010111;
+assign rom3[229] = 9'b010010110;
 
 
 
-	assign rom3[217] = 9'b000000001;
+	assign rom3[230] = 9'b000000001;
 
 
 endmodule
