@@ -388,7 +388,7 @@ module fetch_unit(
     assign rom3[6] = 9'b010010110;
     assign rom3[7] = 9'b101101100;
     assign rom3[8] = 9'b100100011;
-    assign rom3[9] = 9'b101010011;
+    assign rom3[9] = 9'b101010001;
     assign rom3[10] = 9'b100011111;
     assign rom3[11] = 9'b010010110;
     assign rom3[12] = 9'b101001100;
@@ -444,12 +444,12 @@ module fetch_unit(
     assign rom3[62] = 9'b101101100;
     assign rom3[63] = 9'b100100110;
     assign rom3[64] = 9'b010000110;
-    assign rom3[65] = 9'b101101100;
+    assign rom3[65] = 9'b101101010;
     assign rom3[66] = 9'b100100000;
     assign rom3[67] = 9'b010001110;
     assign rom3[68] = 9'b000010111;
-    assign rom3[69] = 9'b101101111;
-    assign rom3[70] = 9'b100100000;
+    assign rom3[69] = 9'b101100000;
+    assign rom3[70] = 9'b100101111;
     assign rom3[71] = 9'b000110110;
     assign rom3[72] = 9'b101000110;
     assign rom3[73] = 9'b100000100;
@@ -537,7 +537,7 @@ module fetch_unit(
     assign rom3[155] = 9'b101101100;
     assign rom3[156] = 9'b100100110;
     assign rom3[157] = 9'b010000110;
-    assign rom3[158] = 9'b101101100;
+    assign rom3[158] = 9'b101101010;
     assign rom3[159] = 9'b100100000;
     assign rom3[160] = 9'b010001110;
     assign rom3[161] = 9'b000010111;
@@ -587,6 +587,7 @@ module fetch_unit(
     assign rom3[205] = 9'b010001100;
     assign rom3[206] = 9'b001010111;
     assign rom3[207] = 9'b010010110;
+
 	assign rom3[208] = 9'b000000001;
 
 
