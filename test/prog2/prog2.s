@@ -86,6 +86,7 @@ p4_while_end:
   xor $2 $3 ; p ^= t
   movil $0 13 ; temp = 253
   ld $3 $0 ; t = mem[253] = mem[temp] = upper
+  shri $3 1 ; t >>= 1
   xor $2 $3 ; p ^= t
   shri $3 1 ; t >>= 1
   xor $2 $3 ; p ^= t
