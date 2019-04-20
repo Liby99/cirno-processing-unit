@@ -1,4 +1,4 @@
-module instruction_memory(
+module instr_mem(
     input       clk,
     input       init,
     input       branch,
