@@ -27,7 +27,7 @@
 	st	$1, [$2]		// acc2 = 0
 	
 	mva	$2, addr_i
-	mv	$1, 63			// $1 = i
+	mv	$1, 31			// $1 = i
 	st	$1, [$2]		// i = 63
 
 	mva	$4, addr_pos
