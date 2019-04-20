@@ -1,12 +1,13 @@
 #define addr_i 195
 #define addr_j 196
 #define addr_pos 197
-#define addr_acc1 194
-#define addr_acc2 193
+#define addr_acc1 193
+#define addr_acc2 194
+#define addr_acc3 192
 #define addr_char1 198
 #define addr_char2 199
 #define addr_inByte 200
-#define addr_pattern 192
+#define addr_pattern 160
 #define POS 128
 
 #define $4 $0
@@ -25,6 +26,8 @@
 	st	$1, [$2]		// acc1 = 0
 	mva	$2, addr_acc2
 	st	$1, [$2]		// acc2 = 0
+	mva $2, addr_acc3
+	st  $1, [$2]
 	
 	mva	$2, addr_i
 	mv	$1, 31			// $1 = i
@@ -72,14 +75,23 @@ outerwhile:
 	st	$1, [$2]
 
 innerwhile:
+	mva	$2, addr_j		// $1 = j
+	ld	$1, [$2]
+
 	mvb	$4, =end_innerwhile
 	andi	$3, 0
 	cmp	$1, $3
 	b0	$4
+
+	mv	$3, 1 			// j--
+	sub	$1, $3
+	st	$1, [$2]
+
 	mva	$2, addr_char1
 	ld	$1, [$2]		// $1 = char1
 	mva	$2, addr_pattern
 	ld	$3, [$2]		// $3 = pattern
+	shli $3, 4
 
 	xor	$1, $3			// temp = char1 ^ pattern
 	//mv	$2, 0b11110000	
@@ -106,11 +118,6 @@ notMatch:
 	shli	$3, 1			// char2 = char2 << 1
 	st	$3, [$4]
 
-	mva	$2, addr_j		// j--
-	ld	$1, [$2]
-	mv	$3, 1
-	sub	$1, $3
-	st	$1, [$2]
 	mvb	$4, =innerwhile
 	jp	$4
 	
@@ -132,6 +139,14 @@ ifmatch:
 	andi	$3, 0
 	cmp	$1, $3
 	b0	$4
+
+	mva	$2, addr_j
+	ld	$1, [$2]		// $1 = j
+	mv	$2, 3
+	xor	$1, $2
+	cmp	$1, $3
+	b0	$4
+
 	mvb	$4, =notMatch
 	jp	$4
 
@@ -139,6 +154,12 @@ ifinbyte:
 	mva	$2, addr_inByte
 	mv	$1, 1			// inByte = 1
 	st	$1, [$2]
+
+	mva	$2, addr_acc3
+	ld  	$1, $2
+	incr 	$1
+	st  	$1, $2
+
 	mvb	$4, =notMatch
 	jp	$4
 
@@ -173,6 +194,7 @@ lastBytewhile:
 	ld	$1, [$2]		// $1 = char1
 	mva	$2, addr_pattern
 	ld	$3, [$2]		// $3 = pattern
+	shli	$3, 4
 
 	xor	$1, $3			// temp = char1 ^ pattern
 	//mv	$2, 0b11110000	
@@ -208,6 +230,11 @@ lastByteMatch:
 	mva	$2, addr_inByte
 	mv	$1, 1			// inByte = 1
 	st	$1, [$2]
+
+	mva	$2, addr_acc3
+	ld  	$1, $2
+	incr 	$1
+	st  	$1, $2
 
 	mvb	$4, =lastByteNotMatch
 	jp	$4
