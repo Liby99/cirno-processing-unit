@@ -225,3 +225,4 @@ end_prog:
 
 	add	$1 $3
 	sb	$1 $2	
+  halt

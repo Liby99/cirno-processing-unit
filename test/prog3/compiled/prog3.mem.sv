@@ -229,3 +229,4 @@ assign rom[227] = 9'b100001000;
 assign rom[228] = 9'b010001100;
 assign rom[229] = 9'b001010111;
 assign rom[230] = 9'b010010110;
+assign rom[231] = 9'b000000001;
