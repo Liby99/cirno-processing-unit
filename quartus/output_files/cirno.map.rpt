@@ -1,5 +1,5 @@
 Analysis & Synthesis report for cirno
-Fri Apr 19 23:57:03 2019
+Sat Apr 20 03:14:20 2019
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -15,18 +15,17 @@ Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
   7. Analysis & Synthesis Resource Utilization by Entity
   8. Analysis & Synthesis RAM Summary
   9. State Machine - |top_level|step
- 10. User-Specified and Inferred Latches
- 11. Registers Removed During Synthesis
- 12. General Register Statistics
- 13. Multiplexer Restructuring Statistics (Restructuring Performed)
- 14. Source assignments for memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated
- 15. Parameter Settings for User Entity Instance: memory:dm1|altsyncram:core[0][7]__1
- 16. altsyncram Parameter Settings by Entity Instance
- 17. Port Connectivity Checks: "fetch_unit:fetch_unit"
- 18. Post-Synthesis Netlist Statistics for Top Partition
- 19. Elapsed Time Per Partition
- 20. Analysis & Synthesis Messages
- 21. Analysis & Synthesis Suppressed Messages
+ 10. Registers Removed During Synthesis
+ 11. General Register Statistics
+ 12. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 13. Source assignments for memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated
+ 14. Parameter Settings for User Entity Instance: memory:dm1|altsyncram:core[0][7]__1
+ 15. altsyncram Parameter Settings by Entity Instance
+ 16. Port Connectivity Checks: "fetch_unit:fetch_unit"
+ 17. Post-Synthesis Netlist Statistics for Top Partition
+ 18. Elapsed Time Per Partition
+ 19. Analysis & Synthesis Messages
+ 20. Analysis & Synthesis Suppressed Messages
 
 
 
@@ -52,13 +51,13 @@ refer to the applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                  ;
 +---------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status     ; Successful - Fri Apr 19 23:57:03 2019       ;
+; Analysis & Synthesis Status     ; Successful - Sat Apr 20 03:14:20 2019       ;
 ; Quartus Prime Version           ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                   ; cirno                                       ;
 ; Top-level Entity Name           ; top_level                                   ;
 ; Family                          ; Cyclone V                                   ;
 ; Logic utilization (in ALMs)     ; N/A                                         ;
-; Total registers                 ; 109                                         ;
+; Total registers                 ; 101                                         ;
 ; Total pins                      ; 3                                           ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 2,048                                       ;
@@ -173,32 +172,36 @@ refer to the applicable agreement for further details.
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
 ;     Processor 2            ;   0.0%      ;
-;     Processors 3-4         ;   0.0%      ;
+;     Processor 3            ;   0.0%      ;
+;     Processor 4            ;   0.0%      ;
 +----------------------------+-------------+
 
 
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis Source Files Read                                                                                                                                              ;
-+----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
-; File Name with User-Entered Path ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                                          ; Library ;
-+----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
-; ../src/cirno/register.sv         ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv                    ;         ;
-; ../src/cirno/memory.sv           ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv                      ;         ;
-; ../src/cirno/decoder.sv          ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv                     ;         ;
-; ../src/cirno/alu.sv              ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv                         ;         ;
-; ../src/cirno/fetch_unit.sv       ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv                  ;         ;
-; ../src/cirno/top_level.sv        ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv                   ;         ;
-; altsyncram.tdf                   ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altsyncram.tdf        ;         ;
-; stratix_ram_block.inc            ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/stratix_ram_block.inc ;         ;
-; lpm_mux.inc                      ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/lpm_mux.inc           ;         ;
-; lpm_decode.inc                   ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/lpm_decode.inc        ;         ;
-; aglobal171.inc                   ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/aglobal171.inc        ;         ;
-; a_rdenreg.inc                    ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/a_rdenreg.inc         ;         ;
-; altrom.inc                       ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altrom.inc            ;         ;
-; altram.inc                       ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altram.inc            ;         ;
-; altdpram.inc                     ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altdpram.inc          ;         ;
-; db/altsyncram_m0q1.tdf           ; yes             ; Auto-Generated Megafunction  ; /home/tedi2/playground/cirno-processing-unit/quartus/db/altsyncram_m0q1.tdf           ;         ;
-+----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                                                       ;
++---------------------------------------------------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path                                          ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                                          ; Library ;
++---------------------------------------------------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
+; ../src/cirno/register.sv                                                  ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv                    ;         ;
+; ../src/cirno/memory.sv                                                    ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv                      ;         ;
+; ../src/cirno/decoder.sv                                                   ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv                     ;         ;
+; ../src/cirno/alu.sv                                                       ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv                         ;         ;
+; ../src/cirno/fetch_unit.sv                                                ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv                  ;         ;
+; ../src/cirno/top_level.sv                                                 ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv                   ;         ;
+; /home/tedi2/playground/cirno-processing-unit/src/cirno/programs/prog1.mem ; yes             ; Auto-Found Unspecified File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/programs/prog1.mem             ;         ;
+; /home/tedi2/playground/cirno-processing-unit/src/cirno/programs/prog3.mem ; yes             ; Auto-Found Unspecified File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/programs/prog3.mem             ;         ;
+; /home/tedi2/playground/cirno-processing-unit/src/cirno/programs/prog2.mem ; yes             ; Auto-Found Unspecified File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/programs/prog2.mem             ;         ;
+; altsyncram.tdf                                                            ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altsyncram.tdf        ;         ;
+; stratix_ram_block.inc                                                     ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/stratix_ram_block.inc ;         ;
+; lpm_mux.inc                                                               ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/lpm_mux.inc           ;         ;
+; lpm_decode.inc                                                            ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/lpm_decode.inc        ;         ;
+; aglobal171.inc                                                            ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/aglobal171.inc        ;         ;
+; a_rdenreg.inc                                                             ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/a_rdenreg.inc         ;         ;
+; altrom.inc                                                                ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altrom.inc            ;         ;
+; altram.inc                                                                ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altram.inc            ;         ;
+; altdpram.inc                                                              ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altdpram.inc          ;         ;
+; db/altsyncram_m0q1.tdf                                                    ; yes             ; Auto-Generated Megafunction  ; /home/tedi2/playground/cirno-processing-unit/quartus/db/altsyncram_m0q1.tdf           ;         ;
++---------------------------------------------------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
 
 
 +---------------------------------------------------------+
@@ -206,16 +209,16 @@ refer to the applicable agreement for further details.
 +---------------------------------------------+-----------+
 ; Resource                                    ; Usage     ;
 +---------------------------------------------+-----------+
-; Estimate of Logic utilization (ALMs needed) ; 325       ;
+; Estimate of Logic utilization (ALMs needed) ; 307       ;
 ;                                             ;           ;
-; Combinational ALUT usage for logic          ; 422       ;
+; Combinational ALUT usage for logic          ; 407       ;
 ;     -- 7 input functions                    ; 3         ;
-;     -- 6 input functions                    ; 224       ;
-;     -- 5 input functions                    ; 64        ;
-;     -- 4 input functions                    ; 42        ;
-;     -- <=3 input functions                  ; 89        ;
+;     -- 6 input functions                    ; 202       ;
+;     -- 5 input functions                    ; 73        ;
+;     -- 4 input functions                    ; 52        ;
+;     -- <=3 input functions                  ; 77        ;
 ;                                             ;           ;
-; Dedicated logic registers                   ; 109       ;
+; Dedicated logic registers                   ; 101       ;
 ;                                             ;           ;
 ; I/O pins                                    ; 3         ;
 ; Total MLAB memory bits                      ; 0         ;
@@ -224,9 +227,9 @@ refer to the applicable agreement for further details.
 ; Total DSP Blocks                            ; 0         ;
 ;                                             ;           ;
 ; Maximum fan-out node                        ; clk~input ;
-; Maximum fan-out                             ; 117       ;
-; Total fan-out                               ; 2516      ;
-; Average fan-out                             ; 4.62      ;
+; Maximum fan-out                             ; 109       ;
+; Total fan-out                               ; 2415      ;
+; Average fan-out                             ; 4.63      ;
 +---------------------------------------------+-----------+
 
 
@@ -235,14 +238,14 @@ refer to the applicable agreement for further details.
 +-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
 ; Compilation Hierarchy Node                ; Combinational ALUTs ; Dedicated Logic Registers ; Block Memory Bits ; DSP Blocks ; Pins ; Virtual Pins ; Full Hierarchy Name                                                           ; Entity Name     ; Library Name ;
 +-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
-; |top_level                                ; 422 (17)            ; 109 (14)                  ; 2048              ; 0          ; 3    ; 0            ; |top_level                                                                    ; top_level       ; work         ;
-;    |alu:alu|                              ; 82 (82)             ; 9 (9)                     ; 0                 ; 0          ; 0    ; 0            ; |top_level|alu:alu                                                            ; alu             ; work         ;
-;    |decoder:decoder|                      ; 52 (52)             ; 27 (27)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|decoder:decoder                                                    ; decoder         ; work         ;
-;    |fetch_unit:fetch_unit|                ; 193 (193)           ; 11 (11)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|fetch_unit:fetch_unit                                              ; fetch_unit      ; work         ;
+; |top_level                                ; 407 (24)            ; 101 (15)                  ; 2048              ; 0          ; 3    ; 0            ; |top_level                                                                    ; top_level       ; work         ;
+;    |alu:alu|                              ; 65 (65)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |top_level|alu:alu                                                            ; alu             ; work         ;
+;    |decoder:decoder|                      ; 51 (51)             ; 28 (28)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|decoder:decoder                                                    ; decoder         ; work         ;
+;    |fetch_unit:fetch_unit|                ; 187 (187)           ; 10 (10)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|fetch_unit:fetch_unit                                              ; fetch_unit      ; work         ;
 ;    |memory:dm1|                           ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |top_level|memory:dm1                                                         ; memory          ; work         ;
 ;       |altsyncram:core[0][7]__1|          ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |top_level|memory:dm1|altsyncram:core[0][7]__1                                ; altsyncram      ; work         ;
 ;          |altsyncram_m0q1:auto_generated| ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |top_level|memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated ; altsyncram_m0q1 ; work         ;
-;    |register:register|                    ; 78 (78)             ; 48 (48)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|register:register                                                  ; register        ; work         ;
+;    |register:register|                    ; 80 (80)             ; 48 (48)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|register:register                                                  ; register        ; work         ;
 +-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
@@ -270,25 +273,6 @@ Encoding Type:  One-Hot
 +----------+----------+----------+----------+----------+----------+
 
 
-+-----------------------------------------------------------------------------------------------------------+
-; User-Specified and Inferred Latches                                                                       ;
-+----------------------------------------------------+-----------------------------+------------------------+
-; Latch Name                                         ; Latch Enable Signal         ; Free of Timing Hazards ;
-+----------------------------------------------------+-----------------------------+------------------------+
-; fetch_unit:fetch_unit|inst[1]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[2]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[3]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[4]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[5]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[6]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[7]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[8]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; fetch_unit:fetch_unit|inst[0]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
-; Number of user-specified and inferred latches = 9  ;                             ;                        ;
-+----------------------------------------------------+-----------------------------+------------------------+
-Note: All latches listed above may not be present at the end of synthesis due to various synthesis optimizations.
-
-
 +------------------------------------------------------------+
 ; Registers Removed During Synthesis                         ;
 +---------------------------------------+--------------------+
@@ -306,12 +290,12 @@ Note: All latches listed above may not be present at the end of synthesis due to
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 109   ;
-; Number of registers using Synchronous Clear  ; 3     ;
+; Total registers                              ; 101   ;
+; Number of registers using Synchronous Clear  ; 0     ;
 ; Number of registers using Synchronous Load   ; 0     ;
 ; Number of registers using Asynchronous Clear ; 0     ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 95    ;
+; Number of registers using Clock Enable       ; 90    ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
@@ -321,29 +305,31 @@ Note: All latches listed above may not be present at the end of synthesis due to
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
 ; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output              ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |top_level|register:register|x[7]       ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |top_level|register:register|x[3]       ;
 ; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |top_level|register:register|y[7]       ;
-; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |top_level|register:register|y[2]       ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[3][5]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[3][3]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[2][5]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[2][0]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[1][5]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[1][3]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[0][5]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[0][0]  ;
-; 6:1                ; 8 bits    ; 32 LEs        ; 24 LEs               ; 8 LEs                  ; Yes        ; |top_level|fetch_unit:fetch_unit|pc[1]  ;
-; 79:1               ; 4 bits    ; 208 LEs       ; 12 LEs               ; 196 LEs                ; Yes        ; |top_level|decoder:decoder|funct[3]     ;
-; 151:1              ; 2 bits    ; 200 LEs       ; 8 LEs                ; 192 LEs                ; Yes        ; |top_level|decoder:decoder|immediate[5] ;
-; 151:1              ; 3 bits    ; 300 LEs       ; 27 LEs               ; 273 LEs                ; Yes        ; |top_level|decoder:decoder|immediate[3] ;
-; 22:1               ; 4 bits    ; 56 LEs        ; 36 LEs               ; 20 LEs                 ; Yes        ; |top_level|alu:alu|result[6]            ;
-; 22:1               ; 4 bits    ; 56 LEs        ; 36 LEs               ; 20 LEs                 ; Yes        ; |top_level|alu:alu|result[3]            ;
+; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |top_level|register:register|y[0]       ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[3][1]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[3][7]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[2][3]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[2][7]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[1][0]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[1][4]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[0][2]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[0][7]  ;
+; 6:1                ; 8 bits    ; 32 LEs        ; 24 LEs               ; 8 LEs                  ; Yes        ; |top_level|fetch_unit:fetch_unit|pc[0]  ;
+; 20:1               ; 2 bits    ; 26 LEs        ; 2 LEs                ; 24 LEs                 ; Yes        ; |top_level|decoder:decoder|immediate[1] ;
+; 11:1               ; 4 bits    ; 28 LEs        ; 12 LEs               ; 16 LEs                 ; Yes        ; |top_level|decoder:decoder|funct[2]     ;
+; 20:1               ; 2 bits    ; 26 LEs        ; 4 LEs                ; 22 LEs                 ; Yes        ; |top_level|decoder:decoder|immediate[4] ;
+; 10:1               ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; Yes        ; |top_level|decoder:decoder|r1[1]        ;
 ; 3:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; No         ; |top_level|step                         ;
-; 3:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |top_level|fetch_unit:fetch_unit|Mux29  ;
+; 4:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |top_level|fetch_unit:fetch_unit|Mux7   ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|ShiftRight0          ;
 ; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|ShiftLeft0           ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|ShiftRight1          ;
 ; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|ShiftLeft0           ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |top_level|register:register|Mux8       ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |top_level|register:register|Mux13      ;
+; 1:1                ; 8 bits    ; 0 LEs         ; 0 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|Add0                 ;
+; 17:1               ; 4 bits    ; 44 LEs        ; 36 LEs               ; 8 LEs                  ; No         ; |top_level|alu:alu|Mux7                 ;
+; 17:1               ; 4 bits    ; 44 LEs        ; 36 LEs               ; 8 LEs                  ; No         ; |top_level|alu:alu|Mux0                 ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
 
 
@@ -451,28 +437,27 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; arriav_ff             ; 109                         ;
-;     ENA               ; 92                          ;
-;     ENA SCLR          ; 3                           ;
-;     plain             ; 14                          ;
-; arriav_lcell_comb     ; 422                         ;
-;     arith             ; 38                          ;
-;         1 data inputs ; 12                          ;
-;         2 data inputs ; 10                          ;
+; arriav_ff             ; 101                         ;
+;     ENA               ; 90                          ;
+;     plain             ; 11                          ;
+; arriav_lcell_comb     ; 407                         ;
+;     arith             ; 35                          ;
+;         1 data inputs ; 11                          ;
+;         2 data inputs ; 8                           ;
 ;         3 data inputs ; 16                          ;
 ;     extend            ; 3                           ;
 ;         7 data inputs ; 3                           ;
-;     normal            ; 381                         ;
-;         2 data inputs ; 20                          ;
-;         3 data inputs ; 31                          ;
-;         4 data inputs ; 42                          ;
-;         5 data inputs ; 64                          ;
-;         6 data inputs ; 224                         ;
+;     normal            ; 369                         ;
+;         2 data inputs ; 15                          ;
+;         3 data inputs ; 27                          ;
+;         4 data inputs ; 52                          ;
+;         5 data inputs ; 73                          ;
+;         6 data inputs ; 202                         ;
 ; boundary_port         ; 3                           ;
 ; stratixv_ram_block    ; 8                           ;
 ;                       ;                             ;
-; Max LUT depth         ; 4.80                        ;
-; Average LUT depth     ; 2.93                        ;
+; Max LUT depth         ; 6.00                        ;
+; Average LUT depth     ; 3.97                        ;
 +-----------------------+-----------------------------+
 
 
@@ -481,7 +466,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:02     ;
+; Top            ; 00:00:05     ;
 +----------------+--------------+
 
 
@@ -491,7 +476,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
-    Info: Processing started: Fri Apr 19 23:56:50 2019
+    Info: Processing started: Sat Apr 20 03:14:05 2019
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off cirno -c cirno
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -516,11 +501,10 @@ Info (12021): Found 1 design units, including 1 entities, in source file /home/t
 Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv
     Info (12023): Found entity 1: tb File: /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv Line: 2
 Info (12127): Elaborating entity "top_level" for the top level hierarchy
-Info (10264): Verilog HDL Case Statement information at top_level.sv(57): all case item expressions in this case statement are onehot File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 57
-Info (12128): Elaborating entity "decoder" for hierarchy "decoder:decoder" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 30
-Warning (10935): Verilog HDL Casex/Casez warning at decoder.sv(44): casex/casez item expression overlaps with a previous casex/casez item expression File: /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv Line: 44
-Warning (10935): Verilog HDL Casex/Casez warning at decoder.sv(95): casex/casez item expression overlaps with a previous casex/casez item expression File: /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv Line: 95
-Info (12128): Elaborating entity "memory" for hierarchy "memory:dm1" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 31
+Warning (10230): Verilog HDL assignment warning at top_level.sv(38): truncated value with size 9 to match size of target (8) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 38
+Info (10264): Verilog HDL Case Statement information at top_level.sv(58): all case item expressions in this case statement are onehot File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 58
+Info (12128): Elaborating entity "decoder" for hierarchy "decoder:decoder" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 31
+Info (12128): Elaborating entity "memory" for hierarchy "memory:dm1" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 32
 Info (12128): Elaborating entity "altsyncram" for hierarchy "memory:dm1|altsyncram:core[0][7]__1"
 Info (12130): Elaborated megafunction instantiation "memory:dm1|altsyncram:core[0][7]__1"
 Info (12133): Instantiated megafunction "memory:dm1|altsyncram:core[0][7]__1" with the following parameter:
@@ -543,62 +527,40 @@ Info (12133): Instantiated megafunction "memory:dm1|altsyncram:core[0][7]__1" wi
 Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_m0q1.tdf
     Info (12023): Found entity 1: altsyncram_m0q1 File: /home/tedi2/playground/cirno-processing-unit/quartus/db/altsyncram_m0q1.tdf Line: 27
 Info (12128): Elaborating entity "altsyncram_m0q1" for hierarchy "memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated" File: /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altsyncram.tdf Line: 791
-Info (12128): Elaborating entity "register" for hierarchy "register:register" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 32
-Info (12128): Elaborating entity "alu" for hierarchy "alu:alu" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 33
-Info (12128): Elaborating entity "fetch_unit" for hierarchy "fetch_unit:fetch_unit" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 34
-Warning (10230): Verilog HDL assignment warning at fetch_unit.sv(22): truncated value with size 32 to match size of target (2) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 22
-Warning (10230): Verilog HDL assignment warning at fetch_unit.sv(43): truncated value with size 32 to match size of target (9) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 43
-Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(48): variable "prog" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 48
-Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(49): variable "rom1" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 49
-Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(50): variable "rom2" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 50
-Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(51): variable "rom3" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 51
-Warning (10270): Verilog HDL Case Statement warning at fetch_unit.sv(48): incomplete case statement has no default case item File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 48
-Warning (10240): Verilog HDL Always Construct warning at fetch_unit.sv(47): inferring latch(es) for variable "inst", which holds its previous value in one or more paths through the always construct File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Warning (10030): Net "rom1[511..139]" at fetch_unit.sv(14) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 14
-Warning (10030): Net "rom2[511..185]" at fetch_unit.sv(15) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 15
-Warning (10030): Net "rom3[511..232]" at fetch_unit.sv(16) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 16
-Info (10041): Inferred latch for "inst[0]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[1]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[2]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[3]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[4]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[5]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[6]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[7]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Info (10041): Inferred latch for "inst[8]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-Warning (13012): Latch fetch_unit:fetch_unit|inst[1] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[2] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[3] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[4] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[5] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[6] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[7] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[8] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
-Warning (13012): Latch fetch_unit:fetch_unit|inst[0] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
-    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Info (12128): Elaborating entity "register" for hierarchy "register:register" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 33
+Info (12128): Elaborating entity "alu" for hierarchy "alu:alu" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 34
+Info (12128): Elaborating entity "fetch_unit" for hierarchy "fetch_unit:fetch_unit" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 35
+Warning (10230): Verilog HDL assignment warning at fetch_unit.sv(28): truncated value with size 32 to match size of target (2) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 28
+Warning (10230): Verilog HDL assignment warning at fetch_unit.sv(49): truncated value with size 32 to match size of target (8) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 49
+Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(55): variable "prog" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 55
+Warning (10270): Verilog HDL Case Statement warning at fetch_unit.sv(55): incomplete case statement has no default case item File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 55
+Warning (10030): Net "rom1.data_a" at fetch_unit.sv(14) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 14
+Warning (10030): Net "rom1.waddr_a" at fetch_unit.sv(14) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 14
+Warning (10030): Net "rom2.data_a" at fetch_unit.sv(15) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 15
+Warning (10030): Net "rom2.waddr_a" at fetch_unit.sv(15) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 15
+Warning (10030): Net "rom3.data_a" at fetch_unit.sv(16) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 16
+Warning (10030): Net "rom3.waddr_a" at fetch_unit.sv(16) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 16
+Warning (10030): Net "rom1.we_a" at fetch_unit.sv(14) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 14
+Warning (10030): Net "rom2.we_a" at fetch_unit.sv(15) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 15
+Warning (10030): Net "rom3.we_a" at fetch_unit.sv(16) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 16
+Critical Warning (127005): Memory depth (256) in the design file differs from memory depth (139) in the Memory Initialization File "/home/tedi2/playground/cirno-processing-unit/quartus/db/cirno.ram0_fetch_unit_eb39a4ff.hdl.mif" -- setting initial value for remaining addresses to 0
+Critical Warning (127005): Memory depth (256) in the design file differs from memory depth (185) in the Memory Initialization File "/home/tedi2/playground/cirno-processing-unit/quartus/db/cirno.ram1_fetch_unit_eb39a4ff.hdl.mif" -- setting initial value for remaining addresses to 0
+Critical Warning (127005): Memory depth (256) in the design file differs from memory depth (232) in the Memory Initialization File "/home/tedi2/playground/cirno-processing-unit/quartus/db/cirno.ram2_fetch_unit_eb39a4ff.hdl.mif" -- setting initial value for remaining addresses to 0
 Info (286030): Timing-Driven Synthesis is running
 Info (17049): 3 registers lost all their fanouts during netlist optimizations.
 Info (144001): Generated suppressed messages file /home/tedi2/playground/cirno-processing-unit/quartus/output_files/cirno.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 439 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 425 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 2 input pins
     Info (21059): Implemented 1 output pins
-    Info (21061): Implemented 428 logic cells
+    Info (21061): Implemented 414 logic cells
     Info (21064): Implemented 8 RAM segments
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 32 warnings
-    Info: Peak virtual memory: 1104 megabytes
-    Info: Processing ended: Fri Apr 19 23:57:03 2019
-    Info: Elapsed time: 00:00:13
-    Info: Total CPU time (on all processors): 00:00:31
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 18 warnings
+    Info: Peak virtual memory: 1087 megabytes
+    Info: Processing ended: Sat Apr 20 03:14:20 2019
+    Info: Elapsed time: 00:00:15
+    Info: Total CPU time (on all processors): 00:00:32
 
 
 +------------------------------------------+
