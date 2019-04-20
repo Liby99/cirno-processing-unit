@@ -4,10 +4,10 @@
 //if - dc - rs - if: movih, movil, mv
 //if - dc - of - wm - if: st
 //if - dc - of - rm - rs - is: ld
-// if = inst fetch,  dc = decode,  of = oprand fetch, rs = result store, rm = read mem, wm = write mem 
+// if = inst fetch,  dc = decode,  of = oprand fetch, rs = result store, rm = read mem, wm = write mem
 
 
-module top_level (
+module cirno (
     input   init, clk,
     output  done
 );
@@ -28,11 +28,11 @@ module top_level (
 		logic is_cmp, eq;
     logic temp;
 
-    decoder decoder(.*);
-    memory dm1(.mem_in(x), .addr(y), .memory_r_en, .memory_w_en, .clk, .mem_out);
-    register register(.*);
-    alu alu(.*);
-    fetch_unit fetch_unit(.clk, .init, .branch, .branchi, .fetch_unit_en, .startAddress, .target(x), .immediate, .inst, .jump);
+    decoder DECODER(.*);
+    alu ALU(.*);
+    reg_file REG_FILE(.*);
+    data_mem DATA_MEM(.mem_in(x), .addr(y), .memory_r_en, .memory_w_en, .clk, .mem_out);
+    instr_mem INSTR_MEM(.clk, .init, .branch, .branchi, .fetch_unit_en, .startAddress, .target(x), .immediate, .inst, .jump);
 
     initial begin
         startAddress = 9'b11111111;
@@ -50,7 +50,7 @@ module top_level (
 
 
     always @(posedge clk) begin
-        if (init) 
+        if (init)
             step <= 1;
         else if (done)
             step <= 0;
@@ -59,7 +59,7 @@ module top_level (
                 1: begin
                     fetch_unit_en <= 1;
                     step <= 2;
-                end 
+                end
 
                 2: begin
                     decoder_en <= 1;
@@ -85,7 +85,7 @@ module top_level (
 																cmp <= eq;
 														end
                         end
-                            
+
                         2: begin;
                             exe_done <= 1;
                         end
@@ -96,7 +96,7 @@ module top_level (
                         end
 
                         4: begin
-                            exe_done <= !temp ; //TODO 
+                            exe_done <= !temp ; //TODO
                         end
 
                         5: begin

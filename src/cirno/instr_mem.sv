@@ -1,4 +1,4 @@
-module fetch_unit(
+module instruction_memory(
     input       clk,
     input       init,
     input       branch,

@@ -1,4 +1,4 @@
-module register (
+module reg_file (
 	input clk,
 	input [1:0] r1, r2,
 	input [7:0] result, mem_out,
@@ -26,12 +26,12 @@ module register (
 		if (reg_hi_en)
 			mem[r1][7:4] <= immediate[3:0];
 
-		if (reg_lo_en) 
+		if (reg_lo_en)
 			mem[r1][3:0] <= immediate[3:0];
 
 		if (reg_swap_en)
 			mem[r1] = mem[r2];
-		if (reg_mem_w_en) 
+		if (reg_mem_w_en)
 			mem[r1] <= mem_out;
 	end
 

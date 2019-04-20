@@ -7,7 +7,7 @@ module decoder (
     output logic [5:0] immediate,
     output logic branch, branchi, jump,
     output logic reg_hi_en, reg_lo_en, reg_readx_en, reg_ready_en, reg_swap_en,
-		output logic is_cmp,
+    output logic is_cmp,
     output logic y_is_imm, done
 );
     initial begin
@@ -23,7 +23,7 @@ module decoder (
     end
 
     always @(posedge clk) begin
-        if (init) 
+        if (init)
             done <= 0;
         if (decoder_en) begin
             reg_readx_en <= 0;
@@ -110,7 +110,7 @@ module decoder (
                             end
                             else
                                 inst_type <= 2;
-                        end 
+                        end
 												2'b00: begin // nil and halt
 														inst_type <= 2;
 														if (inst[0])
@@ -144,12 +144,12 @@ module decoder (
 														funct <= inst[7:4];
 												end
 
-                        default: begin 
+                        default: begin
                             inst_type <= 1;
                             funct <= inst[7:4];
                         end
                     endcase
-                end         
+                end
             endcase
         end
     end

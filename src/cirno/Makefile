@@ -1,5 +1,5 @@
 all:
-	echo "Nothing..."
+	@ echo "Nothing..."
 
 copy-programs:
 	cp ../../test/prog1/compiled/prog1.mem programs/prog1.mem

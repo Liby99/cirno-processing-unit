@@ -7,8 +7,10 @@
 // Generic data memory design for CSE141L projects
 // data width = 8 bits (per assignment spec.)
 // depth = 2**AW (default value of AW = 8, may be changed)
-module dm #(parameter AW=8,			     // address width; default supports 256 elements
-                      DW=8)(             // data width; default data path width = 8
+module data_memory #(
+  parameter AW=8,  // address width; default supports 256 elements
+            DW=8   // data width; default data path width = 8
+) (
   input                 clk,             // clock
   input       [AW-1:0]  MemAdr,  	     // address pointer
   input                 ReadEn,			 // read enable	(may be tied high)
@@ -19,12 +21,12 @@ module dm #(parameter AW=8,			     // address width; default supports 256 elemen
   logic [7:0] core [2**AW]; 	     	 // create array of 2**AW elements (default = 256)
 
 // optional initialization of memory, e.g. seeding with constants
-//  initial 
+//  initial
 //    $readmemh("dataram_init.list", my_memory);
 
 // read from memory, e.g. on load instruction
   always_comb							 // reads are immediate/combinational
-    if(ReadEn) begin
+    if (ReadEn) begin
       DatOut = core[MemAdr];
 // optional diagnostic print statement:
 //	  $display("Memory read M[%d] = %d",DataAddress,DataOut);
@@ -34,8 +36,8 @@ module dm #(parameter AW=8,			     // address width; default supports 256 elemen
 
 // write to memory, e.g. on store instruction
   always_ff @ (posedge clk)	             // writes are clocked / sequential
-    if(WriteEn) begin
-      core[MemAdr] <= DatIn;			 
+    if (WriteEn) begin
+      core[MemAdr] <= DatIn;
 //	  $display("Memory write M[%d] = %d",DataAddress,DataIn);
     end
 
