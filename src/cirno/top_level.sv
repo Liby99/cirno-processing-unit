@@ -53,65 +53,67 @@ module top_level (
             step <= 1;
         else if (done)
             step <= 0;
-        case(step)
-            1: begin
-                fetch_unit_en <= 1;
-                step <= 2;
-            end 
+        else begin
+            case(step)
+                1: begin
+                    fetch_unit_en <= 1;
+                    step <= 2;
+                end 
 
-            2: begin
-                decoder_en <= 1;
-                fetch_unit_en <= 0;
-                step <= 3;
-            end
-
-            3: begin
-                decoder_en <= 0;
-                temp <= 1;
-                step <= 4;
-            end
-
-            4: begin
-                temp <= 0;
-                case(inst_type)
-                    1: begin
-                        reg_r_en <= temp;
-                        alu_en <= reg_r_en;
-                        reg_w_en <= alu_en;
-                        exe_done <= reg_w_en;
-                    end
-                        
-                    2: begin;
-                        exe_done <= 1;
-                    end
-
-                    3: begin
-                        reg_r_en <= temp;
-                        exe_done <= reg_r_en;
-                    end
-
-                    4: begin
-                        exe_done <= !temp ; //TODO 
-                    end
-
-                    5: begin
-                        reg_r_en <= temp;
-                        memory_w_en <= reg_r_en;
-                        exe_done <= memory_w_en;
-                    end
-
-                    6: begin
-                        reg_r_en <= temp;
-                        memory_r_en <= reg_r_en;
-                        reg_mem_w_en <=  memory_r_en;
-                        exe_done <= reg_mem_w_en;
-                    end
-                endcase
-                if (exe_done) begin
-                    exe_done <= 0;
-                    step <= 1;
+                2: begin
+                    decoder_en <= 1;
+                    fetch_unit_en <= 0;
+                    step <= 3;
                 end
-            end
-        endcase
+
+                3: begin
+                    decoder_en <= 0;
+                    temp <= 1;
+                    step <= 4;
+                end
+
+                4: begin
+                    temp <= 0;
+                    case(inst_type)
+                        1: begin
+                            reg_r_en <= temp;
+                            alu_en <= reg_r_en;
+                            reg_w_en <= alu_en;
+                            exe_done <= reg_w_en;
+                        end
+                            
+                        2: begin;
+                            exe_done <= 1;
+                        end
+
+                        3: begin
+                            reg_r_en <= temp;
+                            exe_done <= reg_r_en;
+                        end
+
+                        4: begin
+                            exe_done <= !temp ; //TODO 
+                        end
+
+                        5: begin
+                            reg_r_en <= temp;
+                            memory_w_en <= reg_r_en;
+                            exe_done <= memory_w_en;
+                        end
+
+                        6: begin
+                            reg_r_en <= temp;
+                            memory_r_en <= reg_r_en;
+                            reg_mem_w_en <=  memory_r_en;
+                            exe_done <= reg_mem_w_en;
+                        end
+                    endcase
+                    if (exe_done) begin
+                        exe_done <= 0;
+                        step <= 1;
+                    end
+                end
+            endcase
+        end
     end
 endmodule
