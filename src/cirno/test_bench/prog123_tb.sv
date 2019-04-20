@@ -74,8 +74,8 @@ initial begin
     d2_good[i] = {d2_in[i][11:5],p8,d2_in[i][4:2],p4,d2_in[i][1],p2,p1};
     flip[i] = $random;
     d2_bad[i] = d2_good[i] ^ (1'b1<<flip[i]);
-	DUT.DATA_MEM.core[65+2*i] = {1'b0,d2_bad[i][15:9]};
-    DUT.DATA_MEM.core[64+2*i] = {d2_bad[i][8:1]};
+    DUT.DATA_MEM.core[65 + 2 * i] = {1'b0, d2_bad[i][15:9]};
+    DUT.DATA_MEM.core[64 + 2 * i] = {d2_bad[i][8:1]};
   end
   #10ns req   = 1;
   #10ns req   = 0;
