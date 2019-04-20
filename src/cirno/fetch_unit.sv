@@ -597,7 +597,7 @@ assign rom3[214] = 9'b010001100;
 assign rom3[215] = 9'b001010111;
 assign rom3[216] = 9'b010010110;
 
-	assign rom3[217] = 9'b000000001;
+	assign rom3[225] = 9'b000000001;
 
 
 endmodule

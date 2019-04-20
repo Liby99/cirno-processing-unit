@@ -1,0 +1,8 @@
+
+State Machine - |top_level|step
+Name step.011 step.010 step.000 step.001 step.100 
+step.001 0 0 0 0 0 
+step.000 0 0 1 1 0 
+step.010 0 1 0 1 0 
+step.011 1 0 0 1 0 
+step.100 0 0 0 1 1 
