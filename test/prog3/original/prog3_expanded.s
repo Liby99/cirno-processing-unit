@@ -11,10 +11,12 @@
 
 
 	andi	$1 0			
-	movi	$2 194
-	sb	$1 $2		
 	movi	$2 193
 	sb	$1 $2		
+	movi	$2 194
+	sb	$1 $2		
+	movi $2 192
+	sb  $1 $2
 	
 	movi	$2 195
 	movi	$1 31			
@@ -62,14 +64,23 @@ outerwhile:
 	sb	$1 $2
 
 innerwhile:
+	movi	$2 196		
+	lb	$1 $2
+
 	movl	$0 end_innerwhile
 	andi	$3 0
 	cmp	$1 $3
 	beq	$0
+
+	movi	$3 1 			
+	sub	$1 $3
+	sb	$1 $2
+
 	movi	$2 198
 	lb	$1 $2		
-	movi	$2 192
+	movi	$2 160
 	lb	$3 $2		
+	shli $3 4
 
 	xor	$1 $3			
 	
@@ -96,16 +107,11 @@ notMatch:
 	shli	$3 1			
 	sb	$3 $0
 
-	movi	$2 196		
-	lb	$1 $2
-	movi	$3 1
-	sub	$1 $3
-	sb	$1 $2
 	movl	$0 innerwhile
 	jmp	$0
 	
 ifmatch:
-	movi	$2 194
+	movi	$2 193
 	lb	$1 $2		
 	movi	$3 1
 	add	$1 $3			
@@ -122,6 +128,14 @@ ifmatch:
 	andi	$3 0
 	cmp	$1 $3
 	beq	$0
+
+	movi	$2 196
+	lb	$1 $2		
+	movi	$2 3
+	xor	$1 $2
+	cmp	$1 $3
+	beq	$0
+
 	movl	$0 notMatch
 	jmp	$0
 
@@ -129,11 +143,17 @@ ifinbyte:
 	movi	$2 200
 	movi	$1 1			
 	sb	$1 $2
+
+	movi	$2 192
+	lb  	$1 $2
+	incr 	$1
+	sb  	$1 $2
+
 	movl	$0 notMatch
 	jmp	$0
 
 end_innerwhile:
-	movi	$2 193		
+	movi	$2 194		
 	lb	$1 $2
 	
 	movi	$0 200
@@ -161,8 +181,9 @@ lastBytewhile:
 	beq	$0
 	movi	$2 198
 	lb	$1 $2		
-	movi	$2 192
+	movi	$2 160
 	lb	$3 $2		
+	shli	$3 4
 
 	xor	$1 $3			
 	
@@ -189,7 +210,7 @@ lastByteNotMatch:
 	jmp	$0
 	
 lastByteMatch:
-	movi	$2 194
+	movi	$2 193
 	lb	$1 $2		
 	movi	$3 1
 	add	$1 $3			
@@ -199,15 +220,20 @@ lastByteMatch:
 	movi	$1 1			
 	sb	$1 $2
 
+	movi	$2 192
+	lb  	$1 $2
+	incr 	$1
+	sb  	$1 $2
+
 	movl	$0 lastByteNotMatch
 	jmp	$0
 
 end_prog:
-	movi	$2 193		
+	movi	$2 194		
 	lb	$1 $2
 	
 	movi	$0 200
 	lb	$3 $0		
 
 	add	$1 $3
-	sb	$1 $2		
+	sb	$1 $2	

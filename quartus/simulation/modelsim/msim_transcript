@@ -11,100 +11,77 @@
 # 
 # vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:01:45 on Apr 19,2019
+# Start time: 23:58:30 on Apr 19,2019
 # vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv 
 # -- Compiling module register
 # 
 # Top level modules:
 # 	register
-# End time: 23:01:45 on Apr 19,2019, Elapsed time: 0:00:00
+# End time: 23:58:30 on Apr 19,2019, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:01:45 on Apr 19,2019
+# Start time: 23:58:30 on Apr 19,2019
 # vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv 
 # -- Compiling module memory
 # 
 # Top level modules:
 # 	memory
-# End time: 23:01:45 on Apr 19,2019, Elapsed time: 0:00:00
+# End time: 23:58:30 on Apr 19,2019, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:01:45 on Apr 19,2019
+# Start time: 23:58:30 on Apr 19,2019
 # vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv 
 # -- Compiling module decoder
 # 
 # Top level modules:
 # 	decoder
-# End time: 23:01:45 on Apr 19,2019, Elapsed time: 0:00:00
+# End time: 23:58:30 on Apr 19,2019, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:01:45 on Apr 19,2019
+# Start time: 23:58:30 on Apr 19,2019
 # vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv 
 # -- Compiling module alu
 # 
 # Top level modules:
 # 	alu
-# End time: 23:01:45 on Apr 19,2019, Elapsed time: 0:00:00
+# End time: 23:58:30 on Apr 19,2019, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:01:45 on Apr 19,2019
+# Start time: 23:58:30 on Apr 19,2019
 # vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv 
 # -- Compiling module fetch_unit
 # 
 # Top level modules:
 # 	fetch_unit
-# End time: 23:01:45 on Apr 19,2019, Elapsed time: 0:00:00
+# End time: 23:58:30 on Apr 19,2019, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:01:45 on Apr 19,2019
+# Start time: 23:58:30 on Apr 19,2019
 # vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv 
 # -- Compiling module top_level
 # 
 # Top level modules:
 # 	top_level
-# End time: 23:01:45 on Apr 19,2019, Elapsed time: 0:00:00
+# End time: 23:58:30 on Apr 19,2019, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # 
-vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv
+do ../../cirno_tb.do
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:02:07 on Apr 19,2019
-# vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv 
-# -- Compiling module tb
-# 
-# Top level modules:
-# 	tb
-# End time: 23:02:07 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:02:09 on Apr 19,2019
-# vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv 
-# -- Compiling module tb
-# 
-# Top level modules:
-# 	tb
-# End time: 23:02:09 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:02:15 on Apr 19,2019
+# Start time: 23:58:38 on Apr 19,2019
 # vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv 
 # -- Compiling module prog123_tb
 # 
 # Top level modules:
 # 	prog123_tb
-# End time: 23:02:15 on Apr 19,2019, Elapsed time: 0:00:00
+# End time: 23:58:38 on Apr 19,2019, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-run -a
-# No Design Loaded!
-vsim -t ns prog123_tb
 # vsim -t ns prog123_tb 
-# Start time: 23:04:04 on Apr 19,2019
+# Start time: 23:58:38 on Apr 19,2019
 # Loading sv_std.std
 # Loading work.prog123_tb
 # Loading work.top_level
@@ -213,213 +190,9 @@ run -a
 #  
 # start program 3
 #  
-# ctb =  96  64
-# **** oops!****
-# cts = 127 128
-# **** oops!****
+# ctb =  96  96
+# cts = 127 127
 # cto =  32  32
 # ** Note: $stop    : /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv(135)
-#    Time: 1633485 ns  Iteration: 0  Instance: /prog123_tb
-# Break in Module prog123_tb at /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv line 135
-do cirno_run_msim_rtl_verilog.do
-# if {[file exists rtl_work]} {
-# 	vdel -lib rtl_work -all
-# }
-# vlib rtl_work
-# vmap work rtl_work
-# Model Technology ModelSim - Intel FPGA Edition vmap 10.5b Lib Mapping Utility 2016.10 Oct  5 2016
-# vmap work rtl_work 
-# Modifying modelsim.ini
-# 
-# vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:15:57 on Apr 19,2019
-# vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv 
-# -- Compiling module register
-# 
-# Top level modules:
-# 	register
-# End time: 23:15:57 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:15:57 on Apr 19,2019
-# vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv 
-# -- Compiling module memory
-# 
-# Top level modules:
-# 	memory
-# End time: 23:15:57 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:15:57 on Apr 19,2019
-# vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv 
-# -- Compiling module decoder
-# 
-# Top level modules:
-# 	decoder
-# End time: 23:15:57 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:15:57 on Apr 19,2019
-# vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv 
-# -- Compiling module alu
-# 
-# Top level modules:
-# 	alu
-# End time: 23:15:57 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:15:57 on Apr 19,2019
-# vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv 
-# -- Compiling module fetch_unit
-# 
-# Top level modules:
-# 	fetch_unit
-# End time: 23:15:57 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vlog -sv -work work +incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno {/home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv}
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:15:57 on Apr 19,2019
-# vlog -reportprogress 300 -sv -work work "+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno" /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv 
-# -- Compiling module top_level
-# 
-# Top level modules:
-# 	top_level
-# End time: 23:15:57 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# 
-vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv
-# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 23:16:00 on Apr 19,2019
-# vlog -reportprogress 300 -work work /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv 
-# -- Compiling module prog123_tb
-# 
-# Top level modules:
-# 	prog123_tb
-# End time: 23:16:00 on Apr 19,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-vsim -t ns prog123_tb
-# End time: 23:16:03 on Apr 19,2019, Elapsed time: 0:11:59
-# Errors: 0, Warnings: 1
-# vsim -t ns prog123_tb 
-# Start time: 23:16:03 on Apr 19,2019
-# Loading sv_std.std
-# Loading work.prog123_tb
-# Loading work.top_level
-# Loading work.decoder
-# Loading work.memory
-# Loading work.register
-# Loading work.alu
-# Loading work.fetch_unit
-run -a
-# ** Warning: (vsim-3116) Problem reading symbols from linux-gate.so.1 : can not open ELF file.
-# start program 1
-#  
-# 0101001010101010
-# 0101001010101010
-#  
-# 0110100010001110
-# 0110100010001110
-#  
-# 0110000001001101
-# 0110000001001101
-#  
-# 0110011000011110
-# 0110011000011110
-#  
-# 0011000001100101
-# 0011000001100101
-#  
-# 0001100001100111
-# 0001100001100111
-#  
-# 0100011010100111
-# 0100011010100111
-#  
-# 0010000100010010
-# 0010000100010010
-#  
-# 0011000000000100
-# 0011000000000100
-#  
-# 0101000001100100
-# 0101000001100100
-#  
-# 0001011100111010
-# 0001011100111010
-#  
-# 0101001101100111
-# 0101001101100111
-#  
-# 0111111001100111
-# 0111111001100111
-#  
-# 0111100001100001
-# 0111100001100001
-#  
-# 0001111111001101
-# 0001111111001101
-#  
-#  
-# start program 2
-#  
-# 0000010011000110
-# 0000010011000110
-#  
-# 0000001010101010
-# 0000001010101010
-#  
-# 0000001001110111
-# 0000001001110111
-#  
-# 0000001110001111
-# 0000001110001111
-#  
-# 0000011011001110
-# 0000011011001110
-#  
-# 0000011011000101
-# 0000011011000101
-#  
-# 0000000010111101
-# 0000000010111101
-#  
-# 0000011001100101
-# 0000011001100101
-#  
-# 0000011100001010
-# 0000011100001010
-#  
-# 0000000100100000
-# 0000000100100000
-#  
-# 0000010010011101
-# 0000010010011101
-#  
-# 0000000000010011
-# 0000000000010011
-#  
-# 0000011001010011
-# 0000011001010011
-#  
-# 0000001011010101
-# 0000001011010101
-#  
-# 0000011010101110
-# 0000011010101110
-#  
-#  
-# start program 3
-#  
-# ctb =  96  64
-# **** oops!****
-# cts = 127 128
-# **** oops!****
-# cto =  32  32
-# ** Note: $stop    : /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv(135)
-#    Time: 1667405 ns  Iteration: 0  Instance: /prog123_tb
+#    Time: 1663065 ns  Iteration: 0  Instance: /prog123_tb
 # Break in Module prog123_tb at /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv line 135
