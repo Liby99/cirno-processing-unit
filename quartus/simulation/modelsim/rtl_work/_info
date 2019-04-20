@@ -10,7 +10,7 @@ cModel Technology
 Z0 d/home/tedi2/playground/cirno-processing-unit/quartus/simulation/modelsim
 valu
 Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
-Z2 !s110 1555740105
+Z2 !s110 1555740957
 !i10b 1
 !s100 CCa=jV:PMCHYJSAfZ8OUX2
 IH1@MDiUM_8z>X9giHQk<83
@@ -26,7 +26,7 @@ Z5 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z6 !s108 1555740105.000000
+Z6 !s108 1555740957.000000
 !s107 /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/tedi2/playground/cirno-processing-unit/src/cirno|/home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv|
 !i113 1
@@ -62,13 +62,13 @@ vfetch_unit
 R1
 R2
 !i10b 1
-!s100 g?4P8@X^d0Yf^fRzn59>G0
-IFE^A3:EUSaD^iPRaA=>Gn2
+!s100 G4a8Hh]gQJ3M?;_H3:63j1
+IZkYaZGBK@KSV;31z3dXh<3
 R3
 !s105 fetch_unit_sv_unit
 S1
 R0
-w1555739988
+w1555740922
 8/home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv
 F/home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv
 L0 1
@@ -110,7 +110,7 @@ R8
 R9
 vprog123_tb
 R1
-!s110 1555740135
+!s110 1555740960
 !i10b 1
 !s100 jg@kLBCa9_GJ5ne<SMYTL3
 IB3JDPD2dWMiOWfkjREYD32
@@ -126,11 +126,11 @@ R5
 r1
 !s85 0
 31
-!s108 1555740135.000000
+!s108 1555740960.000000
 !s107 /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv|
 !s90 -reportprogress|300|-work|work|/home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv|
 !i113 1
-Z10 o-work work
+o-work work
 R9
 vregister
 R1
@@ -157,33 +157,9 @@ R6
 R7
 R8
 R9
-vtb
-R1
-!s110 1555740129
-!i10b 1
-!s100 N>NB36jVDjQS59FYlg4ie1
-ITeSg`b7:PJ;ibUdeRfnLa2
-R3
-!s105 tb_sv_unit
-S1
-R0
-R4
-8/home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv
-F/home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv
-L0 2
-R5
-r1
-!s85 0
-31
-!s108 1555740129.000000
-!s107 /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv|
-!s90 -reportprogress|300|-work|work|/home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv|
-!i113 1
-R10
-R9
 vtop_level
 R1
-R2
+!s110 1555740958
 !i10b 1
 !s100 1Y[IR08Rl;YPkh;^N4E>n3
 I:_YmI327BV9;kTO_N5[_00
