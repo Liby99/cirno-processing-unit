@@ -1,5 +1,5 @@
 Analysis & Synthesis report for cirno
-Sat Apr 20 04:15:35 2019
+Sat Apr 20 15:47:56 2019
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -15,18 +15,20 @@ Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
   7. Analysis & Synthesis Resource Utilization by Entity
   8. Analysis & Synthesis RAM Summary
   9. State Machine - |cirno|step
- 10. Registers Removed During Synthesis
- 11. General Register Statistics
- 12. Registers Packed Into Inferred Megafunctions
- 13. Multiplexer Restructuring Statistics (Restructuring Performed)
- 14. Source assignments for data_mem:DATA_MEM|altsyncram:core_rtl_0|altsyncram_m0q1:auto_generated
- 15. Parameter Settings for Inferred Entity Instance: data_mem:DATA_MEM|altsyncram:core_rtl_0
- 16. altsyncram Parameter Settings by Entity Instance
- 17. Port Connectivity Checks: "instr_mem:INSTR_MEM"
- 18. Post-Synthesis Netlist Statistics for Top Partition
- 19. Elapsed Time Per Partition
- 20. Analysis & Synthesis Messages
- 21. Analysis & Synthesis Suppressed Messages
+ 10. User-Specified and Inferred Latches
+ 11. Registers Removed During Synthesis
+ 12. General Register Statistics
+ 13. Inverted Register Statistics
+ 14. Registers Packed Into Inferred Megafunctions
+ 15. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 16. Source assignments for data_mem:DATA_MEM|altsyncram:core_rtl_0|altsyncram_m0q1:auto_generated
+ 17. Parameter Settings for Inferred Entity Instance: data_mem:DATA_MEM|altsyncram:core_rtl_0
+ 18. altsyncram Parameter Settings by Entity Instance
+ 19. Port Connectivity Checks: "instr_mem:INSTR_MEM"
+ 20. Post-Synthesis Netlist Statistics for Top Partition
+ 21. Elapsed Time Per Partition
+ 22. Analysis & Synthesis Messages
+ 23. Analysis & Synthesis Suppressed Messages
 
 
 
@@ -52,13 +54,13 @@ refer to the applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                  ;
 +---------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status     ; Successful - Sat Apr 20 04:15:35 2019       ;
+; Analysis & Synthesis Status     ; Successful - Sat Apr 20 15:47:56 2019       ;
 ; Quartus Prime Version           ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                   ; cirno                                       ;
 ; Top-level Entity Name           ; cirno                                       ;
 ; Family                          ; Cyclone V                                   ;
 ; Logic utilization (in ALMs)     ; N/A                                         ;
-; Total registers                 ; 101                                         ;
+; Total registers                 ; 99                                          ;
 ; Total pins                      ; 3                                           ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 2,048                                       ;
@@ -210,16 +212,16 @@ refer to the applicable agreement for further details.
 +---------------------------------------------+-----------+
 ; Resource                                    ; Usage     ;
 +---------------------------------------------+-----------+
-; Estimate of Logic utilization (ALMs needed) ; 317       ;
+; Estimate of Logic utilization (ALMs needed) ; 311       ;
 ;                                             ;           ;
-; Combinational ALUT usage for logic          ; 415       ;
-;     -- 7 input functions                    ; 3         ;
-;     -- 6 input functions                    ; 214       ;
-;     -- 5 input functions                    ; 58        ;
-;     -- 4 input functions                    ; 51        ;
+; Combinational ALUT usage for logic          ; 407       ;
+;     -- 7 input functions                    ; 5         ;
+;     -- 6 input functions                    ; 208       ;
+;     -- 5 input functions                    ; 56        ;
+;     -- 4 input functions                    ; 49        ;
 ;     -- <=3 input functions                  ; 89        ;
 ;                                             ;           ;
-; Dedicated logic registers                   ; 101       ;
+; Dedicated logic registers                   ; 99        ;
 ;                                             ;           ;
 ; I/O pins                                    ; 3         ;
 ; Total MLAB memory bits                      ; 0         ;
@@ -228,9 +230,9 @@ refer to the applicable agreement for further details.
 ; Total DSP Blocks                            ; 0         ;
 ;                                             ;           ;
 ; Maximum fan-out node                        ; clk~input ;
-; Maximum fan-out                             ; 109       ;
-; Total fan-out                               ; 2436      ;
-; Average fan-out                             ; 4.60      ;
+; Maximum fan-out                             ; 107       ;
+; Total fan-out                               ; 2425      ;
+; Average fan-out                             ; 4.66      ;
 +---------------------------------------------+-----------+
 
 
@@ -239,13 +241,13 @@ refer to the applicable agreement for further details.
 +-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
 ; Compilation Hierarchy Node                ; Combinational ALUTs ; Dedicated Logic Registers ; Block Memory Bits ; DSP Blocks ; Pins ; Virtual Pins ; Full Hierarchy Name                                                           ; Entity Name     ; Library Name ;
 +-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
-; |cirno                                    ; 415 (21)            ; 101 (15)                  ; 2048              ; 0          ; 3    ; 0            ; |cirno                                                                        ; cirno           ; work         ;
-;    |alu:ALU|                              ; 77 (77)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |cirno|alu:ALU                                                                ; alu             ; work         ;
+; |cirno                                    ; 407 (21)            ; 99 (15)                   ; 2048              ; 0          ; 3    ; 0            ; |cirno                                                                        ; cirno           ; work         ;
+;    |alu:ALU|                              ; 70 (70)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |cirno|alu:ALU                                                                ; alu             ; work         ;
 ;    |data_mem:DATA_MEM|                    ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |cirno|data_mem:DATA_MEM                                                      ; data_mem        ; work         ;
 ;       |altsyncram:core_rtl_0|             ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |cirno|data_mem:DATA_MEM|altsyncram:core_rtl_0                                ; altsyncram      ; work         ;
 ;          |altsyncram_m0q1:auto_generated| ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |cirno|data_mem:DATA_MEM|altsyncram:core_rtl_0|altsyncram_m0q1:auto_generated ; altsyncram_m0q1 ; work         ;
-;    |decoder:DECODER|                      ; 49 (49)             ; 28 (28)                   ; 0                 ; 0          ; 0    ; 0            ; |cirno|decoder:DECODER                                                        ; decoder         ; work         ;
-;    |instr_mem:INSTR_MEM|                  ; 188 (188)           ; 10 (10)                   ; 0                 ; 0          ; 0    ; 0            ; |cirno|instr_mem:INSTR_MEM                                                    ; instr_mem       ; work         ;
+;    |decoder:DECODER|                      ; 51 (51)             ; 28 (28)                   ; 0                 ; 0          ; 0    ; 0            ; |cirno|decoder:DECODER                                                        ; decoder         ; work         ;
+;    |instr_mem:INSTR_MEM|                  ; 185 (185)           ; 8 (8)                     ; 0                 ; 0          ; 0    ; 0            ; |cirno|instr_mem:INSTR_MEM                                                    ; instr_mem       ; work         ;
 ;    |reg_file:REG_FILE|                    ; 80 (80)             ; 48 (48)                   ; 0                 ; 0          ; 0    ; 0            ; |cirno|reg_file:REG_FILE                                                      ; reg_file        ; work         ;
 +-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
@@ -274,13 +276,25 @@ Encoding Type:  One-Hot
 +----------+----------+----------+----------+----------+----------+
 
 
++---------------------------------------------------------------------------------------------------+
+; User-Specified and Inferred Latches                                                               ;
++----------------------------------------------------+---------------------+------------------------+
+; Latch Name                                         ; Latch Enable Signal ; Free of Timing Hazards ;
++----------------------------------------------------+---------------------+------------------------+
+; instr_mem:INSTR_MEM|prog[0]                        ; init                ; yes                    ;
+; instr_mem:INSTR_MEM|prog[1]                        ; init                ; yes                    ;
+; Number of user-specified and inferred latches = 2  ;                     ;                        ;
++----------------------------------------------------+---------------------+------------------------+
+Note: All latches listed above may not be present at the end of synthesis due to various synthesis optimizations.
+
+
 +------------------------------------------------------------+
 ; Registers Removed During Synthesis                         ;
 +---------------------------------------+--------------------+
 ; Register name                         ; Reason for Removal ;
 +---------------------------------------+--------------------+
-; step~7                                ; Lost fanout        ;
-; step~8                                ; Lost fanout        ;
+; step~9                                ; Lost fanout        ;
+; step~10                               ; Lost fanout        ;
 ; step.000                              ; Lost fanout        ;
 ; Total Number of Removed Registers = 3 ;                    ;
 +---------------------------------------+--------------------+
@@ -291,14 +305,31 @@ Encoding Type:  One-Hot
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 101   ;
+; Total registers                              ; 99    ;
 ; Number of registers using Synchronous Clear  ; 0     ;
 ; Number of registers using Synchronous Load   ; 0     ;
-; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Clear ; 32    ;
 ; Number of registers using Asynchronous Load  ; 0     ;
 ; Number of registers using Clock Enable       ; 90    ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
+
+
++--------------------------------------------------+
+; Inverted Register Statistics                     ;
++----------------------------------------+---------+
+; Inverted Register                      ; Fan out ;
++----------------------------------------+---------+
+; instr_mem:INSTR_MEM|pc[7]              ; 44      ;
+; instr_mem:INSTR_MEM|pc[5]              ; 80      ;
+; instr_mem:INSTR_MEM|pc[4]              ; 82      ;
+; instr_mem:INSTR_MEM|pc[0]              ; 93      ;
+; instr_mem:INSTR_MEM|pc[3]              ; 93      ;
+; instr_mem:INSTR_MEM|pc[2]              ; 96      ;
+; instr_mem:INSTR_MEM|pc[1]              ; 82      ;
+; instr_mem:INSTR_MEM|pc[6]              ; 64      ;
+; Total number of inverted registers = 8 ;         ;
++----------------------------------------+---------+
 
 
 +-----------------------------------------------------------------------+
@@ -315,29 +346,28 @@ Encoding Type:  One-Hot
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------+
 ; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output          ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------+
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|x[4]       ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|y[6]       ;
-; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|y[0]       ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[0][3]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[0][4]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[1][1]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[1][6]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[2][0]  ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|x[5]       ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|y[7]       ;
+; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|y[3]       ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[0][1]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[0][7]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[1][0]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[1][7]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[2][2]  ;
 ; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[2][6]  ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[3][0]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[3][3]  ;
 ; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |cirno|reg_file:REG_FILE|mem[3][4]  ;
-; 6:1                ; 8 bits    ; 32 LEs        ; 24 LEs               ; 8 LEs                  ; Yes        ; |cirno|instr_mem:INSTR_MEM|pc[0]    ;
 ; 20:1               ; 2 bits    ; 26 LEs        ; 2 LEs                ; 24 LEs                 ; Yes        ; |cirno|decoder:DECODER|immediate[1] ;
-; 11:1               ; 4 bits    ; 28 LEs        ; 12 LEs               ; 16 LEs                 ; Yes        ; |cirno|decoder:DECODER|funct[3]     ;
+; 11:1               ; 4 bits    ; 28 LEs        ; 12 LEs               ; 16 LEs                 ; Yes        ; |cirno|decoder:DECODER|funct[2]     ;
 ; 20:1               ; 2 bits    ; 26 LEs        ; 4 LEs                ; 22 LEs                 ; Yes        ; |cirno|decoder:DECODER|immediate[4] ;
-; 10:1               ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; Yes        ; |cirno|decoder:DECODER|r1[1]        ;
-; 3:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; No         ; |cirno|step                         ;
+; 10:1               ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; Yes        ; |cirno|decoder:DECODER|r1[0]        ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |cirno|instr_mem:INSTR_MEM|pc[6]    ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |cirno|alu:ALU|ShiftLeft0           ;
 ; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |cirno|alu:ALU|ShiftRight0          ;
 ; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |cirno|alu:ALU|ShiftLeft0           ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |cirno|alu:ALU|ShiftLeft0           ;
-; 4:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |cirno|instr_mem:INSTR_MEM|Mux0     ;
+; 4:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |cirno|instr_mem:INSTR_MEM|Mux6     ;
 ; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |cirno|reg_file:REG_FILE|Mux12      ;
-; 18:1               ; 4 bits    ; 48 LEs        ; 36 LEs               ; 12 LEs                 ; No         ; |cirno|alu:ALU|Mux4                 ;
+; 18:1               ; 4 bits    ; 48 LEs        ; 36 LEs               ; 12 LEs                 ; No         ; |cirno|alu:ALU|Mux7                 ;
 ; 18:1               ; 4 bits    ; 48 LEs        ; 36 LEs               ; 12 LEs                 ; No         ; |cirno|alu:ALU|Mux0                 ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------+
 
@@ -446,27 +476,29 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; arriav_ff             ; 101                         ;
-;     ENA               ; 90                          ;
-;     plain             ; 11                          ;
-; arriav_lcell_comb     ; 415                         ;
+; arriav_ff             ; 99                          ;
+;     CLR               ; 8                           ;
+;     ENA               ; 66                          ;
+;     ENA CLR           ; 24                          ;
+;     plain             ; 1                           ;
+; arriav_lcell_comb     ; 407                         ;
 ;     arith             ; 35                          ;
 ;         1 data inputs ; 11                          ;
 ;         2 data inputs ; 8                           ;
 ;         3 data inputs ; 16                          ;
-;     extend            ; 3                           ;
-;         7 data inputs ; 3                           ;
-;     normal            ; 377                         ;
-;         2 data inputs ; 23                          ;
-;         3 data inputs ; 31                          ;
-;         4 data inputs ; 51                          ;
-;         5 data inputs ; 58                          ;
-;         6 data inputs ; 214                         ;
+;     extend            ; 5                           ;
+;         7 data inputs ; 5                           ;
+;     normal            ; 367                         ;
+;         2 data inputs ; 22                          ;
+;         3 data inputs ; 32                          ;
+;         4 data inputs ; 49                          ;
+;         5 data inputs ; 56                          ;
+;         6 data inputs ; 208                         ;
 ; boundary_port         ; 3                           ;
 ; stratixv_ram_block    ; 8                           ;
 ;                       ;                             ;
 ; Max LUT depth         ; 6.00                        ;
-; Average LUT depth     ; 4.07                        ;
+; Average LUT depth     ; 3.89                        ;
 +-----------------------+-----------------------------+
 
 
@@ -475,7 +507,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:06     ;
+; Top            ; 00:00:02     ;
 +----------------+--------------+
 
 
@@ -485,7 +517,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
-    Info: Processing started: Sat Apr 20 04:15:18 2019
+    Info: Processing started: Sat Apr 20 15:47:43 2019
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off cirno -c cirno
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -502,7 +534,16 @@ Info (12021): Found 1 design units, including 1 entities, in source file /home/t
 Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/reg_file.sv
     Info (12023): Found entity 1: reg_file File: /home/tedi2/playground/cirno-processing-unit/src/cirno/reg_file.sv Line: 1
 Info (12127): Elaborating entity "cirno" for the top level hierarchy
-Info (10264): Verilog HDL Case Statement information at cirno.sv(56): all case item expressions in this case statement are onehot File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 56
+Info (10264): Verilog HDL Case Statement information at cirno.sv(55): all case item expressions in this case statement are onehot File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 55
+Warning (10240): Verilog HDL Always Construct warning at cirno.sv(37): inferring latch(es) for variable "start_address", which holds its previous value in one or more paths through the always construct File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[0]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[1]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[2]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[3]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[4]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[5]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[6]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
+Info (10041): Inferred latch for "start_address[7]" at cirno.sv(37) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 37
 Info (12128): Elaborating entity "decoder" for hierarchy "decoder:DECODER" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 31
 Info (12128): Elaborating entity "alu" for hierarchy "alu:ALU" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 32
 Info (12128): Elaborating entity "reg_file" for hierarchy "reg_file:REG_FILE" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 33
@@ -510,6 +551,7 @@ Info (12128): Elaborating entity "data_mem" for hierarchy "data_mem:DATA_MEM" Fi
 Info (12128): Elaborating entity "instr_mem" for hierarchy "instr_mem:INSTR_MEM" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/cirno.sv Line: 35
 Warning (10230): Verilog HDL assignment warning at instr_mem.sv(30): truncated value with size 32 to match size of target (2) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 30
 Warning (10230): Verilog HDL assignment warning at instr_mem.sv(49): truncated value with size 32 to match size of target (8) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 49
+Warning (10240): Verilog HDL Always Construct warning at instr_mem.sv(27): inferring latch(es) for variable "prog", which holds its previous value in one or more paths through the always construct File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 27
 Warning (10235): Verilog HDL Always Construct warning at instr_mem.sv(55): variable "prog" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 55
 Warning (10270): Verilog HDL Case Statement warning at instr_mem.sv(55): incomplete case statement has no default case item File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 55
 Warning (10030): Net "rom1.data_a" at instr_mem.sv(15) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 15
@@ -521,6 +563,12 @@ Warning (10030): Net "rom3.waddr_a" at instr_mem.sv(17) has no driver or initial
 Warning (10030): Net "rom1.we_a" at instr_mem.sv(15) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 15
 Warning (10030): Net "rom2.we_a" at instr_mem.sv(16) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 16
 Warning (10030): Net "rom3.we_a" at instr_mem.sv(17) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 17
+Info (10041): Inferred latch for "prog[0]" at instr_mem.sv(27) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 27
+Info (10041): Inferred latch for "prog[1]" at instr_mem.sv(27) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 27
+Info (276014): Found 3 instances of uninferred RAM logic
+    Info (276007): RAM logic "instr_mem:INSTR_MEM|rom1" is uninferred due to asynchronous read logic File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 15
+    Info (276007): RAM logic "instr_mem:INSTR_MEM|rom2" is uninferred due to asynchronous read logic File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 16
+    Info (276007): RAM logic "instr_mem:INSTR_MEM|rom3" is uninferred due to asynchronous read logic File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 17
 Critical Warning (127005): Memory depth (256) in the design file differs from memory depth (139) in the Memory Initialization File "/home/tedi2/playground/cirno-processing-unit/quartus/db/cirno.ram0_instr_mem_8ff0214b.hdl.mif" -- setting initial value for remaining addresses to 0
 Critical Warning (127005): Memory depth (256) in the design file differs from memory depth (185) in the Memory Initialization File "/home/tedi2/playground/cirno-processing-unit/quartus/db/cirno.ram1_instr_mem_8ff0214b.hdl.mif" -- setting initial value for remaining addresses to 0
 Critical Warning (127005): Memory depth (256) in the design file differs from memory depth (232) in the Memory Initialization File "/home/tedi2/playground/cirno-processing-unit/quartus/db/cirno.ram2_instr_mem_8ff0214b.hdl.mif" -- setting initial value for remaining addresses to 0
@@ -562,21 +610,23 @@ Info (12133): Instantiated megafunction "data_mem:DATA_MEM|altsyncram:core_rtl_0
     Info (12134): Parameter "RDCONTROL_REG_B" = "CLOCK0"
 Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_m0q1.tdf
     Info (12023): Found entity 1: altsyncram_m0q1 File: /home/tedi2/playground/cirno-processing-unit/quartus/db/altsyncram_m0q1.tdf Line: 27
+Info (13000): Registers with preset signals will power-up high File: /home/tedi2/playground/cirno-processing-unit/src/cirno/instr_mem.sv Line: 32
+Info (13003): DEV_CLRn pin will set, and not reset, register with preset signal due to NOT Gate Push-Back
 Info (286030): Timing-Driven Synthesis is running
 Info (17049): 3 registers lost all their fanouts during netlist optimizations.
 Info (144001): Generated suppressed messages file /home/tedi2/playground/cirno-processing-unit/quartus/output_files/cirno.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 433 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 425 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 2 input pins
     Info (21059): Implemented 1 output pins
-    Info (21061): Implemented 422 logic cells
+    Info (21061): Implemented 414 logic cells
     Info (21064): Implemented 8 RAM segments
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 17 warnings
-    Info: Peak virtual memory: 1100 megabytes
-    Info: Processing ended: Sat Apr 20 04:15:35 2019
-    Info: Elapsed time: 00:00:17
-    Info: Total CPU time (on all processors): 00:00:35
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 19 warnings
+    Info: Peak virtual memory: 1099 megabytes
+    Info: Processing ended: Sat Apr 20 15:47:56 2019
+    Info: Elapsed time: 00:00:13
+    Info: Total CPU time (on all processors): 00:00:31
 
 
 +------------------------------------------+
