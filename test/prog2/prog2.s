@@ -213,3 +213,4 @@ correct_parity_end:
   jmpl $1 loop_start
 
 loop_end:
+  halt
