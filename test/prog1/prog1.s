@@ -163,3 +163,4 @@ p1_while_end:
 	jmpl $3 while_start
 
 while_end:
+	halt
