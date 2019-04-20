@@ -34,7 +34,7 @@ module top_level (
     fetch_unit fetch_unit(.clk, .init, .branch, .branchi, .fetch_unit_en, .startAddress, .target(x), .immediate, .inst, .jump);
 
     initial begin
-        startAddress = 0;
+        startAddress = 9'b111111111;
         reg_r_en <= 0;
         reg_w_en <= 0;
         alu_en <= 0;
@@ -51,7 +51,7 @@ module top_level (
     always @(posedge clk) begin
         if (init) 
             step <= 1;
-        if (done)
+        else if (done)
             step <= 0;
         case(step)
             1: begin

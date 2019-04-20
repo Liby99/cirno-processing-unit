@@ -17,7 +17,7 @@
 	sb	$1 $2		
 	
 	movi	$2 195
-	movi	$1 63			
+	movi	$1 31			
 	sb	$1 $2		
 
 	movi	$0 197
