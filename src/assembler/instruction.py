@@ -170,7 +170,7 @@ class MoveLabel(Instruction):
 
   def to_binary(self, index: int, labels: Dict[str, int]) -> str:
     if not self.label in labels:
-      raise Exception("Label {} doesn't exist")
+      raise Exception("Label {} doesn't exist".format(self.label))
     label_index = labels[self.label]
     if self.is_upper:
       num = (label_index >> 4) & 15
@@ -185,7 +185,7 @@ class JumpImmediateLabel(Instruction):
 
   def to_binary(self, index: int, labels: Dict[str, int]) -> str:
     if not self.label in labels:
-      raise Exception("Label {} doesn't exist")
+      raise Exception("Label {} doesn't exist".format(self.label))
     label_index = labels[self.label]
     diff = label_index - index
     is_neg = diff < 0
@@ -197,7 +197,7 @@ class BranchImmediateLabel(Instruction):
 
   def to_binary(self, index: int, labels: Dict[str, int]) -> str:
     if not self.label in labels:
-      raise Exception("Label {} doesn't exist")
+      raise Exception("Label {} doesn't exist".format(self.label))
     label_index = labels[self.label]
     diff = label_index - index
     is_neg = diff < 0
