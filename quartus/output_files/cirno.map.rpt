@@ -1,0 +1,626 @@
+Analysis & Synthesis report for cirno
+Fri Apr 19 23:00:04 2019
+Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Analysis & Synthesis RAM Summary
+  9. State Machine - |top_level|step
+ 10. User-Specified and Inferred Latches
+ 11. Registers Removed During Synthesis
+ 12. General Register Statistics
+ 13. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 14. Source assignments for memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated
+ 15. Parameter Settings for User Entity Instance: memory:dm1|altsyncram:core[0][7]__1
+ 16. altsyncram Parameter Settings by Entity Instance
+ 17. Port Connectivity Checks: "fetch_unit:fetch_unit"
+ 18. Post-Synthesis Netlist Statistics for Top Partition
+ 19. Elapsed Time Per Partition
+ 20. Analysis & Synthesis Messages
+ 21. Analysis & Synthesis Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2017  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details.
+
+
+
++-------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                  ;
++---------------------------------+---------------------------------------------+
+; Analysis & Synthesis Status     ; Successful - Fri Apr 19 23:00:04 2019       ;
+; Quartus Prime Version           ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
+; Revision Name                   ; cirno                                       ;
+; Top-level Entity Name           ; top_level                                   ;
+; Family                          ; Cyclone V                                   ;
+; Logic utilization (in ALMs)     ; N/A                                         ;
+; Total registers                 ; 109                                         ;
+; Total pins                      ; 3                                           ;
+; Total virtual pins              ; 0                                           ;
+; Total block memory bits         ; 2,048                                       ;
+; Total DSP Blocks                ; 0                                           ;
+; Total HSSI RX PCSs              ; 0                                           ;
+; Total HSSI PMA RX Deserializers ; 0                                           ;
+; Total HSSI TX PCSs              ; 0                                           ;
+; Total HSSI PMA TX Serializers   ; 0                                           ;
+; Total PLLs                      ; 0                                           ;
+; Total DLLs                      ; 0                                           ;
++---------------------------------+---------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                             ;
++---------------------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                                          ; Setting            ; Default Value      ;
++---------------------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                                          ; 5CGXFC7C7F23C8     ;                    ;
+; Top-level entity name                                                           ; top_level          ; cirno              ;
+; Family name                                                                     ; Cyclone V          ; Cyclone V          ;
+; Use smart compilation                                                           ; Off                ; Off                ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation      ; On                 ; On                 ;
+; Enable compact report table                                                     ; Off                ; Off                ;
+; Restructure Multiplexers                                                        ; Auto               ; Auto               ;
+; MLAB Add Timing Constraints For Mixed-Port Feed-Through Mode Setting Don't Care ; Off                ; Off                ;
+; Create Debugging Nodes for IP Cores                                             ; Off                ; Off                ;
+; Preserve fewer node names                                                       ; On                 ; On                 ;
+; Intel FPGA IP Evaluation Mode                                                   ; Enable             ; Enable             ;
+; Verilog Version                                                                 ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                                    ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                                        ; Auto               ; Auto               ;
+; Safe State Machine                                                              ; Off                ; Off                ;
+; Extract Verilog State Machines                                                  ; On                 ; On                 ;
+; Extract VHDL State Machines                                                     ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                               ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                                      ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                                  ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                         ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                                       ; On                 ; On                 ;
+; Parallel Synthesis                                                              ; On                 ; On                 ;
+; DSP Block Balancing                                                             ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                                              ; On                 ; On                 ;
+; Power-Up Don't Care                                                             ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                                    ; Off                ; Off                ;
+; Remove Duplicate Registers                                                      ; On                 ; On                 ;
+; Ignore CARRY Buffers                                                            ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                                          ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                                           ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                       ; Off                ; Off                ;
+; Ignore LCELL Buffers                                                            ; Off                ; Off                ;
+; Ignore SOFT Buffers                                                             ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                                  ; Off                ; Off                ;
+; Optimization Technique                                                          ; Balanced           ; Balanced           ;
+; Carry Chain Length                                                              ; 70                 ; 70                 ;
+; Auto Carry Chains                                                               ; On                 ; On                 ;
+; Auto Open-Drain Pins                                                            ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                           ; Off                ; Off                ;
+; Auto ROM Replacement                                                            ; On                 ; On                 ;
+; Auto RAM Replacement                                                            ; On                 ; On                 ;
+; Auto DSP Block Replacement                                                      ; On                 ; On                 ;
+; Auto Shift Register Replacement                                                 ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                                 ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                                   ; On                 ; On                 ;
+; Strict RAM Replacement                                                          ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                               ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                                          ; Off                ; Off                ;
+; Auto Resource Sharing                                                           ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                                              ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                                              ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                                   ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                             ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                               ; Off                ; Off                ;
+; Timing-Driven Synthesis                                                         ; On                 ; On                 ;
+; Report Parameter Settings                                                       ; On                 ; On                 ;
+; Report Source Assignments                                                       ; On                 ; On                 ;
+; Report Connectivity Checks                                                      ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                              ; Off                ; Off                ;
+; Synchronization Register Chain Length                                           ; 3                  ; 3                  ;
+; Power Optimization During Synthesis                                             ; Normal compilation ; Normal compilation ;
+; HDL message level                                                               ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                                 ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                        ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report                              ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                       ; 100                ; 100                ;
+; Clock MUX Protection                                                            ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                                     ; Off                ; Off                ;
+; Block Design Naming                                                             ; Auto               ; Auto               ;
+; SDC constraint protection                                                       ; Off                ; Off                ;
+; Synthesis Effort                                                                ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal                    ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                                            ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                                              ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                                     ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                                          ; On                 ; On                 ;
+; Automatic Parallel Synthesis                                                    ; On                 ; On                 ;
+; Partial Reconfiguration Bitstream ID                                            ; Off                ; Off                ;
++---------------------------------------------------------------------------------+--------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 8           ;
+; Maximum allowed            ; 4           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 4           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processors 2-4         ;   0.0%      ;
++----------------------------+-------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                              ;
++----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                                          ; Library ;
++----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
+; ../src/cirno/register.sv         ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv                    ;         ;
+; ../src/cirno/memory.sv           ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv                      ;         ;
+; ../src/cirno/decoder.sv          ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv                     ;         ;
+; ../src/cirno/alu.sv              ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv                         ;         ;
+; ../src/cirno/fetch_unit.sv       ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv                  ;         ;
+; ../src/cirno/top_level.sv        ; yes             ; User SystemVerilog HDL File  ; /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv                   ;         ;
+; altsyncram.tdf                   ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altsyncram.tdf        ;         ;
+; stratix_ram_block.inc            ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/stratix_ram_block.inc ;         ;
+; lpm_mux.inc                      ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/lpm_mux.inc           ;         ;
+; lpm_decode.inc                   ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/lpm_decode.inc        ;         ;
+; aglobal171.inc                   ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/aglobal171.inc        ;         ;
+; a_rdenreg.inc                    ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/a_rdenreg.inc         ;         ;
+; altrom.inc                       ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altrom.inc            ;         ;
+; altram.inc                       ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altram.inc            ;         ;
+; altdpram.inc                     ; yes             ; Megafunction                 ; /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altdpram.inc          ;         ;
+; db/altsyncram_m0q1.tdf           ; yes             ; Auto-Generated Megafunction  ; /home/tedi2/playground/cirno-processing-unit/quartus/db/altsyncram_m0q1.tdf           ;         ;
++----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------+---------+
+
+
++---------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary             ;
++---------------------------------------------+-----------+
+; Resource                                    ; Usage     ;
++---------------------------------------------+-----------+
+; Estimate of Logic utilization (ALMs needed) ; 326       ;
+;                                             ;           ;
+; Combinational ALUT usage for logic          ; 431       ;
+;     -- 7 input functions                    ; 2         ;
+;     -- 6 input functions                    ; 217       ;
+;     -- 5 input functions                    ; 74        ;
+;     -- 4 input functions                    ; 46        ;
+;     -- <=3 input functions                  ; 92        ;
+;                                             ;           ;
+; Dedicated logic registers                   ; 109       ;
+;                                             ;           ;
+; I/O pins                                    ; 3         ;
+; Total MLAB memory bits                      ; 0         ;
+; Total block memory bits                     ; 2048      ;
+;                                             ;           ;
+; Total DSP Blocks                            ; 0         ;
+;                                             ;           ;
+; Maximum fan-out node                        ; clk~input ;
+; Maximum fan-out                             ; 117       ;
+; Total fan-out                               ; 2542      ;
+; Average fan-out                             ; 4.59      ;
++---------------------------------------------+-----------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                                 ;
++-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
+; Compilation Hierarchy Node                ; Combinational ALUTs ; Dedicated Logic Registers ; Block Memory Bits ; DSP Blocks ; Pins ; Virtual Pins ; Full Hierarchy Name                                                           ; Entity Name     ; Library Name ;
++-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
+; |top_level                                ; 431 (17)            ; 109 (14)                  ; 2048              ; 0          ; 3    ; 0            ; |top_level                                                                    ; top_level       ; work         ;
+;    |alu:alu|                              ; 82 (82)             ; 9 (9)                     ; 0                 ; 0          ; 0    ; 0            ; |top_level|alu:alu                                                            ; alu             ; work         ;
+;    |decoder:decoder|                      ; 57 (57)             ; 27 (27)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|decoder:decoder                                                    ; decoder         ; work         ;
+;    |fetch_unit:fetch_unit|                ; 197 (197)           ; 11 (11)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|fetch_unit:fetch_unit                                              ; fetch_unit      ; work         ;
+;    |memory:dm1|                           ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |top_level|memory:dm1                                                         ; memory          ; work         ;
+;       |altsyncram:core[0][7]__1|          ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |top_level|memory:dm1|altsyncram:core[0][7]__1                                ; altsyncram      ; work         ;
+;          |altsyncram_m0q1:auto_generated| ; 0 (0)               ; 0 (0)                     ; 2048              ; 0          ; 0    ; 0            ; |top_level|memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated ; altsyncram_m0q1 ; work         ;
+;    |register:register|                    ; 78 (78)             ; 48 (48)                   ; 0                 ; 0          ; 0    ; 0            ; |top_level|register:register                                                  ; register        ; work         ;
++-------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-------------------------------------------------------------------------------+-----------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis RAM Summary                                                                                                                                                  ;
++-------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+------+------+
+; Name                                                                          ; Type ; Mode             ; Port A Depth ; Port A Width ; Port B Depth ; Port B Width ; Size ; MIF  ;
++-------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+------+------+
+; memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated|ALTSYNCRAM ; AUTO ; Simple Dual Port ; 256          ; 8            ; 256          ; 8            ; 2048 ; None ;
++-------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+------+------+
+
+
+Encoding Type:  One-Hot
++-----------------------------------------------------------------+
+; State Machine - |top_level|step                                 ;
++----------+----------+----------+----------+----------+----------+
+; Name     ; step.011 ; step.010 ; step.000 ; step.001 ; step.100 ;
++----------+----------+----------+----------+----------+----------+
+; step.001 ; 0        ; 0        ; 0        ; 0        ; 0        ;
+; step.000 ; 0        ; 0        ; 1        ; 1        ; 0        ;
+; step.010 ; 0        ; 1        ; 0        ; 1        ; 0        ;
+; step.011 ; 1        ; 0        ; 0        ; 1        ; 0        ;
+; step.100 ; 0        ; 0        ; 0        ; 1        ; 1        ;
++----------+----------+----------+----------+----------+----------+
+
+
++-----------------------------------------------------------------------------------------------------------+
+; User-Specified and Inferred Latches                                                                       ;
++----------------------------------------------------+-----------------------------+------------------------+
+; Latch Name                                         ; Latch Enable Signal         ; Free of Timing Hazards ;
++----------------------------------------------------+-----------------------------+------------------------+
+; fetch_unit:fetch_unit|inst[1]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[2]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[3]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[4]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[5]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[6]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[7]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[8]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; fetch_unit:fetch_unit|inst[0]                      ; fetch_unit:fetch_unit|Mux36 ; yes                    ;
+; Number of user-specified and inferred latches = 9  ;                             ;                        ;
++----------------------------------------------------+-----------------------------+------------------------+
+Note: All latches listed above may not be present at the end of synthesis due to various synthesis optimizations.
+
+
++------------------------------------------------------------+
+; Registers Removed During Synthesis                         ;
++---------------------------------------+--------------------+
+; Register name                         ; Reason for Removal ;
++---------------------------------------+--------------------+
+; step~7                                ; Lost fanout        ;
+; step~8                                ; Lost fanout        ;
+; step.000                              ; Lost fanout        ;
+; Total Number of Removed Registers = 3 ;                    ;
++---------------------------------------+--------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 109   ;
+; Number of registers using Synchronous Clear  ; 3     ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 95    ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                        ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output              ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |top_level|register:register|x[7]       ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |top_level|register:register|y[7]       ;
+; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |top_level|register:register|y[2]       ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[3][5]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[3][3]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[2][5]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[2][0]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[1][5]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[1][3]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[0][5]  ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |top_level|register:register|mem[0][0]  ;
+; 6:1                ; 8 bits    ; 32 LEs        ; 24 LEs               ; 8 LEs                  ; Yes        ; |top_level|fetch_unit:fetch_unit|pc[1]  ;
+; 79:1               ; 4 bits    ; 208 LEs       ; 12 LEs               ; 196 LEs                ; Yes        ; |top_level|decoder:decoder|funct[3]     ;
+; 151:1              ; 2 bits    ; 200 LEs       ; 8 LEs                ; 192 LEs                ; Yes        ; |top_level|decoder:decoder|immediate[5] ;
+; 151:1              ; 3 bits    ; 300 LEs       ; 27 LEs               ; 273 LEs                ; Yes        ; |top_level|decoder:decoder|immediate[3] ;
+; 22:1               ; 4 bits    ; 56 LEs        ; 36 LEs               ; 20 LEs                 ; Yes        ; |top_level|alu:alu|result[6]            ;
+; 22:1               ; 4 bits    ; 56 LEs        ; 36 LEs               ; 20 LEs                 ; Yes        ; |top_level|alu:alu|result[3]            ;
+; 3:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; No         ; |top_level|step                         ;
+; 3:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |top_level|fetch_unit:fetch_unit|Mux29  ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|ShiftLeft0           ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|ShiftRight1          ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |top_level|alu:alu|ShiftLeft0           ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |top_level|register:register|Mux8       ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
+
+
++-------------------------------------------------------------------------------------------+
+; Source assignments for memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated ;
++---------------------------------+--------------------+------+-----------------------------+
+; Assignment                      ; Value              ; From ; To                          ;
++---------------------------------+--------------------+------+-----------------------------+
+; OPTIMIZE_POWER_DURING_SYNTHESIS ; NORMAL_COMPILATION ; -    ; -                           ;
++---------------------------------+--------------------+------+-----------------------------+
+
+
++----------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: memory:dm1|altsyncram:core[0][7]__1 ;
++------------------------------------+----------------------+----------------------+
+; Parameter Name                     ; Value                ; Type                 ;
++------------------------------------+----------------------+----------------------+
+; BYTE_SIZE_BLOCK                    ; 8                    ; Untyped              ;
+; AUTO_CARRY_CHAINS                  ; ON                   ; AUTO_CARRY           ;
+; IGNORE_CARRY_BUFFERS               ; OFF                  ; IGNORE_CARRY         ;
+; AUTO_CASCADE_CHAINS                ; ON                   ; AUTO_CASCADE         ;
+; IGNORE_CASCADE_BUFFERS             ; OFF                  ; IGNORE_CASCADE       ;
+; WIDTH_BYTEENA                      ; 1                    ; Untyped              ;
+; OPERATION_MODE                     ; DUAL_PORT            ; Untyped              ;
+; WIDTH_A                            ; 8                    ; Untyped              ;
+; WIDTHAD_A                          ; 8                    ; Untyped              ;
+; NUMWORDS_A                         ; 256                  ; Untyped              ;
+; OUTDATA_REG_A                      ; UNREGISTERED         ; Untyped              ;
+; ADDRESS_ACLR_A                     ; NONE                 ; Untyped              ;
+; OUTDATA_ACLR_A                     ; NONE                 ; Untyped              ;
+; WRCONTROL_ACLR_A                   ; NONE                 ; Untyped              ;
+; INDATA_ACLR_A                      ; NONE                 ; Untyped              ;
+; BYTEENA_ACLR_A                     ; NONE                 ; Untyped              ;
+; WIDTH_B                            ; 8                    ; Untyped              ;
+; WIDTHAD_B                          ; 8                    ; Untyped              ;
+; NUMWORDS_B                         ; 256                  ; Untyped              ;
+; INDATA_REG_B                       ; CLOCK1               ; Untyped              ;
+; WRCONTROL_WRADDRESS_REG_B          ; CLOCK1               ; Untyped              ;
+; RDCONTROL_REG_B                    ; CLOCK0               ; Untyped              ;
+; ADDRESS_REG_B                      ; CLOCK0               ; Untyped              ;
+; OUTDATA_REG_B                      ; UNREGISTERED         ; Untyped              ;
+; BYTEENA_REG_B                      ; CLOCK1               ; Untyped              ;
+; INDATA_ACLR_B                      ; NONE                 ; Untyped              ;
+; WRCONTROL_ACLR_B                   ; NONE                 ; Untyped              ;
+; ADDRESS_ACLR_B                     ; NONE                 ; Untyped              ;
+; OUTDATA_ACLR_B                     ; NONE                 ; Untyped              ;
+; RDCONTROL_ACLR_B                   ; NONE                 ; Untyped              ;
+; BYTEENA_ACLR_B                     ; NONE                 ; Untyped              ;
+; WIDTH_BYTEENA_A                    ; 1                    ; Untyped              ;
+; WIDTH_BYTEENA_B                    ; 1                    ; Untyped              ;
+; RAM_BLOCK_TYPE                     ; AUTO                 ; Untyped              ;
+; BYTE_SIZE                          ; 8                    ; Untyped              ;
+; READ_DURING_WRITE_MODE_MIXED_PORTS ; OLD_DATA             ; Untyped              ;
+; READ_DURING_WRITE_MODE_PORT_A      ; NEW_DATA_NO_NBE_READ ; Untyped              ;
+; READ_DURING_WRITE_MODE_PORT_B      ; NEW_DATA_NO_NBE_READ ; Untyped              ;
+; INIT_FILE                          ; UNUSED               ; Untyped              ;
+; INIT_FILE_LAYOUT                   ; PORT_A               ; Untyped              ;
+; MAXIMUM_DEPTH                      ; 0                    ; Untyped              ;
+; CLOCK_ENABLE_INPUT_A               ; NORMAL               ; Untyped              ;
+; CLOCK_ENABLE_INPUT_B               ; NORMAL               ; Untyped              ;
+; CLOCK_ENABLE_OUTPUT_A              ; NORMAL               ; Untyped              ;
+; CLOCK_ENABLE_OUTPUT_B              ; NORMAL               ; Untyped              ;
+; CLOCK_ENABLE_CORE_A                ; USE_INPUT_CLKEN      ; Untyped              ;
+; CLOCK_ENABLE_CORE_B                ; USE_INPUT_CLKEN      ; Untyped              ;
+; ENABLE_ECC                         ; FALSE                ; Untyped              ;
+; ECC_PIPELINE_STAGE_ENABLED         ; FALSE                ; Untyped              ;
+; WIDTH_ECCSTATUS                    ; 3                    ; Untyped              ;
+; DEVICE_FAMILY                      ; Cyclone V            ; Untyped              ;
+; CBXI_PARAMETER                     ; altsyncram_m0q1      ; Untyped              ;
++------------------------------------+----------------------+----------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------+
+; altsyncram Parameter Settings by Entity Instance                                ;
++-------------------------------------------+-------------------------------------+
+; Name                                      ; Value                               ;
++-------------------------------------------+-------------------------------------+
+; Number of entity instances                ; 1                                   ;
+; Entity Instance                           ; memory:dm1|altsyncram:core[0][7]__1 ;
+;     -- OPERATION_MODE                     ; DUAL_PORT                           ;
+;     -- WIDTH_A                            ; 8                                   ;
+;     -- NUMWORDS_A                         ; 256                                 ;
+;     -- OUTDATA_REG_A                      ; UNREGISTERED                        ;
+;     -- WIDTH_B                            ; 8                                   ;
+;     -- NUMWORDS_B                         ; 256                                 ;
+;     -- ADDRESS_REG_B                      ; CLOCK0                              ;
+;     -- OUTDATA_REG_B                      ; UNREGISTERED                        ;
+;     -- RAM_BLOCK_TYPE                     ; AUTO                                ;
+;     -- READ_DURING_WRITE_MODE_MIXED_PORTS ; OLD_DATA                            ;
++-------------------------------------------+-------------------------------------+
+
+
++---------------------------------------------------+
+; Port Connectivity Checks: "fetch_unit:fetch_unit" ;
++--------------+-------+----------+-----------------+
+; Port         ; Type  ; Severity ; Details         ;
++--------------+-------+----------+-----------------+
+; startAddress ; Input ; Info     ; Stuck at VCC    ;
++--------------+-------+----------+-----------------+
+
+
++-----------------------------------------------------+
+; Post-Synthesis Netlist Statistics for Top Partition ;
++-----------------------+-----------------------------+
+; Type                  ; Count                       ;
++-----------------------+-----------------------------+
+; arriav_ff             ; 109                         ;
+;     ENA               ; 92                          ;
+;     ENA SCLR          ; 3                           ;
+;     plain             ; 14                          ;
+; arriav_lcell_comb     ; 431                         ;
+;     arith             ; 38                          ;
+;         1 data inputs ; 12                          ;
+;         2 data inputs ; 10                          ;
+;         3 data inputs ; 16                          ;
+;     extend            ; 2                           ;
+;         7 data inputs ; 2                           ;
+;     normal            ; 391                         ;
+;         2 data inputs ; 20                          ;
+;         3 data inputs ; 34                          ;
+;         4 data inputs ; 46                          ;
+;         5 data inputs ; 74                          ;
+;         6 data inputs ; 217                         ;
+; boundary_port         ; 3                           ;
+; stratixv_ram_block    ; 8                           ;
+;                       ;                             ;
+; Max LUT depth         ; 5.00                        ;
+; Average LUT depth     ; 3.00                        ;
++-----------------------+-----------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:02     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
+    Info: Processing started: Fri Apr 19 22:59:50 2019
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off cirno -c cirno
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv
+    Info (12023): Found entity 1: register File: /home/tedi2/playground/cirno-processing-unit/src/cirno/register.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/proc.sv
+    Info (12023): Found entity 1: prog File: /home/tedi2/playground/cirno-processing-unit/src/cirno/proc.sv Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/dm.sv
+    Info (12023): Found entity 1: dm File: /home/tedi2/playground/cirno-processing-unit/src/cirno/dm.sv Line: 10
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv
+    Info (12023): Found entity 1: memory File: /home/tedi2/playground/cirno-processing-unit/src/cirno/memory.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv
+    Info (12023): Found entity 1: decoder File: /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv
+    Info (12023): Found entity 1: prog123_tb File: /home/tedi2/playground/cirno-processing-unit/src/cirno/prog123_tb.sv Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv
+    Info (12023): Found entity 1: alu File: /home/tedi2/playground/cirno-processing-unit/src/cirno/alu.sv Line: 12
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv
+    Info (12023): Found entity 1: fetch_unit File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv
+    Info (12023): Found entity 1: top_level File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 10
+Info (12021): Found 1 design units, including 1 entities, in source file /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv
+    Info (12023): Found entity 1: tb File: /home/tedi2/playground/cirno-processing-unit/src/cirno/tb.sv Line: 2
+Info (12127): Elaborating entity "top_level" for the top level hierarchy
+Info (10264): Verilog HDL Case Statement information at top_level.sv(57): all case item expressions in this case statement are onehot File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 57
+Info (12128): Elaborating entity "decoder" for hierarchy "decoder:decoder" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 30
+Warning (10935): Verilog HDL Casex/Casez warning at decoder.sv(44): casex/casez item expression overlaps with a previous casex/casez item expression File: /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv Line: 44
+Warning (10935): Verilog HDL Casex/Casez warning at decoder.sv(95): casex/casez item expression overlaps with a previous casex/casez item expression File: /home/tedi2/playground/cirno-processing-unit/src/cirno/decoder.sv Line: 95
+Info (12128): Elaborating entity "memory" for hierarchy "memory:dm1" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 31
+Info (19000): Inferred 1 megafunctions from design logic
+    Info (276029): Inferred altsyncram megafunction from the following design logic: "memory:dm1|altsyncram:core[0][7]__1" 
+        Info (286033): Parameter OPERATION_MODE set to DUAL_PORT
+        Info (286033): Parameter WIDTH_A set to 8
+        Info (286033): Parameter WIDTHAD_A set to 8
+        Info (286033): Parameter NUMWORDS_A set to 256
+        Info (286033): Parameter WIDTH_B set to 8
+        Info (286033): Parameter WIDTHAD_B set to 8
+        Info (286033): Parameter NUMWORDS_B set to 256
+        Info (286033): Parameter ADDRESS_ACLR_A set to NONE
+        Info (286033): Parameter OUTDATA_REG_B set to UNREGISTERED
+        Info (286033): Parameter ADDRESS_ACLR_B set to NONE
+        Info (286033): Parameter OUTDATA_ACLR_B set to NONE
+        Info (286033): Parameter ADDRESS_REG_B set to CLOCK0
+        Info (286033): Parameter INDATA_ACLR_A set to NONE
+        Info (286033): Parameter WRCONTROL_ACLR_A set to NONE
+        Info (286033): Parameter READ_DURING_WRITE_MODE_MIXED_PORTS set to OLD_DATA
+        Info (286033): Parameter RDCONTROL_REG_B set to CLOCK0
+Info (12128): Elaborating entity "altsyncram" for hierarchy "memory:dm1|altsyncram:core[0][7]__1"
+Info (12130): Elaborated megafunction instantiation "memory:dm1|altsyncram:core[0][7]__1"
+Info (12133): Instantiated megafunction "memory:dm1|altsyncram:core[0][7]__1" with the following parameter:
+    Info (12134): Parameter "OPERATION_MODE" = "DUAL_PORT"
+    Info (12134): Parameter "WIDTH_A" = "8"
+    Info (12134): Parameter "WIDTHAD_A" = "8"
+    Info (12134): Parameter "NUMWORDS_A" = "256"
+    Info (12134): Parameter "WIDTH_B" = "8"
+    Info (12134): Parameter "WIDTHAD_B" = "8"
+    Info (12134): Parameter "NUMWORDS_B" = "256"
+    Info (12134): Parameter "ADDRESS_ACLR_A" = "NONE"
+    Info (12134): Parameter "OUTDATA_REG_B" = "UNREGISTERED"
+    Info (12134): Parameter "ADDRESS_ACLR_B" = "NONE"
+    Info (12134): Parameter "OUTDATA_ACLR_B" = "NONE"
+    Info (12134): Parameter "ADDRESS_REG_B" = "CLOCK0"
+    Info (12134): Parameter "INDATA_ACLR_A" = "NONE"
+    Info (12134): Parameter "WRCONTROL_ACLR_A" = "NONE"
+    Info (12134): Parameter "READ_DURING_WRITE_MODE_MIXED_PORTS" = "OLD_DATA"
+    Info (12134): Parameter "RDCONTROL_REG_B" = "CLOCK0"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_m0q1.tdf
+    Info (12023): Found entity 1: altsyncram_m0q1 File: /home/tedi2/playground/cirno-processing-unit/quartus/db/altsyncram_m0q1.tdf Line: 27
+Info (12128): Elaborating entity "altsyncram_m0q1" for hierarchy "memory:dm1|altsyncram:core[0][7]__1|altsyncram_m0q1:auto_generated" File: /home/tedi2/intelFPGA_lite/17.1/quartus/libraries/megafunctions/altsyncram.tdf Line: 791
+Info (12128): Elaborating entity "register" for hierarchy "register:register" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 32
+Info (12128): Elaborating entity "alu" for hierarchy "alu:alu" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 33
+Info (12128): Elaborating entity "fetch_unit" for hierarchy "fetch_unit:fetch_unit" File: /home/tedi2/playground/cirno-processing-unit/src/cirno/top_level.sv Line: 34
+Warning (10230): Verilog HDL assignment warning at fetch_unit.sv(22): truncated value with size 32 to match size of target (2) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 22
+Warning (10230): Verilog HDL assignment warning at fetch_unit.sv(43): truncated value with size 32 to match size of target (9) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 43
+Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(48): variable "prog" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 48
+Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(49): variable "rom1" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 49
+Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(50): variable "rom2" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 50
+Warning (10235): Verilog HDL Always Construct warning at fetch_unit.sv(51): variable "rom3" is read inside the Always Construct but isn't in the Always Construct's Event Control File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 51
+Warning (10270): Verilog HDL Case Statement warning at fetch_unit.sv(48): incomplete case statement has no default case item File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 48
+Warning (10240): Verilog HDL Always Construct warning at fetch_unit.sv(47): inferring latch(es) for variable "inst", which holds its previous value in one or more paths through the always construct File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Warning (10030): Net "rom1[511..139]" at fetch_unit.sv(14) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 14
+Warning (10030): Net "rom2[511..185]" at fetch_unit.sv(15) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 15
+Warning (10030): Net "rom3[511..218]" at fetch_unit.sv(16) has no driver or initial value, using a default initial value '0' File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 16
+Info (10041): Inferred latch for "inst[0]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[1]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[2]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[3]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[4]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[5]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[6]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[7]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Info (10041): Inferred latch for "inst[8]" at fetch_unit.sv(47) File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+Warning (13012): Latch fetch_unit:fetch_unit|inst[1] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[2] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[3] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[4] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[5] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[6] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[7] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[8] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Warning (13012): Latch fetch_unit:fetch_unit|inst[0] has unsafe behavior File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 47
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal fetch_unit:fetch_unit|prog[1] File: /home/tedi2/playground/cirno-processing-unit/src/cirno/fetch_unit.sv Line: 19
+Info (286030): Timing-Driven Synthesis is running
+Info (17049): 3 registers lost all their fanouts during netlist optimizations.
+Info (144001): Generated suppressed messages file /home/tedi2/playground/cirno-processing-unit/quartus/output_files/cirno.map.smsg
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 448 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 2 input pins
+    Info (21059): Implemented 1 output pins
+    Info (21061): Implemented 437 logic cells
+    Info (21064): Implemented 8 RAM segments
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 32 warnings
+    Info: Peak virtual memory: 1087 megabytes
+    Info: Processing ended: Fri Apr 19 23:00:04 2019
+    Info: Elapsed time: 00:00:14
+    Info: Total CPU time (on all processors): 00:00:30
+
+
++------------------------------------------+
+; Analysis & Synthesis Suppressed Messages ;
++------------------------------------------+
+The suppressed messages can be found in /home/tedi2/playground/cirno-processing-unit/quartus/output_files/cirno.map.smsg.
+
+

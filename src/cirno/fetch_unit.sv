@@ -379,7 +379,7 @@ module fetch_unit(
     assign rom2[183] = 9'b000001001;
 	assign rom2[184] = 9'b000000001;
 
-assign rom3[0] = 9'b1assign rom3[0] = 9'b110010000;
+assign rom3[0] = 9'b110010000;
 assign rom3[1] = 9'b101101100;
 assign rom3[2] = 9'b100100001;
 assign rom3[3] = 9'b010010110;

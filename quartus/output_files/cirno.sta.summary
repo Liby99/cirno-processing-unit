@@ -1,0 +1,101 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1100mV 85C Model Setup 'fetch_unit:fetch_unit|prog[0]'
+Slack : -8.981
+TNS   : -76.340
+
+Type  : Slow 1100mV 85C Model Setup 'clk'
+Slack : -4.159
+TNS   : -394.786
+
+Type  : Slow 1100mV 85C Model Hold 'clk'
+Slack : 0.511
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Hold 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.583
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Minimum Pulse Width 'clk'
+Slack : -4.555
+TNS   : -301.096
+
+Type  : Slow 1100mV 85C Model Minimum Pulse Width 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.116
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Setup 'fetch_unit:fetch_unit|prog[0]'
+Slack : -9.223
+TNS   : -78.362
+
+Type  : Slow 1100mV 0C Model Setup 'clk'
+Slack : -4.024
+TNS   : -387.804
+
+Type  : Slow 1100mV 0C Model Hold 'clk'
+Slack : 0.302
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Hold 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.512
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Minimum Pulse Width 'clk'
+Slack : -4.555
+TNS   : -302.219
+
+Type  : Slow 1100mV 0C Model Minimum Pulse Width 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.044
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Setup 'fetch_unit:fetch_unit|prog[0]'
+Slack : -3.522
+TNS   : -28.978
+
+Type  : Fast 1100mV 85C Model Setup 'clk'
+Slack : -1.921
+TNS   : -114.953
+
+Type  : Fast 1100mV 85C Model Hold 'clk'
+Slack : 0.180
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Hold 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.308
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Minimum Pulse Width 'clk'
+Slack : -2.636
+TNS   : -106.367
+
+Type  : Fast 1100mV 85C Model Minimum Pulse Width 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.160
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Setup 'fetch_unit:fetch_unit|prog[0]'
+Slack : -3.264
+TNS   : -27.133
+
+Type  : Fast 1100mV 0C Model Setup 'clk'
+Slack : -1.515
+TNS   : -92.352
+
+Type  : Fast 1100mV 0C Model Hold 'clk'
+Slack : 0.140
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Hold 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.272
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Minimum Pulse Width 'clk'
+Slack : -2.636
+TNS   : -106.126
+
+Type  : Fast 1100mV 0C Model Minimum Pulse Width 'fetch_unit:fetch_unit|prog[0]'
+Slack : 0.211
+TNS   : 0.000
+
+------------------------------------------------------------
