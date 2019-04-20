@@ -1,193 +1,165 @@
-#define addr_i 195
-#define addr_j 196
-#define addr_k 197
-#define addr_t 198
-#define addr_p 199
-#define addr_p8 200
-#define addr_p4 201
-#define addr_p2 202
-#define addr_p1 203
-#define addr_lower 204
-#define addr_upper 205
-#define addr_b4to2 206
-#define addr_b1 207
-#define addr_temp_lower 208
-#define addr_temp_upper 209
+setup:
+	movi	$1, 30	; k = 30
+	movi	$0, 253 ; ptr = 253
+	st	$1, $0		; mem[253] = 30
 
-prog_start:
-	andi	$0, 0
-	movi	$1, addr_i
-	st	$0, $1
+	clr	$1				; i = 0
 
-	andi	$0, 30
-	movi		$1, addr_k
-	st		$0, $1
+while_start:
+	ld	$2 $1		; lower = mem[i]
+	movil	$0 10  ; ptr = 250
+	st	$2 $0		; mem[250] = lower
 
-while:
-	movi	$1,	addr_i
-	ld	$1, $1
-	
-	movi	$0, addr_lower
-	ld	$2, $1					// $2(lower) = mem[i]
-	st	$2, $0
-
+	incr $1
+	ld	$3 $1		; p = upper = mem[i+1]
 	incr	$1
-	ld	$3, $1					// $3(upper) = mem[i]
+	movil	$0 15	; ptr = 255
+	st	$1 $0		; mem[255] = i
+
+	;; Calculate p8
+	;;   $0: ptr / 7
+	;;   $1: j
+	;;   $2: t
+	;;   $3: p
+	shli	$3 4
+	shri	$2 4
+	or	$3 $2		; p = temp_upper = $3
+	movil $0 11 ; ptr = 251
+	st	$3 $0		; mem[251] = temp_upper
+
+	mov	$2 $3		; t = p
+	shri	$2 1
+
+	clr	$1		  ; j = 0
+	movi	$0 7	; temp = 7
+
+p8_while_start:
+	xor	$3 $2
+	shri	$2 1
 	incr	$1
-	movi	$0, addr_i
-	st	$1, $0
+	cmp	$1 $0
+	beqil p8_while_end
+	jmpil	p8_while_start
 
-	shli	$3, 4
-	shri	$2, 4
-	or	$3, $2					// $3 = (upper << 4) | (lower >> 4)
-	movi	$2, addr_temp_upper
-	st	$3, $2					// $3(temp_upper) = mem[$2]
+p8_while_end:
+	shli	$3 4
+	movi	$0 250
+	ld	$2 $0		; $2 = lower = mem[250]
+	andi $2 14  ; $2 &= 14
+	or $3 $2    ; p = [x x x p8 b4 b3 b2 0]
+	movil	$0 12 ; ptr = 252
+	st	$3 $0   ; mem[252] = p
 
-p8:
-	mov	$0, $3					// $0 = p
-	mov	$1, $0
-	shri	$1, 1					// $1 = t
-	clr	$2							// $2(j) = 0
-	movi	$3, 7					// $3 = 7
+	;; Calculate p4
+	movil	$0 11
+	ld	$3 $0		; p = temp_upper = mem[251]
+	movil	$0 8  ; ptr = 248
+	and	$3 $0   ; p &= 248
+	movil	$0 10
+	ld	$2 $0
+	shri	$2 1
+	andi	$2 7
+	or	$3 $2   ; p = (temp_upper & 248) | ((lower >> 1) & 7)
+	mov $2 $3
+	shri	$2 1  ; t = p >> 1
+	clr	$1      ; j = 0
+	movi	$0 7
 
-p8while:
-	xor	$0, $1
-	shri	$1, 1
-	incr	$2
-	cmp	$3, $2
-	beqil p4
-	jmpil	p8while
+p4_while_start:
+	xor	$3 $2
+	shri	$2 1
+	incr	$1
+	cmp	$1 $0
+	beqil p4_while_end
+	jmpil	p4_while_start
 
-p4:
-	shli	$0, 7					// p << 7
-	andi	$0, 128
-	movi	$1, addr_p8
-	st	$0, $1
+p4_while_end:
+	andi $3 1  ; p &= 1
+	movi $0 252  ; ptr = 252
+	ld $2 $0 ; parity = mem[252]
+	or $2 $3 ; parity |= p4 ; parity = [x x x p8 b4 b3 b2 p4]
+	shli $2 1 ; parity <<= 1 ; parity = [x x p8 b4 b3 b2 p4 0]
+	movil $0 10 ; ptr = 250
+	ld $3 $0 ; $3 = lower = mem[250]
+	andi $3 1 ; lower &= 1
+	or $2 $3 ; parity |= b1 ; parity = [x x p8 b4 b3 b2 p4 b1]
+	shli $2 1 ; parity <<= 1 ; parity = [x p8 b4 b3 b2 p4 b1 0]
+	movil $0 12 ; ptr = 252
+	st $2 $0 ; mem[252] = parity
 
-	movi	$0, addr_temp_upper
-	ld	$0, $0
-	andi	$0, 248				// $0 = (temp_upper & 248)
-	movi	$1, addr_lower
-	ld	$1, $1
-	shri	$1, 1
-	andi	$1, 7					// $1 = ((lower >> 1) & 7)
-	or	$0, $1					// $0 = p
-	mov	$1, $0
-	shri	$1, 1					// $1 = t
-	clr	$2							// j = 0
-	movi	$3, 7					// $3 = 7
+	;; Calculate p2
+	movil	$0 11  ; ptr = 251
+	ld	$3 $0    ; p = temp_upper = mem[251]
+	shri $3 1    ; p >>= 1
+	mov $2 $3    ; t = p
+	shri	$2 1   ; t >>= 1
+	xor	$3 $2    ; p ^= t
+	shri	$2 3   ; t >>= 3
+	xor	$3 $2    ; p ^= t
+	shri $2 1    ; t >>= 1
+	xor $3 $2    ; p ^= t
+	movil	$0 10
+	ld	$2 $0    ; t = lower = mem[250]
+	xor	$3 $2    ; p ^= t
+	shri	$2 2   ; t >>= 2
+	xor	$3 $2    ; p ^= t
+	shri $2 1    ; t >>= 1
+	xor $3 $2    ; p ^= t
 
-p4while:
-	xor	$0, $1
-	shri	$1, 1
-	incr	$2
-	cmp	$3, $2
-	beqil p2
-	jmpil	p4while
+	andi	$3 1   ; p2 = p & 1
+	movil $0 12  ; ptr = 252
+	ld $2 $0     ; $1 = parity = mem[252]
+	or $2 $3     ; parity |= p2 ; parity = [x p8 b4 b3 b2 p4 b1 p2]
+	shli $2 1    ; parity <<= 1 ; parity = [p8 b4 b3 b2 p4 b1 p2 0]
+	st	$2 $0    ; mem[252] = parity
 
-p2:
-	shli	$0, 3
-	andi	$0, 8
-	movi	$1, addr_p4
-	st	$0, $1
+	;; Calculate p1
+	movil	$0 11   ; ptr = 251
+	ld	$3 $0			; p = temp_upper = mem[251]
+	mov $2 $3
+	shri	$2 2    ; t = p >> 2
+	clr	$1				; j = 0
+	movi	$0 3    ; temp = 3
 
-	movi	$0, addr_temp_upper
-	ld	$0, $0
-	shri	$0, 1					// $0 = p
-	mov	$1, $0
-	shri	$1, 1					// $1 = t
-	xor	$0, $1
-	shri	$1, 2
-	xor	$0, $1
-	shri	$1, 1
-	xor	$0, $1
+p1_while_start:
+	xor	$3 $2
+	shri	$2 2
+	incr	$1
+	cmp	$1 $0
+	beqil p1_while_end
+	jmpil	p1_while_start
 
-	movi	$2, addr_lower
-	ld	$2, $2
-	mov	$1, $2
-	xor	$0, $1
-	shri	$1, 2
-	xor	$0, $1
-	shri	$1, 1
-	xor	$0, $1
-	shli	$0, 1
-	andi	$0, 2
-	movi	$1, addr_p2
-	st	$0, $1
+p1_while_end:
+	movi	$0 250   ; ptr = 250
+	ld	$2 $0     ; t = lower = mem[250]
+	xor $3 $2     ; p ^= t
+	shri	$2 1    ; t >>= 1
+	xor	$3 $2     ; p ^= t
+	shri	$2 2    ; t >>= 2
+	xor	$3 $2     ; p ^= t
+	andi	$3 1    ; p1 = p &= 1
+	movil	$0 12   ; ptr = 252
+	ld	$2 $0     ; $2 = parity = mem[252]
+	or	$2 $3     ; parity = [p8 b4 b3 b2 p4 b1 p2 p1]
 
-p1:
-	movi	$0, addr_temp_upper
-	ld	$0, $0					// $0 = p
-	mov	$1, $0
-	shri	$1, 2					// $1 = t
-	clr	$2
-	movi	$3, 3
+	;; Writing back to memory
+	movil	$0 13   ; ptr = 253
+	ld	$1 $0     ; $1 = k
+	st $2 $1     ; mem[k] = parity = new_lower
+	incr	$1    ; k++
+	movil	$0 11  ; ptr = 251
+	ld	$3 $0   ; $3 = temp_upper
+	st	$3 $1   ; mem[k] = temp_upper
+	incr	$1
+	movil	$0 13 ; ptr = 253
+	st	$1 $0
 
-p1while:
-	movi	$1, addr_j
-	ld	$1, $1
-	andi	$0, 3
-	cmp	$0, $1
-	beq	continue_while
+	;; While Loop End
+	movil	$0 15  ; ptr = 255
+	ld $1 $0    ; i = mem[255]
+	movi	$2 30
+	cmp $1 $2
+	beqil while_end
+	jmpl $3 while_start
 
-	xor	$0, $1
-	shri	$1, 2
-	incr	$2
-	cmp	$3, $2
-	beqil continue_while
-	jmpil	p1while
-
-continue_while:
-	movi	$1, addr_lower
-	ld	$1, $1
-	xor	$0, $1
-	shri	$1, 1
-	xor	$0, $1
-	shri	$1, 2
-	xor	$0, $1
-	andi	$0, 1
-	movi	$1, addr_p1
-	st	$0, $1
-
-	movi	$0, addr_lower
-	ld	$0, $0
-	shli	$0, 3
-	andi	$0, 112
-
-	movi	$2, addr_lower
-	ld	$2, $2
-	shli	$2, 2
-	andi	$2, 4
-
-	or	$0, $2
-	movi	$1, addr_p8
-	ld	$1, $1
-	or	$0, $1
-	movi	$1, addr_p4
-	ld	$1, $1
-	or	$0, $1
-	movi	$1, addr_p2
-	ld	$1, $1
-	or	$0, $1
-	movi	$1, addr_p1
-	ld	$1, $1
-	or	$0, $1
-
-	movi	$2, addr_k
-	ld	$3, $2
-	st	$0, $3
-	incr	$3
-	movi	$1, addr_temp_upper
-	ld	$1, $1
-	st	$1, $3
-	incr	$3
-	st	$3, $2
-
-	movi	$1,	addr_i
-	ld	$1, $1
-	movi	$0, 30
-	cmp	$1, $0
-	beqil	end_while
-	jmpil	while
-
-end_while:
+while_end:
