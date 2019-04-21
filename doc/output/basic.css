@@ -1,0 +1,70 @@
+@media print {
+  body {
+    margin: 0.5in 0.3in;
+  }
+
+  .two-column {
+    column-count: 2;
+  }
+
+  h1, h2, h3, h4 {
+    border-bottom: 1px solid rgba(230, 230, 230, 1);
+  }
+
+  p, code, ul > li, ol > li, table th, table td {
+    font-size: 11px;
+  }
+
+  code {
+    background-color: rgba(245, 245, 245, 1);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-size: 9px;
+  }
+
+  pre {
+    background-color: rgba(245, 245, 245, 1);
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 9px;
+  }
+
+  pre code {
+    padding: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  table th, table td {
+    padding: 5px 10px;
+    line-height: 14px;
+    border: 1px solid rgba(230, 230, 230, 1);
+  }
+
+  table tr:nth-child(even) {
+    background-color: rgba(245, 245, 245, 1);
+  }
+
+  table.small th, table.small td {
+    font-size: 9px !important;
+    font-family: 'menlo';
+    line-height: 12px;
+    padding: 3px;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  .span-all {
+    margin: 20px 0;
+    column-span: all;
+    width: 100%;
+  }
+
+  .page-break {
+    page-break-before: always
+  }
+}

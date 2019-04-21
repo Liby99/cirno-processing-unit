@@ -1,0 +1,4435 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+  <title>Cirno Processing Unit</title>
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="basic.css" />
+  <style>
+    .task-list-item {
+      list-style-type: none;
+    }
+
+    .task-list-item-checkbox {
+      margin-left: -20px;
+      vertical-align: middle;
+    }
+  </style>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+</head>
+
+<body>
+  <div class="span-all">
+    <h1 id="cirno-processing-unit">Cirno Processing Unit</h1>
+    <h2 id="team-cirno">Team Cirno</h2>
+    <ul>
+      <li>Ziyang Li, A92070182</li>
+      <li>Kai Li, A13962269</li>
+      <li>Dingmei Gu, A14729954</li>
+    </ul>
+  </div>
+  <div class="two-column">
+    <h2 id="1-introduction">1. Introduction</h2>
+    <p>Our CPU architecture is called <strong>Cirno</strong>. We know that this CPU is designed for only the three
+      programs assigned, and its ok for us to have very specific commands. But we still do want to write a general
+      purpose
+      CPU that has the potential to run other programs as well. So our philosophy is to still give as much space as
+      possible towards generality. Meanwhile, there's also some specific instructions that we use a lot. So sometimes we
+      will give priority to these instructions as well. We strived for generality, and as a consequence we made it. We
+      can
+      actually write very sophisticated programs outside of the three programs.</p>
+    <p>Up to this point we have actually implemented all of the Lab Projects. We will first start from introducing our
+      ISA
+      and our three-program assembly implementation, and then our Assembler and Simulator/Debugger, and finally our CPU
+      design.</p>
+    <h2 id="2-isa">2. ISA</h2>
+    <h3 id="21-overview">2.1. Overview</h3>
+    <p>Our ISA, to maintain the generality of a general purpose CPU, we strive to make full use of every bit possible.
+      We
+      finally choose to have <code>4</code> general purpose registers, which means that we need <code>2</code> bits to
+      represent the register index. There are certainly different kinds of instructions that use different amount of
+      registers or immediates. Therefore we use variable length opcode. We classify our instruction to have 6 types:</p>
+    <ol>
+      <li>
+        <p>Jump Immediate Instruction. We find the offset of Jump to be very important and therefore this instruction
+          has
+          the minimal opcode lengths. This set includes both <code>jump</code> and <code>branch</code>, and are both
+          using
+          immediate offsets.</p>
+      </li>
+      <li>
+        <p>Immediate Instructions. Often times we need registers to be operated with immediates. This includes
+          <code>moving</code> immediates to registers, <code>and</code> immediate and also <code>shift</code>
+          immediates.
+        </p>
+      </li>
+      <li>
+        <p>Load/Store Instructions. Although its load and store, they have the same structure as the arithmatic
+          instructions.</p>
+      </li>
+      <li>
+        <p>Binary Arithmatic Instructions. These instructions involve operations on two registers. They include
+          <code>shift</code>, <code>move</code>, <code>add</code>, <code>sub</code>, <code>and</code>, <code>or</code>,
+          and <code>xor</code>.</p>
+      </li>
+      <li>
+        <p>Unary Arithmatic Instructions. There's only a single <code>increment</code> instruction in this set. We
+          include
+          <code>increment</code> instruction because it is very useful in loops.</p>
+      </li>
+      <li>
+        <p>Jump Register Instructions. We also have two instructions for jumping or branching to an address stored in a
+          register. These instructions are particularly important when we want to jump towards a very faraway
+          instruction.
+          Note that the address we store inside the register is absolute and we only have <code>8</code>-bit registers.
+          Therefore we need to make our number of instructions per program always less than <code>256</code>.</p>
+      </li>
+      <li>
+        <p>Control Instructions. These instructions will not involve any data. There are <code>nil</code> and
+          <code>halt</code> instructions for the CPU to send control signals.</p>
+      </li>
+    </ol>
+  </div>
+  <div class="page-break"></div>
+  <h3 id="22-instruction-list">2.2. Instruction List</h3>
+  <p>Here we provide a complete instruction list of our ISA. Note that we divide the table cells to different sections
+    in order to denote different component of each instruction. On the right most column we also specified what is the
+    meaning of the actual instruction.</p>
+  <p>Few Side Notes about some of the variable names we use right here:</p>
+  <ul>
+    <li><code>$pc</code>: Program Counter. Not necessarily <code>1</code> byte in size. Could have more bits.</li>
+    <li><code>$cmp</code>: Compare Register. Only have <code>1</code> bit. Could be written by <code>cmp</code>
+      instruction, and will be used by <code>br</code> instruction.</li>
+    <li><code>mem</code>: The Main Memory, contains <code>256</code> bytes.</li>
+  </ul>
+  <table class="span-all">
+    <thead>
+      <tr>
+        <th>Function</th>
+        <th>Code</th>
+        <th>8</th>
+        <th>7</th>
+        <th>6</th>
+        <th>5</th>
+        <th>4</th>
+        <th>3</th>
+        <th>2</th>
+        <th>1</th>
+        <th>0</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Jump Immediate</td>
+        <td><code>jmpi</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td colspan="6" align="center"><code>imm (signed)</code></td>
+        <td><code>$pc = $pc + imm</code></td>
+      </tr>
+      <tr>
+        <td>And Immediate</td>
+        <td><code>andi</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="4" align="center"><code>imm</code></td>
+        <td><code>$a = $a & imm</code></td>
+      </tr>
+      <tr>
+        <td>Move Immediate High</td>
+        <td><code>movih</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="4" align="center"><code>imm</code></td>
+        <td><code>$a[4:7] = imm</code></td>
+      </tr>
+      <tr>
+        <td>Move Immediate Low</td>
+        <td><code>movil</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="4" align="center"><code>imm</code></td>
+        <td><code>$a[0:3] = imm</code></td>
+      </tr>
+      <tr>
+        <td>Shift Right Immediate</td>
+        <td><code>shri</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="3" align="center"><code>shamt</code></td>
+        <td><code>$a = $a >> shamt</code></td>
+      </tr>
+      <tr>
+        <td>Shift Left Immediate</td>
+        <td><code>shli</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="3" align="center"><code>shamt</code></td>
+        <td><code>$a = $a << shamt</code></td>
+      </tr>
+      <tr>
+        <td>Branch if Equal Immediate</td>
+        <td><code>beqi</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td colspan="4" align="center"><code>imm (signed)</code></td>
+        <td>
+          <code>if cmp:</code><br />
+          <code>&nbsp; $pc = $pc + imm</code></td>
+      </tr>
+      <tr>
+        <td>Shift Register</td>
+        <td><code>sh</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td>
+          <code>shamt = $b[2:0]</code><br />
+          <code>if $b[3] == 1:</code><br />
+          <code>&nbsp; $a = $a >> shamt</code><br />
+          <code>else:</code><br />
+          <code>&nbsp; $a = $a << shamt</code>
+        </td>
+      </tr>
+      <tr>
+        <td>Store</td>
+        <td><code>st</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>mem[$b] = $a</code></td>
+      </tr>
+      <tr>
+        <td>Load</td>
+        <td><code>ld</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$a = mem[$b]</code></td>
+      </tr>
+      <tr>
+        <td>Move</td>
+        <td><code>mov</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$a = $b</code></td>
+      </tr>
+      <tr>
+        <td>Compare</td>
+        <td><code>cmp</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$cmp = $a == $b</code></td>
+      </tr>
+      <tr>
+        <td>Add</td>
+        <td><code>add</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$a = $a + $b</code></td>
+      </tr>
+      <tr>
+        <td>Subtract</td>
+        <td><code>sub</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$a = $a - $b</code></td>
+      </tr>
+      <tr>
+        <td>And</td>
+        <td><code>and</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$a = $a & $b</code></td>
+      </tr>
+      <tr>
+        <td>Or</td>
+        <td><code>or</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$a = $a | $b</code></td>
+      </tr>
+      <tr>
+        <td>Xor</td>
+        <td><code>xor</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td colspan="2" align="center"><code>$b</code></td>
+        <td><code>$a = $a ^ $b</code></td>
+      </tr>
+      <tr>
+        <td>Incr</td>
+        <td><code>incr</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td><code>$a++</code></td>
+      </tr>
+      <tr>
+        <td>Jump Register</td>
+        <td><code>jmp</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td><code>$pc = $a</code></td>
+      </tr>
+      <tr>
+        <td>Branch if Equal</td>
+        <td><code>beq</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td colspan="2" align="center"><code>$a</code></td>
+        <td><code>if $cmp: $pc = $a</code></td>
+      </tr>
+      <tr>
+        <td>Halt</td>
+        <td><code>halt</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td>CPU Stops Working</td>
+      </tr>
+      <tr>
+        <td>No Op</td>
+        <td><code>nil</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td><code>0</code></td>
+        <td>Nothing Happens</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+  <h3 id="23-sugar-instructions">2.3. Sugar Instructions</h3>
+  <p>There are several &quot;sugar instructions&quot; for us to write better assembly code. These instructions are not
+    internally supported by our CPU. But we will use our assembler to transcribe these instructions to one or more other
+    instructions. We need to note that there's no native &quot;label&quot; support so we put all the &quot;label&quot;
+    related instructions here.</p>
+  <table class="span-all">
+    <thead>
+      <tr>
+        <th>Function</th>
+        <th>Code</th>
+        <th>Format</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Move Label</td>
+        <td><code>movl</code></td>
+        <td><code>movl $reg label</code></td>
+        <td>Because a label usually represents an 8-bit number, this single instruction will be compiled into two
+          instructions: first <code>movil</code> the lower part of the absolute position of <code>label</code> and then
+          <code>movih</code> the upper part of the <code>label</code>. This could be used perfectly alone with
+          <code>jmpr</code> since <code>jmpr</code> will jump to a position specified by the data in a register.</td>
+      </tr>
+      <tr>
+        <td>Move Immediate</td>
+        <td><code>movi</code></td>
+        <td><code>movi $reg &lt;8-bit-number&gt;</code></td>
+        <td>This will be just transcribed to <code>movil</code> and <code>movih</code> the two parts of this immediate
+        </td>
+      </tr>
+      <tr>
+        <td>Clear</td>
+        <td><code>clr</code></td>
+        <td><code>clr $reg</code></td>
+        <td>This instruction will be transcribed to <code>addi $reg 0</code>, and will set <code>$reg</code> directly to
+          <code>0</code></td>
+      </tr>
+      <tr>
+        <td>Jump Label</td>
+        <td><code>jmpl</code></td>
+        <td><code>jmpl $reg &lt;label&gt;</code></td>
+        <td>You will be able to freely use the register <code>$reg</code> to use this command. This instruction will
+          first move the label address to <code>$reg</code>, and then jump using that <code>$reg</code></td>
+      </tr>
+      <tr>
+        <td>Branch if Eq Label</td>
+        <td><code>beql</code></td>
+        <td><code>brl $reg &lt;label&gt;</code></td>
+        <td>This is almost the same as <code>Jump Label</code>, instead it will check if <code>cmp</code> is
+          <code>1</code> before jumping. If not, <code>$pc</code> will be just advanced by <code>1</code>. Again you
+          will need to be able to use the <code>$reg</code> to use this instruction</td>
+      </tr>
+      <tr>
+        <td>Jump Immediate Label</td>
+        <td><code>jmpil</code></td>
+        <td><code>jmpil &lt;label&gt;</code></td>
+        <td>If you are very sure that the difference between the current instruction and the label is within 32, then
+          you can use this instruction. This will directly jump to the <code>&lt;label&gt;</code> specified</td>
+      </tr>
+      <tr>
+        <td>Branch Immediate Label</td>
+        <td><code>beqil</code></td>
+        <td><code>beqil &lt;label&gt;</code></td>
+        <td>If you are very sure that the difference between the current instruction and the label is within 8, then you
+          can use this instruction. This will branch to the <code>&lt;label&gt;</code> if <code>$cmp = 0</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="two-column">
+    <h3 id="24-internal-operands">2.4. Internal Operands</h3>
+    <p>There are several registers in our CPU:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Register</th>
+          <th>Size</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>$pc</code></td>
+          <td><code>8</code></td>
+          <td>Program Counter</td>
+        </tr>
+        <tr>
+          <td><code>$cmp</code></td>
+          <td><code>1</code></td>
+          <td>The comparation result bit. Usually <code>1</code> if the the last comparation operands are equal</td>
+        </tr>
+        <tr>
+          <td><code>$0</code></td>
+          <td><code>8</code></td>
+          <td>General Purpose Register #0</td>
+        </tr>
+        <tr>
+          <td><code>$1</code></td>
+          <td><code>8</code></td>
+          <td>General Purpose Register #1</td>
+        </tr>
+        <tr>
+          <td><code>$2</code></td>
+          <td><code>8</code></td>
+          <td>General Purpose Register #2</td>
+        </tr>
+        <tr>
+          <td><code>$3</code></td>
+          <td><code>8</code></td>
+          <td>General Purpose Register #3</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="25-control-flow">2.5. Control Flow</h3>
+    <h4 id="what-types-of-branches-are-supported">What types of branches are supported?</h4>
+    <p>We have <code>beq</code>, <code>beqi</code>, <code>jmp</code>, <code>jmpi</code></p>
+    <ul>
+      <li>
+        <p><code>beq</code> instruction provides the ability to branch when the previous comparison is true. In details,
+          <code>beq $a</code> where $a is a general purpose register which stores the address of the targeting address
+          for
+          branching. <code>beq $a</code> will perform branching if the value stored in cmp register is true.</p>
+      </li>
+      <li>
+        <p><code>beqi</code> instruction provides the ability to branch when the previous comparison is true. In
+          details,
+          <code>beq imm(signed)</code> where imm is a signed direct value which is the delta between the current address
+          and the address of the targeting address for branching. <code>beq imm</code> will perform branching if the
+          value
+          stored in cmp register is true.</p>
+      </li>
+      <li>
+        <p><code>jmp</code> instruction provides the ability to jump to an address, where the address is stored in a
+          general purpose register.</p>
+      </li>
+      <li>
+        <p><code>jmpi</code> instruction provides the ability to jump to an address, where the address is a signed
+          direct
+          value which is the delta between the current address of the targeting address for branching.</p>
+      </li>
+    </ul>
+    <h4 id="how-are-the-target-addresses-calculated">How are the target addresses calculated?</h4>
+    <p>For <code>beq</code> and <code>jmp</code> instructions, the target address is stored in a general purpose
+      register
+      which can be populated by <code>mov</code>, <code>sub</code> and other instruction which stores value into a
+      general
+      purpose register.</p>
+    <p>For <code>beqi</code> and <code>jmpi</code> instructions, the target address is a signed direct value without
+      using
+      a general purpose register, which can be loaded directly from assembly language.</p>
+    <h4 id="what-is-the-maximum-branch-distance-supported">What is the maximum branch distance supported?</h4>
+    <p>The <code>beq</code> and <code>jmp</code> has the maximum ability for branching, where the address of branching
+      is
+      stored in a general purpose register. Since the maximum value supported in a register is <code>255</code>, the
+      maximum branch distance our ISA supported is from <code>0</code> to <code>255</code>, although we are consciously
+      limiting our instruction memory to within <code>256</code>.</p>
+    <h3 id="26-addressing-mode">2.6. Addressing Mode</h3>
+    <h4 id="261-for-instruction-memory">2.6.1. For Instruction Memory:</h4>
+    <p><code>beqi</code> and <code>jmpi</code> will use relative addressing mode. The reason that these two instructions
+      are relative addressing mode is because the branching distance is directly stored as a direct signed value in
+      assembly code.</p>
+    <p><code>beq</code> and <code>jmp</code> will use the absolute instruction index stored in registers which
+      considered
+      direct addressing mode.</p>
+    <h4 id="262-for-data-memory">2.6.2. For Data Memory:</h4>
+    <p>We use direct addressing mode for data memory.</p>
+    <h3 id="27-machine-classification">2.7. Machine Classification</h3>
+    <p>We classify our machin to be a Load/Store machine.</p>
+    <h3 id="28-examples">2.8. Examples</h3>
+    <p>An example program of our ISA is this:</p>
+    <pre><code class="language-asm"><div>movil $0 1
+jmpi 5
+incr $0
+incr $0
+incr $0
+incr $0
+incr $0
+halt
+</div></code></pre>
+    <p>In this example we are first setting the <code>$0</code> register to <code>1</code>. And then we jump
+      <code>5</code> instructions forward, which will get us to the last instruction. It will execute the last
+      instruction
+      and the ending value stored in <code>$0</code> will be only incremented by 1 time which is <code>2</code>, or
+      <code>0b00000010</code>, as opposed to being incremented by 5 times.</p>
+    <p>We have a &quot;sugared&quot; version of this program which is more readable:</p>
+    <pre><code class="language-asm"><div>  movil $0 1
+  jmpil end
+  incr $0
+  incr $0
+  incr $0
+  incr $0
+end:
+  incr $0
+  halt
+</div></code></pre>
+    <p>Here we are using <code>jmpil</code> which is a &quot;sugar instruction&quot; jumping to a label called
+      <code>end</code>. This program does exactly the same thing as the previous one.</p>
+    <p>After the assembler compilation, we will get machine code like this:</p>
+    <pre><code><div>100000001
+111000101
+000001100
+000001100
+000001100
+000001100
+000001100
+000000001
+</div></code></pre>
+    <p>Obviously there are <code>8</code> instructions in the original example and hence we are getting <code>8</code>
+      lines of machine code. Note that each line contains <code>9</code> bits, demonstrating our <code>9</code>-bit ISA
+      design.</p>
+    <p>We are providing another example which involves more branching and looping like this:</p>
+    <pre><code class="language-asm"><div>  movil $0 9        ; $0 = a = 9
+  movil $1 4        ; $1 = b = 4
+                    ; $2 = i = 0
+                    ; $3 = product = 0
+loop_start:         ; do {
+  add $3 $0         ;   product += a
+  incr $2           ;   i += 1
+  cmp $1 $2         ;   cmp = b == i
+  beqil loop_end    ; }
+  jmpil loop_start  ; while (i &lt; b);
+loop_end:
+  halt
+</div></code></pre>
+    <p>In this example we implemented a multiply function. We will store the first operand in <code>$0</code>, the
+      second
+      in <code>$1</code>, and basically doing a loop and get the product in <code>$3</code>. We are using
+      <code>$2</code>
+      as the incrementor. Note how we are using (sugared) branching instructions. After compilation, we have</p>
+    <pre><code><div>100001001
+100010100
+001011100
+000001110
+001100110
+010110010
+111100100
+000000001
+</div></code></pre>
+    <p>We also want to demonstrate how we are doing debugging labels. Our assembler can generate code like this to aid
+      debugging. The above program will output something like this:</p>
+    <pre><code><div>0: 100001001 movil $0 9
+1: 100010100 movil $1 4
+2: 001011100 add $3 $0 &lt;- loop_start
+3: 000001110 incr $2
+4: 001100110 cmp $1 $2
+5: 010110010 beqil loop_end
+6: 111100100 jmpil loop_start
+7: 000000001 halt &lt;- loop_end
+</div></code></pre>
+    <p>Here we have instruction indices, the machine code generated as well as the original assembly instruction
+      printed.
+      We also included the label. This will largely aid our debugging process, and we will be using this format to
+      demonstrate our three program implementations in the next section.</p>
+    <h2 id="3-program-implementations">3. Program Implementations</h2>
+    <p>In this section we present our program implementations for the three assigned programs. The process we come up
+      with
+      this is actually first writing through the C code, and then translate the C code to our assembly format. In terms
+      of
+      logistics we have <code>139</code> instructions for the first program, <code>185</code> instructions for the
+      second
+      program, and <code>232</code> instructions for the last program.</p>
+    <!-- Substitution Code: (\d+): (\d+)(\s(\w+(\s+[\w\$\d]+)?)(,?\s+[\$\w]+)?)?(\s<\-\s(\w+))?, Change to | $1 | $2 | $3 | $8 | -->
+    <h3 id="31-program-1-hamming-encoder">3.1. Program 1: Hamming Encoder</h3>
+    <table class="small">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Byte Code</th>
+          <th>Assembly</th>
+          <th>Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td>101010001</td>
+          <td>movi $1, 30</td>
+          <td>setup</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>100011110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>101001111</td>
+          <td>movi $0, 253</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>100001101</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>010010100</td>
+          <td>st $1, $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>010001001</td>
+          <td>ld $2 $1</td>
+          <td>while_start</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>100001010</td>
+          <td>movil $0 10</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>010011000</td>
+          <td>st $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>010001101</td>
+          <td>ld $3 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>100001111</td>
+          <td>movil $0 15</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>010010100</td>
+          <td>st $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>011011100</td>
+          <td>shli $3 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>011110100</td>
+          <td>shri $2 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>000101110</td>
+          <td>or $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>100001011</td>
+          <td>movil $0 11</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>010011100</td>
+          <td>st $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td>001111011</td>
+          <td>mov $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>22</td>
+          <td>101000000</td>
+          <td>movi $0 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>23</td>
+          <td>100000111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>24</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td>p8_while_start</td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>27</td>
+          <td>001100100</td>
+          <td>cmp $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td>010110010</td>
+          <td>beqil p8_while_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>29</td>
+          <td>111100101</td>
+          <td>jmpil p8_while_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>30</td>
+          <td>011011100</td>
+          <td>shli $3 4</td>
+          <td>p8_while_end</td>
+        </tr>
+        <tr>
+          <td>31</td>
+          <td>101001111</td>
+          <td>movi $0 250</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>32</td>
+          <td>100001010</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>33</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>34</td>
+          <td>110101110</td>
+          <td>andi $2 14</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>35</td>
+          <td>000101110</td>
+          <td>or $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>36</td>
+          <td>100001100</td>
+          <td>movil $0 12</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>37</td>
+          <td>010011100</td>
+          <td>st $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>38</td>
+          <td>100001011</td>
+          <td>movil $0 11</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>39</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>40</td>
+          <td>100001000</td>
+          <td>movil $0 8</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>41</td>
+          <td>000111100</td>
+          <td>and $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>42</td>
+          <td>100001010</td>
+          <td>movil $0 10</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>43</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>44</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>45</td>
+          <td>110100111</td>
+          <td>andi $2 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>46</td>
+          <td>000101110</td>
+          <td>or $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>47</td>
+          <td>001111011</td>
+          <td>mov $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>48</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>49</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>50</td>
+          <td>101000000</td>
+          <td>movi $0 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>51</td>
+          <td>100000111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>52</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td>p4_while_start</td>
+        </tr>
+        <tr>
+          <td>53</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>54</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>55</td>
+          <td>001100100</td>
+          <td>cmp $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>56</td>
+          <td>010110010</td>
+          <td>beqil p4_while_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>57</td>
+          <td>111100101</td>
+          <td>jmpil p4_while_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>58</td>
+          <td>110110001</td>
+          <td>andi $3 1</td>
+          <td>p4_while_end</td>
+        </tr>
+        <tr>
+          <td>59</td>
+          <td>101001111</td>
+          <td>movi $0 252</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>60</td>
+          <td>100001100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>61</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>62</td>
+          <td>000101011</td>
+          <td>or $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>63</td>
+          <td>011010001</td>
+          <td>shli $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>64</td>
+          <td>100001010</td>
+          <td>movil $0 10</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>65</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>66</td>
+          <td>110110001</td>
+          <td>andi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>67</td>
+          <td>000101011</td>
+          <td>or $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>68</td>
+          <td>011010001</td>
+          <td>shli $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>69</td>
+          <td>100001100</td>
+          <td>movil $0 12</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>70</td>
+          <td>010011000</td>
+          <td>st $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>71</td>
+          <td>100001011</td>
+          <td>movil $0 11</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>72</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>73</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>74</td>
+          <td>001111011</td>
+          <td>mov $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>75</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>76</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>77</td>
+          <td>011110011</td>
+          <td>shri $2 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>78</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>79</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>80</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>81</td>
+          <td>100001010</td>
+          <td>movil $0 10</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>82</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>83</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>84</td>
+          <td>011110010</td>
+          <td>shri $2 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>85</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>86</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>87</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>88</td>
+          <td>110110001</td>
+          <td>andi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>89</td>
+          <td>100001100</td>
+          <td>movil $0 12</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>90</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>91</td>
+          <td>000101011</td>
+          <td>or $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>92</td>
+          <td>011010001</td>
+          <td>shli $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>93</td>
+          <td>010011000</td>
+          <td>st $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>94</td>
+          <td>100001011</td>
+          <td>movil $0 11</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>95</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>96</td>
+          <td>001111011</td>
+          <td>mov $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>97</td>
+          <td>011110010</td>
+          <td>shri $2 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>98</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>99</td>
+          <td>101000000</td>
+          <td>movi $0 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>100</td>
+          <td>100000011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>101</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td>p1_while_start</td>
+        </tr>
+        <tr>
+          <td>102</td>
+          <td>011110010</td>
+          <td>shri $2 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>103</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>104</td>
+          <td>001100100</td>
+          <td>cmp $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>105</td>
+          <td>010110010</td>
+          <td>beqil p1_while_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>106</td>
+          <td>111100101</td>
+          <td>jmpil p1_while_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>107</td>
+          <td>101001111</td>
+          <td>movi $0 250</td>
+          <td>p1_while_end</td>
+        </tr>
+        <tr>
+          <td>108</td>
+          <td>100001010</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>109</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>110</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>111</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>112</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>113</td>
+          <td>011110010</td>
+          <td>shri $2 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>114</td>
+          <td>000011110</td>
+          <td>xor $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>115</td>
+          <td>110110001</td>
+          <td>andi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>116</td>
+          <td>100001100</td>
+          <td>movil $0 12</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>117</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>118</td>
+          <td>000101011</td>
+          <td>or $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>119</td>
+          <td>100001101</td>
+          <td>movil $0 13</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>120</td>
+          <td>010000100</td>
+          <td>ld $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>121</td>
+          <td>010011001</td>
+          <td>st $2 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>122</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>100001011</td>
+          <td>movil $0 11</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>124</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>125</td>
+          <td>010011101</td>
+          <td>st $3 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>126</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>127</td>
+          <td>100001101</td>
+          <td>movil $0 13</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>128</td>
+          <td>010010100</td>
+          <td>st $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>129</td>
+          <td>100001111</td>
+          <td>movil $0 15</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>130</td>
+          <td>010000100</td>
+          <td>ld $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>131</td>
+          <td>101100001</td>
+          <td>movi $2 30</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>100101110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>133</td>
+          <td>001100110</td>
+          <td>cmp $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>134</td>
+          <td>010110100</td>
+          <td>beqil while_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>135</td>
+          <td>101110000</td>
+          <td>jmpl $3 while_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>136</td>
+          <td>100110110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>137</td>
+          <td>000001011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>138</td>
+          <td>000000001</td>
+          <td>halt</td>
+          <td>while_end</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="page-break"></div>
+    <h3 id="32-program-2-hamming-decoder">3.2. Program 2: Hamming Decoder</h3>
+    <table class="small">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Byte Code</th>
+          <th>Assembly</th>
+          <th>Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td>101000101</td>
+          <td>movi $0 94</td>
+          <td>setup</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>100001110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>101011111</td>
+          <td>movi $1 251</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>100011011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>010010001</td>
+          <td>st $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>101000100</td>
+          <td>movi $0 64</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>100000000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td>loop_start</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>000001100</td>
+          <td>incr $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>000001100</td>
+          <td>incr $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>101011111</td>
+          <td>movi $1 255</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>100011111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>010010001</td>
+          <td>st $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>100011110</td>
+          <td>movil $1 14</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>010011001</td>
+          <td>st $2 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>100011101</td>
+          <td>movil $1 13</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>010011101</td>
+          <td>st $3 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>011110111</td>
+          <td>shri $2 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>101000000</td>
+          <td>movi $0 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td>100000111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>22</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td>p8_while_start</td>
+        </tr>
+        <tr>
+          <td>23</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>24</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td>001100001</td>
+          <td>cmp $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td>010110010</td>
+          <td>beqil p8_while_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>27</td>
+          <td>111100101</td>
+          <td>jmpil p8_while_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td>110100001</td>
+          <td>andi $2 1</td>
+          <td>p8_while_end</td>
+        </tr>
+        <tr>
+          <td>29</td>
+          <td>011010001</td>
+          <td>shli $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>30</td>
+          <td>101001111</td>
+          <td>movi $0 252</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>31</td>
+          <td>100001100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>32</td>
+          <td>010011000</td>
+          <td>st $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>33</td>
+          <td>100001101</td>
+          <td>movil $0 13</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>34</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>35</td>
+          <td>100001000</td>
+          <td>movil $0 8</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>36</td>
+          <td>000111100</td>
+          <td>and $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>37</td>
+          <td>100001110</td>
+          <td>movil $0 14</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>38</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>39</td>
+          <td>011110100</td>
+          <td>shri $2 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>40</td>
+          <td>110100111</td>
+          <td>andi $2 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>41</td>
+          <td>000101110</td>
+          <td>or $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>42</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>43</td>
+          <td>011110011</td>
+          <td>shri $2 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>44</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>45</td>
+          <td>101000000</td>
+          <td>movi $0 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>46</td>
+          <td>100000111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>47</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td>p4_while_start</td>
+        </tr>
+        <tr>
+          <td>48</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>49</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>50</td>
+          <td>001100001</td>
+          <td>cmp $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>51</td>
+          <td>010110010</td>
+          <td>beqil p4_while_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>52</td>
+          <td>111100101</td>
+          <td>jmpil p4_while_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>53</td>
+          <td>110100001</td>
+          <td>andi $2 1</td>
+          <td>p4_while_end</td>
+        </tr>
+        <tr>
+          <td>54</td>
+          <td>101001111</td>
+          <td>movi $0 252</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>55</td>
+          <td>100001100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>56</td>
+          <td>010000100</td>
+          <td>ld $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>57</td>
+          <td>000100110</td>
+          <td>or $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>58</td>
+          <td>011001001</td>
+          <td>shli $1 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>59</td>
+          <td>100001110</td>
+          <td>movil $0 14</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>60</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>61</td>
+          <td>011110001</td>
+          <td>shri $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>62</td>
+          <td>001111110</td>
+          <td>mov $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>63</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>64</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>65</td>
+          <td>011111011</td>
+          <td>shri $3 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>66</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>67</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>68</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>69</td>
+          <td>100001101</td>
+          <td>movil $0 13</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>70</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>71</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>72</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>73</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>74</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>75</td>
+          <td>011111011</td>
+          <td>shri $3 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>76</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>77</td>
+          <td>011111001</td>
+          <td>shri $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>78</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>79</td>
+          <td>110100001</td>
+          <td>andi $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>80</td>
+          <td>000100110</td>
+          <td>or $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>81</td>
+          <td>011001001</td>
+          <td>shli $1 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>82</td>
+          <td>100001100</td>
+          <td>movil $0 12</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>83</td>
+          <td>010010100</td>
+          <td>st $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>84</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>85</td>
+          <td>100001110</td>
+          <td>movil $0 14</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>86</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>87</td>
+          <td>001111110</td>
+          <td>mov $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>88</td>
+          <td>011111010</td>
+          <td>shri $3 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>89</td>
+          <td>101000000</td>
+          <td>movi $0 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>90</td>
+          <td>100000011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>91</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td>p1_while1_start</td>
+        </tr>
+        <tr>
+          <td>92</td>
+          <td>011111010</td>
+          <td>shri $3 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>93</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>94</td>
+          <td>001100001</td>
+          <td>cmp $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>95</td>
+          <td>010110010</td>
+          <td>beqil p1_while1_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>96</td>
+          <td>111100101</td>
+          <td>jmpil p1_while1_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>97</td>
+          <td>101001111</td>
+          <td>movi $0 253</td>
+          <td>p1_while1_end</td>
+        </tr>
+        <tr>
+          <td>98</td>
+          <td>100001101</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>99</td>
+          <td>010001100</td>
+          <td>ld $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>100</td>
+          <td>110010000</td>
+          <td>clr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>101</td>
+          <td>101000000</td>
+          <td>movi $0 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>102</td>
+          <td>100000100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>103</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td>p1_while2_start</td>
+        </tr>
+        <tr>
+          <td>104</td>
+          <td>011111010</td>
+          <td>shri $3 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>105</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>106</td>
+          <td>001100001</td>
+          <td>cmp $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>107</td>
+          <td>010110010</td>
+          <td>beqil p1_while2_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>108</td>
+          <td>111100101</td>
+          <td>jmpil p1_while2_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>109</td>
+          <td>110100001</td>
+          <td>andi $2 1</td>
+          <td>p1_while2_end</td>
+        </tr>
+        <tr>
+          <td>110</td>
+          <td>101001111</td>
+          <td>movi $0 252</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>111</td>
+          <td>100001100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>112</td>
+          <td>010000100</td>
+          <td>ld $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>113</td>
+          <td>000100110</td>
+          <td>or $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>114</td>
+          <td>110000000</td>
+          <td>clr $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>115</td>
+          <td>110110000</td>
+          <td>clr $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>116</td>
+          <td>001111001</td>
+          <td>mov $2 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>117</td>
+          <td>001110001</td>
+          <td>mov $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>118</td>
+          <td>011100001</td>
+          <td>shri $0 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>119</td>
+          <td>000101000</td>
+          <td>or $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>120</td>
+          <td>011100001</td>
+          <td>shri $0 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>121</td>
+          <td>000101000</td>
+          <td>or $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>122</td>
+          <td>011100001</td>
+          <td>shri $0 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>000111000</td>
+          <td>and $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>124</td>
+          <td>110100001</td>
+          <td>andi $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>125</td>
+          <td>000001111</td>
+          <td>incr $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>126</td>
+          <td>001101011</td>
+          <td>cmp $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>127</td>
+          <td>010110010</td>
+          <td>beqil cor_par_up</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>128</td>
+          <td>111001010</td>
+          <td>jmpil check_cor_par_low</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>129</td>
+          <td>100001001</td>
+          <td>movil $0 9</td>
+          <td>cor_par_up</td>
+        </tr>
+        <tr>
+          <td>130</td>
+          <td>001000100</td>
+          <td>sub $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>131</td>
+          <td>010101101</td>
+          <td>sh $3 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>101001111</td>
+          <td>movi $0 253</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>133</td>
+          <td>100001101</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>134</td>
+          <td>010001000</td>
+          <td>ld $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>135</td>
+          <td>000011011</td>
+          <td>xor $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>136</td>
+          <td>010011000</td>
+          <td>st $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>137</td>
+          <td>111001110</td>
+          <td>jmpil cor_par_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>138</td>
+          <td>110000000</td>
+          <td>clr $0</td>
+          <td>check_cor_par_low</td>
+        </tr>
+        <tr>
+          <td>139</td>
+          <td>001100100</td>
+          <td>cmp $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>140</td>
+          <td>010110010</td>
+          <td>beqil to_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>141</td>
+          <td>111000010</td>
+          <td>jmpil cor_par_low</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>142</td>
+          <td>111001001</td>
+          <td>jmpil cor_par_end</td>
+          <td>to_end</td>
+        </tr>
+        <tr>
+          <td>143</td>
+          <td>000001100</td>
+          <td>incr $0</td>
+          <td>cor_par_low</td>
+        </tr>
+        <tr>
+          <td>144</td>
+          <td>001000100</td>
+          <td>sub $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>145</td>
+          <td>010100001</td>
+          <td>sh $0 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>146</td>
+          <td>101011111</td>
+          <td>movi $1 254</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>147</td>
+          <td>100011110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>148</td>
+          <td>010001001</td>
+          <td>ld $2 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>149</td>
+          <td>000011000</td>
+          <td>xor $2 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>150</td>
+          <td>010011001</td>
+          <td>st $2 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>151</td>
+          <td>101111111</td>
+          <td>movi $3 251</td>
+          <td>cor_par_end</td>
+        </tr>
+        <tr>
+          <td>152</td>
+          <td>100111011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>153</td>
+          <td>010000011</td>
+          <td>ld $0 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>154</td>
+          <td>100111101</td>
+          <td>movil $3 13</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>155</td>
+          <td>010000111</td>
+          <td>ld $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>156</td>
+          <td>011001100</td>
+          <td>shli $1 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>157</td>
+          <td>100111110</td>
+          <td>movil $3 14</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>158</td>
+          <td>010001011</td>
+          <td>ld $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>159</td>
+          <td>011110010</td>
+          <td>shri $2 2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>160</td>
+          <td>110100001</td>
+          <td>andi $2 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>161</td>
+          <td>000100110</td>
+          <td>or $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>162</td>
+          <td>010001011</td>
+          <td>ld $2 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>163</td>
+          <td>011110011</td>
+          <td>shri $2 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>164</td>
+          <td>110101110</td>
+          <td>andi $2 14</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>165</td>
+          <td>000100110</td>
+          <td>or $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>166</td>
+          <td>010010100</td>
+          <td>st $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>167</td>
+          <td>000001100</td>
+          <td>incr $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>168</td>
+          <td>100111101</td>
+          <td>movil $3 13</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>169</td>
+          <td>010000111</td>
+          <td>ld $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>170</td>
+          <td>011101100</td>
+          <td>shri $1 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>171</td>
+          <td>010010100</td>
+          <td>st $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>172</td>
+          <td>000001100</td>
+          <td>incr $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>173</td>
+          <td>100111011</td>
+          <td>movil $3 11</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>174</td>
+          <td>010010011</td>
+          <td>st $0 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>175</td>
+          <td>100111111</td>
+          <td>movil $3 15</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>176</td>
+          <td>010000011</td>
+          <td>ld $0 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>177</td>
+          <td>101110101</td>
+          <td>movi $3 94</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>178</td>
+          <td>100111110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>179</td>
+          <td>001100011</td>
+          <td>cmp $0 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>180</td>
+          <td>010110100</td>
+          <td>beqil loop_end</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>181</td>
+          <td>101010000</td>
+          <td>jmpl $1 loop_start</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>182</td>
+          <td>100010111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>183</td>
+          <td>000001001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>184</td>
+          <td>000000001</td>
+          <td>halt</td>
+          <td>loop_end</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="page-break"></div>
+    <h3 id="33-program-3-pattern-finder">3.3. Program 3: Pattern Finder</h3>
+    <table class="small">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Byte Code</th>
+          <th>Assembly</th>
+          <th>Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td>110010000</td>
+          <td>andi $1 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>101101100</td>
+          <td>movi $2 193</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>100100001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>101101100</td>
+          <td>movi $2 194</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>100100010</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>101101100</td>
+          <td>movi $2 192</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>100100000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>101101100</td>
+          <td>movi $2 195</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>100100011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>101010001</td>
+          <td>movi $1 31</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>100011111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>101001100</td>
+          <td>movi $0 197</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>100000101</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>101011000</td>
+          <td>movi $1 128</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>100010000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td>010010100</td>
+          <td>sb $1 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>101111000</td>
+          <td>movi $3 128</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td>100110000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>22</td>
+          <td>010000111</td>
+          <td>lb $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>23</td>
+          <td>101101100</td>
+          <td>movi $2 198</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>24</td>
+          <td>100100110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td>101101100</td>
+          <td>movi $2 195</td>
+          <td>outer_while</td>
+        </tr>
+        <tr>
+          <td>27</td>
+          <td>100100011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>29</td>
+          <td>101001001</td>
+          <td>movl $0 end_outer_while</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>30</td>
+          <td>100001110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>31</td>
+          <td>110110000</td>
+          <td>andi $3 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>32</td>
+          <td>001100111</td>
+          <td>cmp $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>33</td>
+          <td>000000100</td>
+          <td>beq $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>34</td>
+          <td>101110000</td>
+          <td>movi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>35</td>
+          <td>100110001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>36</td>
+          <td>001000111</td>
+          <td>sub $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>37</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>38</td>
+          <td>101101100</td>
+          <td>movi $2 197</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>39</td>
+          <td>100100101</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>40</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>41</td>
+          <td>101110000</td>
+          <td>movi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>42</td>
+          <td>100110001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>43</td>
+          <td>001010111</td>
+          <td>add $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>44</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>45</td>
+          <td>101011000</td>
+          <td>movi $1 128</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>46</td>
+          <td>100010000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>47</td>
+          <td>010000101</td>
+          <td>lb $1 $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>48</td>
+          <td>101101100</td>
+          <td>movi $2 199</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>49</td>
+          <td>100100111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>50</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>51</td>
+          <td>110010000</td>
+          <td>andi $1 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>52</td>
+          <td>101101100</td>
+          <td>movi $2 200</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>53</td>
+          <td>100101000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>54</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>55</td>
+          <td>101010000</td>
+          <td>movi $1 8</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>56</td>
+          <td>100011000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>57</td>
+          <td>101101100</td>
+          <td>movi $2 196</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>58</td>
+          <td>100100100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>59</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>60</td>
+          <td>101101100</td>
+          <td>movi $2 196</td>
+          <td>inner_while</td>
+        </tr>
+        <tr>
+          <td>61</td>
+          <td>100100100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>62</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>63</td>
+          <td>101001001</td>
+          <td>movl $0 end_inner_while</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>64</td>
+          <td>100000011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>65</td>
+          <td>110110000</td>
+          <td>andi $3 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>66</td>
+          <td>001100111</td>
+          <td>cmp $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>67</td>
+          <td>000000100</td>
+          <td>beq $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>68</td>
+          <td>101110000</td>
+          <td>movi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>69</td>
+          <td>100110001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>70</td>
+          <td>001000111</td>
+          <td>sub $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>71</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>72</td>
+          <td>101101100</td>
+          <td>movi $2 198</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>73</td>
+          <td>100100110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>74</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>75</td>
+          <td>101101010</td>
+          <td>movi $2 160</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>76</td>
+          <td>100100000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>77</td>
+          <td>010001110</td>
+          <td>lb $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>78</td>
+          <td>011011100</td>
+          <td>shli $3 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>79</td>
+          <td>000010111</td>
+          <td>xor $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>80</td>
+          <td>101101111</td>
+          <td>movi $2 240</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>81</td>
+          <td>100100000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>82</td>
+          <td>000110110</td>
+          <td>and $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>83</td>
+          <td>101000110</td>
+          <td>movl $0 ifmatch</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>84</td>
+          <td>100001000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>85</td>
+          <td>110110000</td>
+          <td>andi $3 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>86</td>
+          <td>001100111</td>
+          <td>cmp $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>87</td>
+          <td>000000100</td>
+          <td>beq $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>88</td>
+          <td>101101100</td>
+          <td>movi $2 198</td>
+          <td>not_match</td>
+        </tr>
+        <tr>
+          <td>89</td>
+          <td>100100110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>90</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>91</td>
+          <td>011001001</td>
+          <td>shli $1 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>92</td>
+          <td>101001100</td>
+          <td>movi $0 199</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>93</td>
+          <td>100000111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>94</td>
+          <td>010001100</td>
+          <td>lb $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>95</td>
+          <td>011111111</td>
+          <td>shri $3 7</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>96</td>
+          <td>000100111</td>
+          <td>or $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>97</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>98</td>
+          <td>010001100</td>
+          <td>lb $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>99</td>
+          <td>011011001</td>
+          <td>shli $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>100</td>
+          <td>010011100</td>
+          <td>sb $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>101</td>
+          <td>101000011</td>
+          <td>movl $0 inner_while</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>102</td>
+          <td>100001100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>103</td>
+          <td>000001000</td>
+          <td>jmp $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>104</td>
+          <td>101101100</td>
+          <td>movi $2 193</td>
+          <td>ifmatch</td>
+        </tr>
+        <tr>
+          <td>105</td>
+          <td>100100001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>106</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>107</td>
+          <td>101110000</td>
+          <td>movi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>108</td>
+          <td>100110001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>109</td>
+          <td>001010111</td>
+          <td>add $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>110</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>111</td>
+          <td>101101100</td>
+          <td>movi $2 196</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>112</td>
+          <td>100100100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>113</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>114</td>
+          <td>101100000</td>
+          <td>movi $2 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>115</td>
+          <td>100100100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>116</td>
+          <td>000110110</td>
+          <td>and $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>117</td>
+          <td>000010110</td>
+          <td>xor $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>118</td>
+          <td>101001000</td>
+          <td>movl $0 ifinbyte</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>119</td>
+          <td>100000110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>120</td>
+          <td>110110000</td>
+          <td>andi $3 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>121</td>
+          <td>001100111</td>
+          <td>cmp $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>122</td>
+          <td>000000100</td>
+          <td>beq $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>101101100</td>
+          <td>movi $2 196</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>124</td>
+          <td>100100100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>125</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>126</td>
+          <td>101100000</td>
+          <td>movi $2 3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>127</td>
+          <td>100100011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>128</td>
+          <td>000010110</td>
+          <td>xor $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>129</td>
+          <td>001100111</td>
+          <td>cmp $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>130</td>
+          <td>000000100</td>
+          <td>beq $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>131</td>
+          <td>101000101</td>
+          <td>movl $0 not_match</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>100001000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>133</td>
+          <td>000001000</td>
+          <td>jmp $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>134</td>
+          <td>101101100</td>
+          <td>movi $2 200</td>
+          <td>ifinbyte</td>
+        </tr>
+        <tr>
+          <td>135</td>
+          <td>100101000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>136</td>
+          <td>101010000</td>
+          <td>movi $1 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>137</td>
+          <td>100010001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>138</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>139</td>
+          <td>101101100</td>
+          <td>movi $2 192</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>140</td>
+          <td>100100000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>141</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>142</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>143</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>144</td>
+          <td>101000101</td>
+          <td>movl $0 not_match</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>145</td>
+          <td>100001000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>146</td>
+          <td>000001000</td>
+          <td>jmp $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>147</td>
+          <td>101101100</td>
+          <td>movi $2 194</td>
+          <td>end_inner_while</td>
+        </tr>
+        <tr>
+          <td>148</td>
+          <td>100100010</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>149</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>150</td>
+          <td>101001100</td>
+          <td>movi $0 200</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>151</td>
+          <td>100001000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>152</td>
+          <td>010001100</td>
+          <td>lb $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>153</td>
+          <td>001010111</td>
+          <td>add $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>154</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>155</td>
+          <td>101000001</td>
+          <td>movl $0 outer_while</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>156</td>
+          <td>100001010</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>157</td>
+          <td>000001000</td>
+          <td>jmp $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>158</td>
+          <td>110010000</td>
+          <td>andi $1 0</td>
+          <td>end_outer_while</td>
+        </tr>
+        <tr>
+          <td>159</td>
+          <td>101101100</td>
+          <td>movi $2 200</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>160</td>
+          <td>100101000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>161</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>162</td>
+          <td>101010000</td>
+          <td>movi $1 5</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>163</td>
+          <td>100010101</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>164</td>
+          <td>101101100</td>
+          <td>movi $2 196</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>165</td>
+          <td>100100100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>166</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>167</td>
+          <td>101001101</td>
+          <td>movl $0 end_prog</td>
+          <td>last_byte_while</td>
+        </tr>
+        <tr>
+          <td>168</td>
+          <td>100001111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>169</td>
+          <td>110110000</td>
+          <td>andi $3 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>170</td>
+          <td>001100111</td>
+          <td>cmp $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>171</td>
+          <td>000000100</td>
+          <td>beq $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>172</td>
+          <td>101101100</td>
+          <td>movi $2 198</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>173</td>
+          <td>100100110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>174</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>175</td>
+          <td>101101010</td>
+          <td>movi $2 160</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>176</td>
+          <td>100100000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>177</td>
+          <td>010001110</td>
+          <td>lb $3 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>178</td>
+          <td>011011100</td>
+          <td>shli $3 4</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>179</td>
+          <td>000010111</td>
+          <td>xor $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>180</td>
+          <td>101101111</td>
+          <td>movi $2 240</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>181</td>
+          <td>100100000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>182</td>
+          <td>000110110</td>
+          <td>and $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>183</td>
+          <td>101001100</td>
+          <td>movl $0 last_byte_match</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>184</td>
+          <td>100001011</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>185</td>
+          <td>110110000</td>
+          <td>andi $3 0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>186</td>
+          <td>001100111</td>
+          <td>cmp $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>187</td>
+          <td>000000100</td>
+          <td>beq $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>188</td>
+          <td>101101100</td>
+          <td>movi $2 198</td>
+          <td>last_byte_not_match</td>
+        </tr>
+        <tr>
+          <td>189</td>
+          <td>100100110</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>190</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>191</td>
+          <td>011001001</td>
+          <td>shli $1 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>192</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>193</td>
+          <td>101101100</td>
+          <td>movi $2 196</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>194</td>
+          <td>100100100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>195</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>196</td>
+          <td>101110000</td>
+          <td>movi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>197</td>
+          <td>100110001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>198</td>
+          <td>001000111</td>
+          <td>sub $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>199</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>200</td>
+          <td>101001010</td>
+          <td>movl $0 last_byte_while</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>201</td>
+          <td>100000111</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>202</td>
+          <td>000001000</td>
+          <td>jmp $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>203</td>
+          <td>101101100</td>
+          <td>movi $2 193</td>
+          <td>last_byte_match</td>
+        </tr>
+        <tr>
+          <td>204</td>
+          <td>100100001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>205</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>206</td>
+          <td>101110000</td>
+          <td>movi $3 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>207</td>
+          <td>100110001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>208</td>
+          <td>001010111</td>
+          <td>add $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>209</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>210</td>
+          <td>101101100</td>
+          <td>movi $2 200</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>211</td>
+          <td>100101000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>212</td>
+          <td>101010000</td>
+          <td>movi $1 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>213</td>
+          <td>100010001</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>214</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>215</td>
+          <td>101101100</td>
+          <td>movi $2 192</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>216</td>
+          <td>100100000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>217</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>218</td>
+          <td>000001101</td>
+          <td>incr $1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>219</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>220</td>
+          <td>101001011</td>
+          <td>movl $0 last_byte_not_match</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>221</td>
+          <td>100001100</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>222</td>
+          <td>000001000</td>
+          <td>jmp $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>223</td>
+          <td>101101100</td>
+          <td>movi $2 194</td>
+          <td>end_prog</td>
+        </tr>
+        <tr>
+          <td>224</td>
+          <td>100100010</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>225</td>
+          <td>010000110</td>
+          <td>lb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>226</td>
+          <td>101001100</td>
+          <td>movi $0 200</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>227</td>
+          <td>100001000</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>228</td>
+          <td>010001100</td>
+          <td>lb $3 $0</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>229</td>
+          <td>001010111</td>
+          <td>add $1 $3</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>230</td>
+          <td>010010110</td>
+          <td>sb $1 $2</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>231</td>
+          <td>000000001</td>
+          <td>halt</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="4-assembler-simulator-and-debugger">4. Assembler, Simulator and Debugger</h2>
+    <p>After we implemented the three programs using our ISA, we start to implement the Assembler, Simulator and
+      Debugger
+      to test their effectiveness. In this section we are going to talk about their functionalities and usages.</p>
+    <h3 id="41-assembler">4.1. Assembler</h3>
+    <p>We implemented our Assembler using Python, mainly because python makes us very easy to deal with file inputs and
+      outputs. It is our assembler which enables us to write nice looking assembly codes, run it and test it
+      effectively.
+    </p>
+    <h4 id="411-assembler-usage">4.1.1. Assembler Usage</h4>
+    <p>It's as simple as</p>
+    <pre><code><div>$ python3 assemble.py test/add.s
+</div></code></pre>
+    <p>This will print out the following result</p>
+    <pre><code><div>101000101
+100000101
+100010011
+001010000
+</div></code></pre>
+    <h4 id="412-exporting-simulator-runnable-file">4.1.2. Exporting Simulator Runnable File</h4>
+    <pre><code><div>$ python3 assemble.py test/add.s &gt; ../simulator/test/add.mem
+</div></code></pre>
+    <p>Then give this <code>add.txt</code> to simulator and it will be able to directly run the file</p>
+    <h4 id="413-print-debugging-symbols">4.1.3. Print Debugging Symbols</h4>
+    <p>When doing assembly, add a flag <code>--debug</code> to enable debugging. Like this:</p>
+    <pre><code><div>$ python3 assemble.py test/mult.s --debug
+</div></code></pre>
+    <p>This will print out something like this, as also demonstrated above:</p>
+    <pre><code><div>0: 100001001 movil $0 9
+1: 100010100 movil $1 4
+2: 001011100 add $3 $0 &lt;- loop_start
+3: 000001110 incr $2
+4: 001100110 cmp $1 $2
+5: 010110010 beqil loop_end
+6: 111100100 jmpil loop_start
+7: 000000001 halt &lt;- loop_end
+</div></code></pre>
+    <h4 id="414-assembly-language-syntax">4.1.4. Assembly Language Syntax</h4>
+    <p>It's very simple, we don't have any symbols. For each instruction specified on the design document, you simply
+      add
+      space between the different components. All the instruction will start with a <strong>code</strong>, like
+      <code>jmpi</code>, <code>add</code>, <code>xor</code> and so on. After that it needs to be followed by either
+      register id or immediate numbers.</p>
+    <p>If you want to specify the registers, you can only use <code>$0</code>, <code>$1</code>, <code>$2</code>, and
+      <code>$3</code> since there are only 4 registers in our CPU.</p>
+    <p>When you want to specify the immediate, usually you only need positive number. There's one case in the
+      <code>jmpi</code> instruction you can actually add a <code>minus</code> sign before the number to indicate that
+      you
+      want to jump backward.</p>
+    <h3 id="42-simulator-and-debugger">4.2. Simulator and Debugger</h3>
+    <h4 id="421-basic-usages">4.2.1. Basic Usages</h4>
+    <p>We have written a simulator and a debugger in C++ to test our written programs. Their usages are very simple as
+      well:</p>
+    <p>This Simulator will try to run already formatted machine codes.</p>
+    <p>How to build this simulator?</p>
+    <pre><code><div>$ make
+</div></code></pre>
+    <p>How to run an file containing machine code?</p>
+    <pre><code><div>$ ./simulate ./test/add.txt
+</div></code></pre>
+    <p>You can also attach an initiated test use data memory file by adding another argument</p>
+    <pre><code><div>$ ./simulate ./test/prog2.txt ./memory/prog2.mem
+</div></code></pre>
+    <h4 id="422-debugging">4.2.2. Debugging</h4>
+    <p>We also have a debugger designed to debug our program. How to build the debugger?</p>
+    <pre><code class="language-bash"><div>$ make
+</div></code></pre>
+    <p>How to debug?</p>
+    <pre><code class="language-bash"><div>$ ./debug ./<span class="hljs-built_in">test</span>/prog2.txt ./memory/prog2.mem
+</div></code></pre>
+    <p>Then the process is pretty much like all the other debugger program. Inside the
+      command line you can do</p>
+    <pre><code><div>(cdb) &gt; help # Print help message
+(cdb) &gt; list # List the instrs around the current line
+(cdb) &gt; break 5 # Set breakpoint at line
+(cdb) &gt; break 6 # Set breakpoint at line 6
+(cdb) &gt; list breakpoint # List all breakpoints
+(cdb) &gt; remove breakpoint 3 # remove breakpoint number 3
+(cdb) &gt; remove breakpoint # Remove all breakpoints
+(cdb) &gt; run # Run until breakpoint or halt
+(cdb) &gt; step # Step once
+(cdb) &gt; print pc # Print the value of pc
+(cdb) &gt; print reg # Print the value of registers
+(cdb) &gt; print cmp # Print the value of cmp
+(cdb) &gt; print mem # Print the whole memory
+(cdb) &gt; print mem 251 # Print the memory at location 251
+(cdb) &gt; print mem 0 29 # Print the memory from 0 to 29
+</div></code></pre>
+    <p>An execution example would be</p>
+    <pre><code><div>$ ~/D/L/c/s/simulator&gt; ./debug test/mult.mem
+Debugging program test/mult.mem.
+(cdb) &gt; break 3
+  Added breakpoint #1 at line 3
+(cdb) &gt; run
+  The program hit a breakpoint at 3
+(cdb) &gt; print reg
+  reg[0]: 00001001
+  reg[1]: 00000100
+  reg[2]: 00000000
+  reg[3]: 00001001
+(cdb) &gt; step
+(cdb) &gt; print reg
+  reg[0]: 00001001
+  reg[1]: 00000100
+  reg[2]: 00000001
+  reg[3]: 00001001
+(cdb) &gt; run
+  The program hit a breakpoint at 3
+(cdb) &gt; remove breakpoint 0
+  Non-exist breakpoint #0
+(cdb) &gt; remove breakpoint 1
+(cdb) &gt; list breakpoint
+  Breakpoints:
+(cdb) &gt; run
+  The program finished running
+(cdb) &gt; print reg
+  reg[0]: 00001001
+  reg[1]: 00000100
+  reg[2]: 00000100
+  reg[3]: 00100100
+(cdb) &gt;
+</div></code></pre>
+  <h2 id="5-cpu-implementation">5. CPU Implementation</h2>
+  <h3 id="51-introduction">5.1. Introduction</h3>
+  <p>After testing out different components, our program implementation as well as designs, we implemented our CPU in
+    system verilog and it is able to run all of the test bench expected.</p>
+  <p>As an overview, our CPU is divided into these modules:</p>
+  <ol>
+    <li>
+      <p><code>cirno.sv</code>. This is the top level of our CPU, connecting all of the components together. We do
+        implement this CPU in a &quot;staged&quot; way, where there are roughly 5 stages we will elaborate on later.
+        This allow us to simplify our circuit logic and improve the CPU clock cycle frequency.</p>
+    </li>
+    <li>
+      <p><code>instr_mem.sv</code>. This is going to be the Instruction Memory. Inside it we load all of our compiled
+        program byte-codes. It also takes charge of managing the <code>$pc</code> register. Note that we didn't try to
+        incorporate the <code>$pc</code> arithmatics into the ALU although that could be better in terms of reducing the
+        number of gates. But that is going to far complicate our design so for now we do it the simple way and implement
+        the <code>$pc</code> increment inside this module. Also note that we have, actually, three program buffers
+        stored inside our <code>instr_mem</code>, each storing the code for each of the programs. There will also be a
+        <code>prog</code> variable indicating which program to use here. The top-level will determine which program to
+        use.</p>
+    </li>
+    <li>
+      <p><code>decoder.sv</code>. After fetching the instruction we will try to decode it. This will decompose the
+        register into lots of 1-bit wires used for ALU, RegFile and DataMem.</p>
+    </li>
+    <li>
+      <p><code>reg_file.sv</code>. This is the register file. Although we put it here indicating that the decoding
+        result will go into register file to determine which registers to read, this is also connected to the result of
+        the ALU and also use the decoder result to determine if there is a write back.</p>
+    </li>
+    <li>
+      <p><code>alu.sv</code>. This is, as name suggests, the ALU. Our ALU follows the simplest design. There will be two
+        data inputs <code>x</code> and <code>y</code>, and one <code>switch</code> input to determine which type of
+        arithmatic operation to use. There will be only one output which is <code>result</code> of the ALU.</p>
+    </li>
+    <li>
+      <p><code>data_mem.sv</code>. As the last part, we have the data memory. Our memory will have <code>256</code>
+        bytes in size.</p>
+    </li>
+  </ol>
+  <h3 id="52-cpu-computation-stages">5.2. CPU Computation Stages</h3>
+  <p>In terms of the 5 stages of our CPU, we have it this way:</p>
+  <ol>
+    <li>
+      <p>The 0th stage is for setting up the variables. Our CPU will do nothing in this stage.</p>
+    </li>
+    <li>
+      <p>The 1st stage is for fetching the instruction. Our CPU will go to the instruction memory module to fetch the
+        corresponding instruction.</p>
+    </li>
+    <li>
+      <p>The 2nd stage is for decoding the instruction. The Decoder Module will start to break the instruction into
+        individual signals that could be passed around to each file.</p>
+    </li>
+    <li>
+      <p>The 3rd stage is for reading the registers.</p>
+    </li>
+    <li>
+      <p>The 4th stage including using the ALU to calculate the result and using the result to write back to either
+        register file or memory. This way we can decouple the read and write so that our CPU can be less bug-prone.</p>
+    </li>
+  </ol>
+  <p>So basically we have CPI to be between 3 to 4: We don't use the 0th stage for every instruction. As long as the CPU
+    is booted, we will start with the stage 1. And the stage 4 is not necessary depending on which type of instruction
+    we are dealing with. So we need between 3 to 4 clock cycles to be able to run a single instruction.</p>
+  <div class="span-all">
+  <h3 id="53-quartus-report">5.3. Quartus Report</h3>
+  <pre class="span-all"><code><div>+-------------------------------------------------------------------------------+
+; Analysis &amp; Synthesis Summary                                                  ;
++---------------------------------+---------------------------------------------+
+; Analysis &amp; Synthesis Status     ; Successful - Sat Apr 20 04:15:35 2019       ;
+; Quartus Prime Version           ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
+; Revision Name                   ; cirno                                       ;
+; Top-level Entity Name           ; cirno                                       ;
+; Family                          ; Cyclone V                                   ;
+; Logic utilization (in ALMs)     ; N/A                                         ;
+; Total registers                 ; 101                                         ;
+; Total pins                      ; 3                                           ;
+; Total virtual pins              ; 0                                           ;
+; Total block memory bits         ; 2,048                                       ;
+; Total DSP Blocks                ; 0                                           ;
+; Total PLLs                      ; 0                                           ;
+; Total DLLs                      ; 0                                           ;
++---------------------------------+---------------------------------------------+
+</div></code></pre>
+  <h3 id="54-rtl-viewer">5.4. RTL Viewer</h3>
+  <p class="span-all"><img src="../screenshot/rtl.png" alt="rtl"></p>
+  <h3 id="55-timing-analysis--statistics">5.5. Timing Analysis &amp; Statistics</h3>
+  <p>Through timing analysis we are able to get our clock cycle period up to <code>8ns</code>, which means we have a
+    <code>125MHz</code> clock frequency. This could be shown from the Quartus Timing Analysis Output File:</p>
+  <pre class="span-all"><code><div>+-------------------------------------------------------------------------------+
+; Clocks                                                                        ;
++------------+------+--------+-----------+-------+-------+------------+---------+
+; Clock Name ; Type ; Period ; Frequency ; Rise  ; Fall  ; Duty Cycle ; Targets ;
++------------+------+--------+-----------+-------+-------+------------+---------+
+; CLOCK_50   ; Base ; 8.000  ; 125.0 MHz ; 0.000 ; 4.000 ;            ; { clk } ;
++------------+------+--------+-----------+-------+-------+------------+---------+
+</div></code></pre>
+</div>
+  <p>It is also notable that our maximum frequency under, for example, a <code>Slow 1100mV 85C Model</code>, is
+    <code>137.76 MHz</code>. Therefore our picked <code>8ns</code> clock period is pretty close to the theoretical
+    minimum.</p>
+  <pre><code><div>+--------------------------------------------------+
+; Slow 1100mV 85C Model Fmax Summary               ;
++------------+-----------------+------------+------+
+; Fmax       ; Restricted Fmax ; Clock Name ; Note ;
++------------+-----------------+------------+------+
+; 137.76 MHz ; 137.76 MHz      ; CLOCK_50   ;      ;
++------------+-----------------+------------+------+
+</div></code></pre>
+  <p>We've also timed the Test Bench and got our program runtime. We printed out the <code>$time</code> when running the
+    test bench and since inside the test bench the clock cycle is <code>10ns</code>, so we divide each time by
+    <code>10</code> and get our clock cycle count. Here's some detailed summary of our individual program metrics. For
+    individual programs we've subtracted the setup time when signaling the request. When deriving the total run time,
+    we've included all the time running the test bench.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Program</th>
+        <th>#Instructions</th>
+        <th>#Clock Cycle</th>
+        <th>Run Time (ns)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#1</td>
+        <td>139</td>
+        <td>22,838</td>
+        <td>182,704</td>
+      </tr>
+      <tr>
+        <td>#2</td>
+        <td>185</td>
+        <td>28,211</td>
+        <td>225,688</td>
+      </tr>
+      <tr>
+        <td>#3</td>
+        <td>232</td>
+        <td>115,249</td>
+        <td>921,992</td>
+      </tr>
+      <tr>
+        <td>All</td>
+        <td>556</td>
+        <td>166,305</td>
+        <td>1,330,440</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>As a conclusion, theoretically the whole test bench will require roughly <code>0.001</code> seconds.</p>
+  <h3 id="56-testbench-output">5.6. Testbench Output</h3>
+  <pre><code><div># start program 1
+#
+# 0101001010101010
+# 0101001010101010
+#
+# 0110100010001110
+# 0110100010001110
+#
+# 0110000001001101
+# 0110000001001101
+#
+# 0110011000011110
+# 0110011000011110
+#
+# 0011000001100101
+# 0011000001100101
+#
+# 0001100001100111
+# 0001100001100111
+#
+# 0100011010100111
+# 0100011010100111
+#
+# 0010000100010010
+# 0010000100010010
+#
+# 0011000000000100
+# 0011000000000100
+#
+# 0101000001100100
+# 0101000001100100
+#
+# 0001011100111010
+# 0001011100111010
+#
+# 0101001101100111
+# 0101001101100111
+#
+# 0111111001100111
+# 0111111001100111
+#
+# 0111100001100001
+# 0111100001100001
+#
+# 0001111111001101
+# 0001111111001101
+#
+# start program 2
+#
+# 0000010011000110
+# 0000010011000110
+#
+# 0000001010101010
+# 0000001010101010
+#
+# 0000001001110111
+# 0000001001110111
+#
+# 0000001110001111
+# 0000001110001111
+#
+# 0000011011001110
+# 0000011011001110
+#
+# 0000011011000101
+# 0000011011000101
+#
+# 0000000010111101
+# 0000000010111101
+#
+# 0000011001100101
+# 0000011001100101
+#
+# 0000011100001010
+# 0000011100001010
+#
+# 0000000100100000
+# 0000000100100000
+#
+# 0000010010011101
+# 0000010010011101
+#
+# 0000000000010011
+# 0000000000010011
+#
+# 0000011001010011
+# 0000011001010011
+#
+# 0000001011010101
+# 0000001011010101
+#
+# 0000011010101110
+# 0000011010101110
+#
+# start program 3
+#
+# ctb =  96  96
+# cts = 127 127
+# cto =  32  32
+</div></code></pre>
+  <h2 id="6-summary-and-conclusion">6. Summary and Conclusion</h2>
+  <p>The report above shows our work designing this ISA, writing its assembler and simulator, and finally implementing
+    the CPU using system verilog. We are pretty satisfied with our ISA design as its clear and straightforward. We have
+    considered other architectures like accumulator and domain specific ISAs. But we are still leaning towards a general
+    purpose CPU and now we can easily write any program in it. In terms of our program implementation we do realize that
+    we still have plenty of rooms to improve. The first thing would be our CPI is still a little bit low because of our
+    top-level constraints. It is also noticable that our program 3 is taking a much longer time comparing to the others.
+    And that's because the bit-wise pattern matching is still not optimized. In terms of future work we are thinking
+    about still improving our ISA. There are still two no-arg instructions we haven't fill a meaning to them. Right now
+    they just behave like a no-op but we can certainly give them domain specific semantics and hence improve our program
+    3 implementation. Other than that it's also a good idea to go further and improve our original staged CPU to a
+    pipelined CPU. This will definitely increase our CPI and get huge amount of performance gain.</p>
+
+</body>
+
+</html>

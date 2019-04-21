@@ -34,9 +34,9 @@ Our ISA, to maintain the generality of a general purpose CPU, we strive to make 
 
 ### 2.2. Instruction List
 
-Here we provide a complete instruction list of our ISA.
+Here we provide a complete instruction list of our ISA. Note that we divide the table cells to different sections in order to denote different component of each instruction. On the right most column we also specified what is the meaning of the actual instruction.
 
-Few Side Notes:
+Few Side Notes about some of the variable names we use right here:
 
 * `$pc`: Program Counter. Not necessarily `1` byte in size. Could have more bits.
 * `$cmp`: Compare Register. Only have `1` bit. Could be written by `cmp` instruction, and will be used by `br` instruction.
