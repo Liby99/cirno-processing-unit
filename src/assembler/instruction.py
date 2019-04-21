@@ -188,6 +188,7 @@ class JumpImmediateLabel(Instruction):
       raise Exception("Label {} doesn't exist".format(self.label))
     label_index = labels[self.label]
     diff = label_index - index
+    assert abs(diff) < 32
     is_neg = diff < 0
     return Jmpi(is_neg, abs(diff)).to_binary(index, labels)
 
@@ -200,5 +201,6 @@ class BranchImmediateLabel(Instruction):
       raise Exception("Label {} doesn't exist".format(self.label))
     label_index = labels[self.label]
     diff = label_index - index
+    assert abs(diff) < 8
     is_neg = diff < 0
     return Beqi(is_neg, abs(diff)).to_binary(index, labels)
