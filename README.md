@@ -2,7 +2,7 @@
 
 ⑨-Bit Cpu Design for Cirno.
 
-[Final Report](https://github.com/Liby99/cirno-processing-unit/raw/master/doc/output/report.pdf)
+[Final Report](https://github.com/Liby99/cirno-processing-unit/blob/master/doc/output/report.pdf)
 
 ## Why Cirno?
 
