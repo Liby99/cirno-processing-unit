@@ -2,6 +2,8 @@
 
 ⑨-Bit Cpu Design for Cirno.
 
+[Final Report](https://github.com/Liby99/cirno-processing-unit/raw/master/doc/output/report.pdf)
+
 ## Why Cirno?
 
 Since Cirno is ⑨ we can only design her a ⑨-bit CPU and nothing else to help her when she is teaching her math class.
